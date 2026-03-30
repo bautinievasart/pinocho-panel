@@ -16,18 +16,21 @@
             --accent: #4318FF;
             --success: #05CD99;
             --danger: #EE5D50;
+            /* Degradados para el efecto Flow */
+            --led-blue: linear-gradient(135deg, #4318FF, #B23AF3, #4318FF);
+            --led-verde: linear-gradient(135deg, #05CD99, #66DDAA, #05CD99);
+            --led-rojo: linear-gradient(135deg, #FF5B5B, #F067B4, #FF5B5B);
         }
 
         * { box-sizing: border-box; outline: none; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); overflow-x: hidden; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); }
 
-        /* --- SIDEBAR REFINADA --- */
-        .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; }
+        /* --- SIDEBAR --- */
+        .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 100; }
         .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
-        .nav-item { color: var(--text-sec); padding: 14px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; margin-bottom: 5px; font-size: 15px; }
-        .nav-item:hover { background: #f7f9ff; color: var(--text-main); }
-        .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.2); }
+        .nav-item { color: var(--text-sec); padding: 14px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; margin-bottom: 5px; }
+        .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.15); }
 
         /* --- CONTENIDO --- */
         .main-wrapper { margin-left: 260px; width: calc(100% - 260px); padding: 40px; }
@@ -35,37 +38,36 @@
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
-        h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; letter-spacing: -0.5px; }
+        h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; }
 
-        /* --- DASHBOARD GRID --- */
-        .dashboard-grid { display: grid; grid-template-columns: 1.8fr 1fr; gap: 24px; margin-bottom: 24px; }
-        .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.03); border: 1px solid rgba(233, 237, 247, 0.6); }
-        .card-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .card-title { font-size: 14px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
+        /* --- CARDS & EFECTOS --- */
+        .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
+        .card-title { font-size: 13px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 
-        .stat-value { font-size: 32px; font-weight: 800; margin: 10px 0; letter-spacing: -1px; }
-        .text-accent { color: var(--accent); }
-        .text-success { color: var(--success); }
-        .text-danger { color: var(--danger); }
+        /* EFECTO DEGRADADO DINÁMICO */
+        .flow-text { font-size: 44px; font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
+        @keyframes flow { to { background-position: 200% center; } }
+        
+        .num-blue { background-image: var(--led-blue); }
+        .num-green { background-image: var(--led-verde); }
+        .num-red { background-image: var(--led-rojo); }
 
         /* --- TABLAS --- */
-        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
-        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; text-transform: uppercase; border-bottom: 1px solid #F4F7FE; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; }
         td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 600; }
 
-        /* --- FORMS --- */
-        .form-inline { display: flex; gap: 12px; margin-bottom: 20px; flex-wrap: wrap; }
-        input, select { background: #F4F7FE; border: 1px solid transparent; padding: 12px 16px; border-radius: 12px; font-family: inherit; font-weight: 600; font-size: 14px; transition: 0.2s; }
-        input:focus { border-color: var(--accent); background: white; }
-        .btn-main { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
-        .btn-main:hover { opacity: 0.9; transform: translateY(-1px); }
-        .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; font-weight: 800; }
+        /* --- BOTONES Y FORMS --- */
+        .form-inline { display: flex; gap: 12px; flex-wrap: wrap; }
+        input, select { background: #F4F7FE; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-family: inherit; }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; }
 
         .badge { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
         .badge-in { background: #E6FFF9; color: var(--success); }
         .badge-out { background: #FFF5F5; color: var(--danger); }
-
-        #timer { font-size: 12px; background: #EEE; padding: 4px 8px; border-radius: 6px; color: #666; }
+        
+        #timer { font-size: 12px; background: #eee; padding: 4px 8px; border-radius: 6px; }
     </style>
 </head>
 <body>
@@ -75,42 +77,34 @@
         <div class="nav-item active" onclick="show('v-dash', this)">📊 Dashboard</div>
         <div class="nav-item" onclick="show('v-ops', this)">📝 Operaciones</div>
         <div class="nav-item" onclick="show('v-pre', this)">💰 Presupuesto</div>
-        <div class="nav-item" onclick="cambiarCapital()">⚙️ Capital</div>
+        <div class="nav-item" onclick="cambiarCapital()">⚙️ Capital Base</div>
     </div>
 
     <div class="main-wrapper">
         
-        <!-- DASHBOARD -->
+        <!-- DASHBOARD (SIN GRÁFICO, CON FLOW TEXT) -->
         <div id="v-dash" class="view-section active">
-            <div class="card-header">
-                <h1>Dashboard</h1>
+            <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                <h1>Resumen de Mercado</h1>
                 <span id="timer">30s</span>
             </div>
             
-            <div class="dashboard-grid">
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
                 <div class="card">
-                    <div class="card-title">Tendencia de Ganancias</div>
-                    <div style="height: 220px; margin-top: 10px;">
-                        <canvas id="multiExchangeChart"></canvas>
-                    </div>
+                    <div class="card-title">Tu Capital de Trabajo</div>
+                    <div class="flow-text num-blue" id="disp-cap">$300.000</div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 24px;">
-                    <div class="card">
-                        <div class="card-title">Capital Actual</div>
-                        <div class="stat-value text-accent" id="disp-cap">$300.000</div>
-                    </div>
-                    <div class="card">
-                        <div class="card-title">Oportunidad Top</div>
-                        <div id="top-gan" class="stat-value text-success">$0.00</div>
-                        <div id="top-ex" style="font-size: 13px; font-weight: 700; opacity: 0.7;">---</div>
-                    </div>
+                <div class="card">
+                    <div class="card-title">Mejor Ganancia Actual</div>
+                    <div id="top-gan" class="flow-text num-green">$0.00</div>
+                    <div id="top-ex" style="font-weight: 700; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">Arbitraje Sugerido (P2P)</div>
+                <div class="card-title">Oportunidades de Arbitraje (USDT)</div>
                 <table>
-                    <thead><tr><th>Exchange</th><th>Compra</th><th>Venta</th><th>Ganancia</th></tr></thead>
+                    <thead><tr><th>Exchange</th><th>Compra (ASK)</th><th>Venta (P2P)</th><th>Ganancia Neta</th></tr></thead>
                     <tbody id="table-p2p"></tbody>
                 </table>
             </div>
@@ -118,13 +112,13 @@
 
         <!-- OPERACIONES -->
         <div id="v-ops" class="view-section">
-            <h1>Operaciones</h1>
-            <div class="card" style="margin-bottom: 24px;">
+            <h1>Registro Operativo</h1>
+            <div class="card">
                 <div class="form-inline">
-                    <input type="number" id="o-monto" placeholder="Monto ARS">
-                    <input type="number" id="o-buy" placeholder="Precio Compra">
-                    <input type="number" id="o-sell" placeholder="Precio Venta">
-                    <button class="btn-main" onclick="addOp()">Registrar</button>
+                    <input type="number" id="o-monto" placeholder="ARS Invertidos">
+                    <input type="number" id="o-buy" placeholder="Cotiz. Compra">
+                    <input type="number" id="o-sell" placeholder="Cotiz. Venta">
+                    <button class="btn-main" onclick="addOp()">Guardar Registro</button>
                 </div>
             </div>
             <div class="card">
@@ -134,40 +128,36 @@
 
         <!-- PRESUPUESTO -->
         <div id="v-pre" class="view-section">
-            <h1>Presupuesto</h1>
-            <div class="dashboard-grid">
+            <h1>Gestión de Presupuesto</h1>
+            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 24px;">
                 <div class="card">
-                    <div class="card-title">Flujos Mensuales</div>
-                    <div style="height: 220px; margin-top: 10px;">
-                        <canvas id="budgetWaveChart"></canvas>
-                    </div>
+                    <div class="card-title">Histórico de Flujos</div>
+                    <div style="height: 200px;"><canvas id="budgetWaveChart"></canvas></div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 24px;">
-                    <div class="card" style="background: var(--accent); color: white;">
-                        <div class="card-title" style="color: rgba(255,255,255,0.7)">Neto Total</div>
-                        <div id="sum-total" class="stat-value" style="margin-bottom: 0;">$0</div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0;">
+                        <div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div>
+                        <div id="sum-total" style="font-size:32px; font-weight:800">$0</div>
                     </div>
-                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div class="card" style="padding: 15px;">
-                            <div class="card-title" style="font-size: 10px;">Ingresos</div>
-                            <div id="sum-in" class="text-success" style="font-size: 18px; font-weight: 800;">$0</div>
-                        </div>
-                        <div class="card" style="padding: 15px;">
-                            <div class="card-title" style="font-size: 10px;">Egresos</div>
-                            <div id="sum-out" class="text-danger" style="font-size: 18px; font-weight: 800;">$0</div>
-                        </div>
+                    <div class="card" style="margin-bottom:0; padding:15px;">
+                        <div class="card-title" style="font-size:10px;">Ingresos Totales</div>
+                        <div id="sum-in" class="flow-text num-green" style="font-size:22px">$0</div>
+                    </div>
+                    <div class="card" style="margin-bottom:0; padding:15px;">
+                        <div class="card-title" style="font-size:10px;">Egresos Totales</div>
+                        <div id="sum-out" class="flow-text num-red" style="font-size:22px">$0</div>
                     </div>
                 </div>
             </div>
 
-            <div class="card" style="margin-bottom: 24px;">
+            <div class="card">
                 <div class="form-inline">
                     <input type="date" id="p-fecha">
                     <input type="text" id="p-desc" placeholder="Descripción">
-                    <input type="number" id="p-monto" placeholder="Monto">
+                    <input type="number" id="p-monto" placeholder="Monto $">
                     <select id="p-tipo">
-                        <option value="in">Ingreso</option>
-                        <option value="out">Egreso</option>
+                        <option value="in">Ingreso (+)</option>
+                        <option value="out">Egreso (-)</option>
                     </select>
                     <button class="btn-main" onclick="addPre()">Añadir</button>
                 </div>
@@ -184,30 +174,17 @@
         let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
         let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
 
-        // --- CHART CONFIG (ULTRA CLEAN) ---
-        const commonOptions = {
-            responsive: true,
-            maintainAspectRatio: false,
-            plugins: { legend: { display: true, position: 'bottom', labels: { usePointStyle: true, boxWidth: 6, font: { size: 10, weight: '600' } } } },
-            scales: {
-                y: { grid: { borderDash: [5, 5], color: '#E9EDF7', drawBorder: false }, ticks: { font: { size: 10 } } },
-                x: { grid: { display: false } }
-            },
-            elements: { line: { tension: 0.4, borderWidth: 2 }, point: { radius: 0, hoverRadius: 5 } }
-        };
-
-        const ctxDash = document.getElementById('multiExchangeChart').getContext('2d');
-        const multiChart = new Chart(ctxDash, {
-            type: 'line',
-            data: { labels: [], datasets: [] },
-            options: commonOptions
-        });
-
+        // --- CHART CONFIG (SOLO PARA PRESUPUESTO) ---
         const ctxPre = document.getElementById('budgetWaveChart').getContext('2d');
         const budgetChart = new Chart(ctxPre, {
             type: 'line',
-            data: { labels: [], datasets: [] },
-            options: commonOptions
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { display: false }, x: { grid: { display: false } } },
+                elements: { line: { tension: 0.4, borderWidth: 3 }, point: { radius: 0 } }
+            },
+            data: { labels: [], datasets: [] }
         });
 
         function show(id, el) {
@@ -217,7 +194,7 @@
             el.classList.add('active');
         }
 
-        // --- LÓGICA ---
+        // --- LÓGICA DE DATOS ---
         function addOp() {
             const m = parseFloat(document.getElementById('o-monto').value);
             const b = parseFloat(document.getElementById('o-buy').value);
@@ -247,7 +224,7 @@
         function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
 
         function render() {
-            document.getElementById('hist-ops').innerHTML = dbOps.map(o => `<tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td class="${o.gan>0?'text-success':'text-danger'}">$${o.gan.toFixed(2)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>`).join('');
+            document.getElementById('hist-ops').innerHTML = dbOps.map(o => `<tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td style="color:${o.gan>0?'#05CD99':'#FF5B5B'}">$${o.gan.toFixed(2)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>`).join('');
             
             let i = 0, e = 0;
             document.getElementById('hist-pre').innerHTML = dbPre.map(p => {
@@ -259,24 +236,16 @@
             document.getElementById('sum-out').innerText = `$${e.toLocaleString()}`;
             document.getElementById('sum-total').innerText = `$${(i - e).toLocaleString()}`;
             
-            updateBudgetChart();
-        }
-
-        function updateBudgetChart() {
-            const sorted = [...dbPre].sort((a,b) => new Date(a.fRaw) - new Date(b.fRaw)).slice(-7);
+            // Update Mini Chart
+            const sorted = [...dbPre].sort((a,b) => new Date(a.fRaw) - new Date(b.fRaw)).slice(-10);
             budgetChart.data.labels = sorted.map(x => x.f.substring(0,5));
-            
-            const gradIn = ctxPre.createLinearGradient(0,0,0,200); gradIn.addColorStop(0, 'rgba(5, 205, 153, 0.1)'); gradIn.addColorStop(1, 'transparent');
-            const gradOut = ctxPre.createLinearGradient(0,0,0,200); gradOut.addColorStop(0, 'rgba(238, 93, 80, 0.1)'); gradOut.addColorStop(1, 'transparent');
-
-            budgetChart.data.datasets = [
-                { label: 'Ingresos', data: sorted.map(x => x.t==='in'?x.m:0), borderColor: '#05CD99', backgroundColor: gradIn, fill: true },
-                { label: 'Egresos', data: sorted.map(x => x.t==='out'?x.m:0), borderColor: '#EE5D50', backgroundColor: gradOut, fill: true }
-            ];
+            budgetChart.data.datasets = [{
+                data: sorted.map(x => x.t==='in'?x.m:-x.m),
+                borderColor: '#4318FF',
+                fill: false
+            }];
             budgetChart.update();
         }
-
-        const exchangeColors = { LEMONCASH: '#F7E018', BELO: '#000000', BUENBIT: '#3AF3B2', FIWIND: '#4318FF', RIPIO: '#EE5D50' };
 
         async function updateMarket() {
             try {
@@ -286,36 +255,24 @@
                 const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
                 let h = '', mGan = -9999, mEx = '';
 
-                if (multiChart.data.labels.length > 8) multiChart.data.labels.shift();
-                multiChart.data.labels.push(new Date().toLocaleTimeString([], {minute:'2-digit', second:'2-digit'}));
-
                 exs.forEach(e => {
-                    const name = e.toUpperCase();
                     const ask = d[e].ask;
                     const gan = (CAPITAL / ask * p2p) - CAPITAL;
-                    if(gan > mGan) { mGan = gan; mEx = name; }
-
-                    let ds = multiChart.data.datasets.find(x => x.label === name);
-                    if (!ds) {
-                        ds = { label: name, data: [], borderColor: exchangeColors[name], fill: false, pointRadius: 0 };
-                        multiChart.data.datasets.push(ds);
-                    }
-                    if (ds.data.length > 8) ds.data.shift();
-                    ds.data.push(gan);
-
-                    h += `<tr><td>${name}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td class="${gan>0?'text-success':'text-danger'}">$${gan.toFixed(2)}</td></tr>`;
+                    if(gan > mGan) { mGan = gan; mEx = e.toUpperCase(); }
+                    h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(2)}</td></tr>`;
                 });
 
                 document.getElementById('table-p2p').innerHTML = h;
-                document.getElementById('top-gan').innerText = `$${mGan.toFixed(2)}`;
+                const topGanEl = document.getElementById('top-gan');
+                topGanEl.innerText = `$${mGan.toFixed(2)}`;
+                topGanEl.className = `flow-text ${mGan > 0 ? 'num-green' : 'num-red'}`;
                 document.getElementById('top-ex').innerText = mEx;
-                multiChart.update();
                 segs = 30;
-            } catch(e) { segs = 5; }
+            } catch(err) { segs = 5; }
         }
 
         setInterval(() => { segs--; document.getElementById('timer').innerText = segs+'s'; if(segs <= 0) updateMarket(); }, 1000);
-        function cambiarCapital() { let p = prompt("Capital ARS:", CAPITAL); if(p) { CAPITAL = parseFloat(p); document.getElementById('disp-cap').innerText = '$'+CAPITAL.toLocaleString(); updateMarket(); } }
+        function cambiarCapital() { let p = prompt("Nuevo Capital ARS:", CAPITAL); if(p) { CAPITAL = parseFloat(p); document.getElementById('disp-cap').innerText = '$'+CAPITAL.toLocaleString(); updateMarket(); } }
 
         render(); updateMarket();
     </script>
