@@ -2,7 +2,7 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>ByBauti - Finance Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -16,136 +16,164 @@
             --accent: #4318FF;
             --success: #05CD99;
             --danger: #EE5D50;
-            /* Degradados para el efecto Flow */
             --led-blue: linear-gradient(135deg, #4318FF, #B23AF3, #4318FF);
             --led-verde: linear-gradient(135deg, #05CD99, #66DDAA, #05CD99);
             --led-rojo: linear-gradient(135deg, #FF5B5B, #F067B4, #FF5B5B);
         }
 
-        * { box-sizing: border-box; outline: none; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); }
+        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
 
-        /* --- SIDEBAR --- */
-        .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 100; }
+        /* --- SIDEBAR (ESCRITORIO) --- */
+        .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 1000; transition: 0.3s; }
         .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
-        .nav-item { color: var(--text-sec); padding: 14px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; margin-bottom: 5px; }
+        .nav-container { display: flex; flex-direction: column; gap: 5px; }
+        .nav-item { color: var(--text-sec); padding: 14px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; }
         .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.15); }
+        .nav-item i { font-style: normal; font-size: 18px; }
 
-        /* --- CONTENIDO --- */
-        .main-wrapper { margin-left: 260px; width: calc(100% - 260px); padding: 40px; }
-        .view-section { display: none; }
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-wrapper { margin-left: 260px; width: 100%; padding: 40px; transition: 0.3s; }
+        .view-section { display: none; max-width: 1100px; margin: 0 auto; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; }
 
-        /* --- CARDS & EFECTOS --- */
+        /* --- CARDS & GRIDS --- */
+        .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
         .card-title { font-size: 13px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
 
         /* EFECTO DEGRADADO DINÁMICO */
-        .flow-text { font-size: 44px; font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
+        .flow-text { font-size: clamp(32px, 5vw, 44px); font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
         @keyframes flow { to { background-position: 200% center; } }
-        
         .num-blue { background-image: var(--led-blue); }
         .num-green { background-image: var(--led-verde); }
         .num-red { background-image: var(--led-rojo); }
 
-        /* --- TABLAS --- */
-        table { width: 100%; border-collapse: collapse; }
+        /* --- TABLAS RESPONSIVAS --- */
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
         th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; }
         td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 600; }
 
-        /* --- BOTONES Y FORMS --- */
-        .form-inline { display: flex; gap: 12px; flex-wrap: wrap; }
-        input, select { background: #F4F7FE; border: none; padding: 12px 16px; border-radius: 12px; font-weight: 600; font-family: inherit; }
-        .btn-main { background: var(--accent); color: white; border: none; padding: 12px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+        /* --- INPUTS --- */
+        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+        input, select { background: #F4F7FE; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; width: 100%; }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-main:active { transform: scale(0.98); }
         .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; }
 
+        /* --- RESPONSIVE (MÓVIL) --- */
+        @media (max-width: 850px) {
+            .sidebar { 
+                width: 100%; height: 70px; bottom: 0; top: auto; padding: 0 10px;
+                border-right: none; border-top: 1px solid #E9EDF7; flex-direction: row;
+            }
+            .logo { display: none; }
+            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; height: 100%; align-items: center; }
+            .nav-item { flex-direction: column; gap: 4px; padding: 8px; font-size: 10px; border-radius: 8px; text-align: center; }
+            .nav-item.active { box-shadow: none; }
+            
+            .main-wrapper { margin-left: 0; padding: 20px 20px 100px 20px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 15px; }
+            h1 { font-size: 22px; }
+            .card { padding: 18px; margin-bottom: 15px; }
+            .flow-text { font-size: 34px; }
+        }
+
+        #timer { font-size: 12px; background: #eee; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
         .badge { padding: 5px 10px; border-radius: 8px; font-size: 11px; font-weight: 700; }
         .badge-in { background: #E6FFF9; color: var(--success); }
         .badge-out { background: #FFF5F5; color: var(--danger); }
-        
-        #timer { font-size: 12px; background: #eee; padding: 4px 8px; border-radius: 6px; }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
         <div class="logo">By<span>Bauti</span></div>
-        <div class="nav-item active" onclick="show('v-dash', this)">📊 Dashboard</div>
-        <div class="nav-item" onclick="show('v-ops', this)">📝 Operaciones</div>
-        <div class="nav-item" onclick="show('v-pre', this)">💰 Presupuesto</div>
-        <div class="nav-item" onclick="cambiarCapital()">⚙️ Capital Base</div>
+        <div class="nav-container">
+            <div class="nav-item active" onclick="show('v-dash', this)"><i>📊</i><span>Dash</span></div>
+            <div class="nav-item" onclick="show('v-ops', this)"><i>📝</i><span>Ops</span></div>
+            <div class="nav-item" onclick="show('v-pre', this)"><i>💰</i><span>Caja</span></div>
+            <div class="nav-item" onclick="cambiarCapital()"><i>⚙️</i><span>Cap</span></div>
+        </div>
     </div>
 
     <div class="main-wrapper">
         
-        <!-- DASHBOARD (SIN GRÁFICO, CON FLOW TEXT) -->
+        <!-- DASHBOARD -->
         <div id="v-dash" class="view-section active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-                <h1>Resumen de Mercado</h1>
+                <h1>Hola, Bauti!</h1>
                 <span id="timer">30s</span>
             </div>
             
-            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px;">
+            <div class="grid-2">
                 <div class="card">
-                    <div class="card-title">Tu Capital de Trabajo</div>
+                    <div class="card-title">Capital de Trabajo</div>
                     <div class="flow-text num-blue" id="disp-cap">$300.000</div>
                 </div>
                 <div class="card">
-                    <div class="card-title">Mejor Ganancia Actual</div>
+                    <div class="card-title">Mejor Opción</div>
                     <div id="top-gan" class="flow-text num-green">$0.00</div>
-                    <div id="top-ex" style="font-weight: 700; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
+                    <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">Oportunidades de Arbitraje (USDT)</div>
-                <table>
-                    <thead><tr><th>Exchange</th><th>Compra (ASK)</th><th>Venta (P2P)</th><th>Ganancia Neta</th></tr></thead>
-                    <tbody id="table-p2p"></tbody>
-                </table>
+                <div class="card-title">Arbitraje USDT (ARS)</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Exchange</th><th>Compra</th><th>Venta</th><th>Ganancia</th></tr></thead>
+                        <tbody id="table-p2p"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
         <!-- OPERACIONES -->
         <div id="v-ops" class="view-section">
-            <h1>Registro Operativo</h1>
+            <h1>Registro de Operaciones</h1>
             <div class="card">
                 <div class="form-inline">
                     <input type="number" id="o-monto" placeholder="ARS Invertidos">
-                    <input type="number" id="o-buy" placeholder="Cotiz. Compra">
-                    <input type="number" id="o-sell" placeholder="Cotiz. Venta">
-                    <button class="btn-main" onclick="addOp()">Guardar Registro</button>
+                    <input type="number" id="o-buy" placeholder="C. Compra">
+                    <input type="number" id="o-sell" placeholder="C. Venta">
+                    <button class="btn-main" onclick="addOp()">Registrar</button>
                 </div>
             </div>
             <div class="card">
-                <table><thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th>Acción</th></tr></thead><tbody id="hist-ops"></tbody></table>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th></th></tr></thead><tbody id="hist-ops"></tbody></table>
+                </div>
             </div>
         </div>
 
         <!-- PRESUPUESTO -->
         <div id="v-pre" class="view-section">
-            <h1>Gestión de Presupuesto</h1>
-            <div style="display: grid; grid-template-columns: 1.5fr 1fr; gap: 24px; margin-bottom: 24px;">
+            <h1>Gestión de Caja</h1>
+            <div class="grid-2">
                 <div class="card">
-                    <div class="card-title">Histórico de Flujos</div>
-                    <div style="height: 200px;"><canvas id="budgetWaveChart"></canvas></div>
+                    <div class="card-title">Flujo de Fondos</div>
+                    <div style="height: 180px;"><canvas id="budgetWaveChart"></canvas></div>
                 </div>
-                <div style="display: flex; flex-direction: column; gap: 20px;">
-                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0;">
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0; padding: 20px;">
                         <div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div>
                         <div id="sum-total" style="font-size:32px; font-weight:800">$0</div>
                     </div>
-                    <div class="card" style="margin-bottom:0; padding:15px;">
-                        <div class="card-title" style="font-size:10px;">Ingresos Totales</div>
-                        <div id="sum-in" class="flow-text num-green" style="font-size:22px">$0</div>
-                    </div>
-                    <div class="card" style="margin-bottom:0; padding:15px;">
-                        <div class="card-title" style="font-size:10px;">Egresos Totales</div>
-                        <div id="sum-out" class="flow-text num-red" style="font-size:22px">$0</div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Ingresos</div>
+                            <div id="sum-in" class="flow-text num-green" style="font-size:20px">$0</div>
+                        </div>
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Egresos</div>
+                            <div id="sum-out" class="flow-text num-red" style="font-size:20px">$0</div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -153,17 +181,16 @@
             <div class="card">
                 <div class="form-inline">
                     <input type="date" id="p-fecha">
-                    <input type="text" id="p-desc" placeholder="Descripción">
+                    <input type="text" id="p-desc" placeholder="Detalle">
                     <input type="number" id="p-monto" placeholder="Monto $">
-                    <select id="p-tipo">
-                        <option value="in">Ingreso (+)</option>
-                        <option value="out">Egreso (-)</option>
-                    </select>
-                    <button class="btn-main" onclick="addPre()">Añadir</button>
+                    <select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select>
+                    <button class="btn-main" onclick="addPre()">Agregar</button>
                 </div>
             </div>
             <div class="card">
-                <table><thead><tr><th>Fecha</th><th>Descripción</th><th>Monto</th><th>Tipo</th><th>Acción</th></tr></thead><tbody id="hist-pre"></tbody></table>
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="hist-pre"></tbody></table>
+                </div>
             </div>
         </div>
     </div>
@@ -174,7 +201,6 @@
         let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
         let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
 
-        // --- CHART CONFIG (SOLO PARA PRESUPUESTO) ---
         const ctxPre = document.getElementById('budgetWaveChart').getContext('2d');
         const budgetChart = new Chart(ctxPre, {
             type: 'line',
@@ -192,15 +218,15 @@
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
+            window.scrollTo(0,0);
         }
 
-        // --- LÓGICA DE DATOS ---
         function addOp() {
             const m = parseFloat(document.getElementById('o-monto').value);
             const b = parseFloat(document.getElementById('o-buy').value);
             const s = parseFloat(document.getElementById('o-sell').value);
             if(!m || !b || !s) return;
-            dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString(), m, gan: (m/b*s)-m });
+            dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'}), m, gan: (m/b*s)-m });
             save();
         }
 
@@ -210,7 +236,7 @@
             const m = parseFloat(document.getElementById('p-monto').value);
             const t = document.getElementById('p-tipo').value;
             if(!d || !m) return;
-            dbPre.unshift({ id: Date.now(), fRaw, f: fRaw.split('-').reverse().join('/'), d, m, t });
+            dbPre.unshift({ id: Date.now(), fRaw, f: fRaw.split('-').reverse().slice(0,2).join('/'), d, m, t });
             save();
         }
 
@@ -224,26 +250,21 @@
         function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
 
         function render() {
-            document.getElementById('hist-ops').innerHTML = dbOps.map(o => `<tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td style="color:${o.gan>0?'#05CD99':'#FF5B5B'}">$${o.gan.toFixed(2)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>`).join('');
+            document.getElementById('hist-ops').innerHTML = dbOps.map(o => `<tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td style="color:${o.gan>0?'#05CD99':'#FF5B5B'}">$${o.gan.toFixed(0)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>`).join('');
             
             let i = 0, e = 0;
             document.getElementById('hist-pre').innerHTML = dbPre.map(p => {
                 p.t === 'in' ? i += p.m : e += p.m;
-                return `<tr><td>${p.f}</td><td>${p.d}</td><td>$${p.m.toLocaleString()}</td><td><span class="badge ${p.t==='in'?'badge-in':'badge-out'}">${p.t==='in'?'INGRESO':'EGRESO'}</span></td><td><button class="btn-del" onclick="delPre(${p.id})">✕</button></td></tr>`;
+                return `<tr><td>${p.f}</td><td>${p.d}</td><td style="color:${p.t==='in'?'#05CD99':'#EE5D50'}">$${p.m.toLocaleString()}</td><td><button class="btn-del" onclick="delPre(${p.id})">✕</button></td></tr>`;
             }).join('');
 
             document.getElementById('sum-in').innerText = `$${i.toLocaleString()}`;
             document.getElementById('sum-out').innerText = `$${e.toLocaleString()}`;
             document.getElementById('sum-total').innerText = `$${(i - e).toLocaleString()}`;
             
-            // Update Mini Chart
-            const sorted = [...dbPre].sort((a,b) => new Date(a.fRaw) - new Date(b.fRaw)).slice(-10);
-            budgetChart.data.labels = sorted.map(x => x.f.substring(0,5));
-            budgetChart.data.datasets = [{
-                data: sorted.map(x => x.t==='in'?x.m:-x.m),
-                borderColor: '#4318FF',
-                fill: false
-            }];
+            const sorted = [...dbPre].sort((a,b) => new Date(a.fRaw) - new Date(b.fRaw)).slice(-8);
+            budgetChart.data.labels = sorted.map(x => x.f);
+            budgetChart.data.datasets = [{ data: sorted.map(x => x.t==='in'?x.m:-x.m), borderColor: '#4318FF', fill: false }];
             budgetChart.update();
         }
 
@@ -259,12 +280,12 @@
                     const ask = d[e].ask;
                     const gan = (CAPITAL / ask * p2p) - CAPITAL;
                     if(gan > mGan) { mGan = gan; mEx = e.toUpperCase(); }
-                    h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(2)}</td></tr>`;
+                    h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(0)}</td></tr>`;
                 });
 
                 document.getElementById('table-p2p').innerHTML = h;
                 const topGanEl = document.getElementById('top-gan');
-                topGanEl.innerText = `$${mGan.toFixed(2)}`;
+                topGanEl.innerText = `$${mGan.toFixed(0)}`;
                 topGanEl.className = `flow-text ${mGan > 0 ? 'num-green' : 'num-red'}`;
                 document.getElementById('top-ex').innerText = mEx;
                 segs = 30;
@@ -272,7 +293,10 @@
         }
 
         setInterval(() => { segs--; document.getElementById('timer').innerText = segs+'s'; if(segs <= 0) updateMarket(); }, 1000);
-        function cambiarCapital() { let p = prompt("Nuevo Capital ARS:", CAPITAL); if(p) { CAPITAL = parseFloat(p); document.getElementById('disp-cap').innerText = '$'+CAPITAL.toLocaleString(); updateMarket(); } }
+        function cambiarCapital() { 
+            let p = prompt("Nuevo Capital ARS:", CAPITAL); 
+            if(p) { CAPITAL = parseFloat(p); document.getElementById('disp-cap').innerText = '$'+CAPITAL.toLocaleString(); updateMarket(); } 
+        }
 
         render(); updateMarket();
     </script>
