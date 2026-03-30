@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinocho CashPanel - Live</title>
+    <style>
+        :root {
+            --bg-color: #E6E9F0;
+            --text-main: #2D3A54;
+            --text-sec: #808D9A;
+            --card-bg: #FFFFFF;
+            --led-rojo: linear-gradient(135deg, #FF6F6F, #FF9B9B);
+            --led-verde: linear-gradient(135deg, #6FDC8C, #A7EEB4);
+            --led-base: linear-gradient(135deg, #FF9966, #FF66CC);
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background-color: var(--bg-color);
+            margin: 0; padding: 20px;
+            display: flex; justify-content: center; min-height: 100vh;
+        }
+
+        .cash-panel { width: 900px; max-width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+
+        .card {
+            background: var(--card-bg); border-radius: 20px; padding: 25px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.03); position: relative;
+        }
+
+        .card-header { display: flex; justify-content: space-between; color: var(--text-sec); font-size: 14px; margin-bottom: 15px; }
+
+        .led-amount {
+            font-size: 42px; font-weight: 800; display: inline-block;
+            background-size: 200% auto; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; transition: all 0.5s ease;
+        }
+
+        .led-inversion { background-image: var(--led-base); }
+        .led-status-rojo { background-image: var(--led-rojo); }
+        .led-status-verde { background-image: var(--led-verde); }
+
+        .results-card { grid-column: 1 / -1; }
+        table { width: 100%; border-collapse: collapse; margin-top: 20px; }
+        th { text-align: left; color: var(--text-sec); padding-bottom: 10px; border-bottom: 1px solid #eee; }
+        td { padding: 15px 0; border-bottom: 1px solid #f9f9f9; font-size: 15px; }
+        
+        .profit-up { color: #2ecc71; font-weight: bold; }
+        .profit-down { color: #e74c3c; font-weight: bold; }
+
+        .config-btn { background: #f0f2f5; border: none; padding: 8px 12px; border-radius: 8px; cursor: pointer; color: var(--text-main); font-weight: 600; }
+
+        @media (max-width: 600px) { .cash-panel { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="cash-panel">
+        <div class="card">
+            <div class="card-header">
+                <span>Capital Invertido (ARS)</span>
+                <button class="config-btn" onclick="configurar()">⚙️ Config</button>
+            </div>
+            <span id="cap-display" class="led-amount led-inversion">$200,000</span>
+        </div>
+
+        <div class="card">
+            <div class="card-header">
+                <span>Ganancia Estimada</span>
+                <span id="time-display">--:--:--</span>
+            </div>
+            <span id="ganancia-led" class="led-amount led-status-rojo">$0.00</span>
+        </div>
+
+        <div class="card results-card">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Exchange</th>
+                        <th>Compra</th>
+                        <th>Venta P2P</th>
+                        <th>Ganancia</th>
+                        <th>%</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    <!-- Datos dinámicos aquí -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let CAPITAL = 200000;
+        let OBJETIVO = 1200;
+
+        function configurar() {
+            CAPITAL = parseFloat(prompt("Nuevo Capital:", CAPITAL)) || CAPITAL;
+            OBJETIVO = parseFloat(prompt("Mínimo Ganancia:", OBJETIVO)) || OBJETIVO;
+            document.getElementById('cap-display').innerText = '$' + CAPITAL.toLocaleString();
+            actualizar();
+        }
+
+        async function actualizar() {
+            try {
+                const res = await fetch('https://criptoya.com/api/usdt/ars/1');
+                const data = await res.json();
+                const p2p = data.binancep2p.bid;
+                const exchanges = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
+                
+                let html = '';
+                let mejorGanancia = -999999;
+
+                exchanges.forEach(ex => {
+                    const compra = data[ex].ask;
+                    const ganancia = (CAPITAL / compra * p2p) - CAPITAL;
+                    const porc = (ganancia / CAPITAL * 100).toFixed(2);
+                    if(ganancia > mejorGanancia) mejorGanancia = ganancia;
+
+                    html += `<tr>
+                        <td><b>${ex.toUpperCase()}</b></td>
+                        <td>$${compra}</td>
+                        <td>$${p2p}</td>
+                        <td class="${ganancia >= OBJETIVO ? 'profit-up' : 'profit-down'}">$${ganancia.toFixed(2)}</td>
+                        <td>${porc}%</td>
+                    </tr>`;
+                });
+
+                document.getElementById('tabla-body').innerHTML = html;
+                const ganLed = document.getElementById('ganancia-led');
+                ganLed.innerText = '$' + mejorGanancia.toFixed(2);
+                ganLed.className = mejorGanancia >= OBJETIVO ? 'led-amount led-status-verde' : 'led-amount led-status-rojo';
+                document.getElementById('time-display').innerText = new Date().toLocaleTimeString();
+
+            } catch (e) { console.error("Error capturando datos"); }
+        }
+
+        setInterval(actualizar, 30000);
+        actualizar();
+    </script>
+</body>
+</html>
