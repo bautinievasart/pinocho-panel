@@ -19,49 +19,59 @@
             --led-blue: linear-gradient(135deg, #4318FF, #B23AF3);
         }
 
+        * { box-sizing: border-box; }
+
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-main);
             margin: 0; padding: 0;
             display: flex; min-height: 100vh; color: var(--text-main);
+            overflow-x: hidden;
         }
 
-        /* --- SIDEBAR --- */
+        /* --- SIDEBAR CORREGIDO --- */
         .sidebar {
-            width: 260px; background-color: var(--sidebar-bg);
-            padding: 30px; border-right: 1px solid #F4F7FE;
-            display: flex; flex-direction: column;
-            position: fixed; height: 100vh;
+            width: 280px; background-color: var(--sidebar-bg);
+            padding: 40px 20px; border-right: 1px solid #F4F7FE;
+            position: fixed; height: 100vh; left: 0; top: 0; z-index: 100;
         }
-        .logo { font-size: 24px; font-weight: 800; margin-bottom: 50px; letter-spacing: -1px; }
+        .logo { font-size: 26px; font-weight: 800; margin-bottom: 60px; padding-left: 20px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
         
         .nav-item { 
-            color: var(--text-sec); padding: 15px; border-radius: 15px; 
-            cursor: pointer; display: flex; align-items: center; gap: 12px; 
-            transition: 0.3s; text-decoration: none; font-weight: 600; margin-bottom: 8px;
+            color: var(--text-sec); padding: 16px 20px; border-radius: 16px; 
+            cursor: pointer; display: flex; align-items: center; gap: 15px; 
+            transition: 0.3s; text-decoration: none; font-weight: 700; margin-bottom: 10px;
         }
         .nav-item:hover, .nav-item.active { background-color: #F4F7FE; color: var(--accent); }
 
-        /* --- CONTENIDO --- */
-        .main-content { flex: 1; padding: 40px; margin-left: 260px; }
-        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        /* --- CONTENIDO PRINCIPAL --- */
+        .main-content { 
+            flex: 1; 
+            margin-left: 280px; /* Ancho exacto de la sidebar */
+            padding: 50px;
+            width: calc(100% - 280px);
+        }
+
+        .view-section { display: none; animation: fadeIn 0.4s ease forwards; }
         .view-section.active { display: block; }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
 
-        .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 25px; }
+        .page-title { font-size: 32px; font-weight: 800; margin-bottom: 35px; letter-spacing: -1px; }
+
+        .dashboard-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 25px; margin-bottom: 25px; }
 
         .card {
             background-color: var(--card-bg); border-radius: 24px; padding: 30px;
             box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.06);
-            position: relative; margin-bottom: 25px;
+            position: relative;
         }
 
-        .card-title { font-size: 14px; color: var(--text-sec); font-weight: 700; margin-bottom: 20px; text-transform: uppercase; }
+        .card-title { font-size: 13px; color: var(--text-sec); font-weight: 800; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
         
         .modern-number {
-            font-size: 44px; font-weight: 800; letter-spacing: -1px;
+            font-size: 44px; font-weight: 800; letter-spacing: -2px;
             background-size: 200% auto; -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; animation: flow 4s linear infinite;
         }
@@ -71,100 +81,136 @@
 
         @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-        /* --- TABLAS Y FORMULARIOS --- */
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-sec); font-size: 12px; padding: 15px; border-bottom: 1px solid #F4F7FE; }
-        td { padding: 15px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; }
+        /* --- TABLAS MODERNAS --- */
+        .table-container { overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; color: var(--text-sec); font-size: 12px; padding: 15px; border-bottom: 1px solid #F4F7FE; font-weight: 700; }
+        td { padding: 18px 15px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; }
         
+        .exchange-link { color: var(--accent); text-decoration: none; background: #F4F7FE; padding: 5px 10px; border-radius: 8px; }
+
+        /* --- INPUTS --- */
+        .form-group { display: flex; flex-wrap: wrap; gap: 15px; margin-bottom: 20px; }
         input, select {
-            background: #F4F7FE; border: none; padding: 12px; border-radius: 12px;
-            font-family: inherit; font-weight: 600; margin-right: 10px; color: var(--text-main);
+            background: #F4F7FE; border: 2px solid transparent; padding: 14px 18px; border-radius: 14px;
+            font-family: inherit; font-weight: 700; color: var(--text-main); outline: none; transition: 0.3s;
+            flex: 1; min-width: 150px;
         }
+        input:focus { border-color: var(--accent); background: #fff; }
 
         .btn-action {
-            background: var(--accent); color: white; border: none; padding: 12px 24px;
-            border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;
+            background: var(--accent); color: white; border: none; padding: 14px 30px;
+            border-radius: 14px; font-weight: 800; cursor: pointer; transition: 0.3s;
         }
-        .btn-action:hover { opacity: 0.9; transform: scale(1.02); }
+        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 10px 20px rgba(67, 24, 255, 0.2); }
 
-        .badge { padding: 5px 12px; border-radius: 10px; font-size: 12px; }
+        .btn-delete {
+            background: #FFE6E6; color: #EE5D50; border: none; padding: 8px;
+            border-radius: 10px; cursor: pointer; font-size: 16px; transition: 0.2s;
+        }
+        .btn-delete:hover { background: #EE5D50; color: white; }
+
+        .badge { padding: 6px 12px; border-radius: 10px; font-size: 12px; font-weight: 800; }
         .win { background: #E6FFF9; color: #05CD99; }
         .loss { background: #FFE6E6; color: #EE5D50; }
 
-        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } .sidebar { width: 80px; padding: 15px; } .main-content { margin-left: 80px; } .nav-text { display: none; } }
+        @media (max-width: 1100px) { 
+            .sidebar { width: 80px; padding: 20px 10px; } 
+            .main-content { margin-left: 80px; width: calc(100% - 80px); padding: 30px; }
+            .nav-text, .logo span:first-child { display: none; }
+        }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="logo"><span class="nav-text">By</span><span>Bauti</span></div>
-        <div class="nav-item active" onclick="showView('v-dashboard')">📊 <span class="nav-text">Dashboard</span></div>
-        <div class="nav-item" onclick="showView('v-operaciones')">📝 <span class="nav-text">Operaciones</span></div>
-        <div class="nav-item" onclick="showView('v-presupuesto')">💰 <span class="nav-text">Presupuesto</span></div>
+        <div class="logo">By<span>Bauti</span></div>
+        <div class="nav-item active" onclick="showView('v-dashboard', this)">📊 <span class="nav-text">Dashboard</span></div>
+        <div class="nav-item" onclick="showView('v-operaciones', this)">📝 <span class="nav-text">Operaciones</span></div>
+        <div class="nav-item" onclick="showView('v-presupuesto', this)">💰 <span class="nav-text">Presupuesto</span></div>
         <div class="nav-item" onclick="configurar()">⚙️ <span class="nav-text">Ajustes</span></div>
     </div>
 
     <div class="main-content">
         
-        <!-- SECCIÓN DASHBOARD -->
+        <!-- DASHBOARD -->
         <div id="v-dashboard" class="view-section active">
-            <div class="page-header">
-                <div style="font-size: 28px; font-weight: 800; letter-spacing: -1px;">Monitor en Vivo</div>
-            </div>
+            <h1 class="page-title">Monitor en Vivo</h1>
             <div class="dashboard-grid">
                 <div class="card">
                     <div class="card-title">Inversión Base</div>
                     <div class="modern-number num-blue" id="inversion-display">$300.000</div>
-                    <div style="height: 180px; margin-top:20px;"><canvas id="balanceChart"></canvas></div>
+                    <div style="height: 180px; margin-top:25px;"><canvas id="balanceChart"></canvas></div>
                 </div>
                 <div class="card" style="text-align:center">
-                    <div class="card-title">Próximo Salto</div>
+                    <div class="card-title">Próximo Refresh</div>
                     <div id="countdown-led" class="modern-number num-blue">30s</div>
                 </div>
                 <div class="card" style="text-align:center">
-                    <div class="card-title">Mejor Opción</div>
+                    <div class="card-title">Mejor Ganancia</div>
                     <div id="neta-led" class="modern-number num-red">$0.00</div>
-                    <div id="mejor-ex" style="font-weight:800; color:var(--accent)">...</div>
+                    <div id="mejor-ex" style="font-weight:800; color:var(--accent); margin-top:10px;">BUSCANDO...</div>
                 </div>
-                <div class="card" style="grid-column: 1 / -1">
-                    <div class="card-title">Arbitraje Sugerido</div>
-                    <table id="pinocho-table"><thead><tr><th>EXCHANGE</th><th>COMPRA</th><th>VENTA P2P</th><th>NETA</th><th>%</th></tr></thead><tbody></tbody></table>
+            </div>
+            <div class="card">
+                <div class="card-title">Arbitraje Sugerido</div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>EXCHANGE</th><th>COMPRA</th><th>VENTA P2P</th><th>GANANCIA NETA</th><th>%</th></tr></thead>
+                        <tbody id="pinocho-table"></tbody>
+                    </table>
                 </div>
             </div>
         </div>
 
-        <!-- SECCIÓN OPERACIONES -->
+        <!-- OPERACIONES -->
         <div id="v-operaciones" class="view-section">
-            <div class="page-header"><div style="font-size: 28px; font-weight: 800;">Registro de Operaciones</div></div>
-            <div class="card">
+            <h1 class="page-title">Registro de Operaciones</h1>
+            <div class="card" style="margin-bottom:25px;">
                 <div class="card-title">Nueva Operación</div>
-                <input type="number" id="op-monto" placeholder="Monto ARS">
-                <input type="number" id="op-compra" placeholder="Precio Compra">
-                <input type="number" id="op-venta" placeholder="Precio Venta">
-                <button class="btn-action" onclick="addOperacion()">Registrar</button>
+                <div class="form-group">
+                    <input type="number" id="op-monto" placeholder="Monto Invertido ARS">
+                    <input type="number" id="op-compra" placeholder="Precio Compra">
+                    <input type="number" id="op-venta" placeholder="Precio Venta">
+                    <button class="btn-action" onclick="addOperacion()">Registrar</button>
+                </div>
             </div>
             <div class="card">
-                <table>
-                    <thead><tr><th>FECHA</th><th>INVERTIDO</th><th>GANANCIA NETA</th><th>ESTADO</th></tr></thead>
-                    <tbody id="lista-operaciones"></tbody>
-                </table>
+                <div class="card-title">Historial de Arbitrajes</div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>FECHA</th><th>INVERTIDO</th><th>GANANCIA NETA</th><th>ACCIÓN</th></tr></thead>
+                        <tbody id="lista-operaciones"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
-        <!-- SECCIÓN PRESUPUESTO -->
+        <!-- PRESUPUESTO -->
         <div id="v-presupuesto" class="view-section">
-            <div class="page-header"><div style="font-size: 28px; font-weight: 800;">Presupuesto Personal</div></div>
-            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom:25px;">
-                <div class="card" style="text-align:center"><div class="card-title">Ingresos</div><div class="modern-number num-green" id="b-ingresos" style="font-size:32px">$0</div></div>
-                <div class="card" style="text-align:center"><div class="card-title">Egresos</div><div class="modern-number num-red" id="b-egresos" style="font-size:32px">$0</div></div>
-                <div class="card" style="text-align:center; background: var(--accent); color:white"><div class="card-title" style="color:white">Balance</div><div id="b-total" style="font-size:32px; font-weight:800">$0</div></div>
+            <h1 class="page-title">Presupuesto Personal</h1>
+            <div class="dashboard-grid">
+                <div class="card" style="text-align:center"><div class="card-title">Ingresos</div><div class="modern-number num-green" id="b-ingresos" style="font-size:36px">$0</div></div>
+                <div class="card" style="text-align:center"><div class="card-title">Egresos</div><div class="modern-number num-red" id="b-egresos" style="font-size:36px">$0</div></div>
+                <div class="card" style="text-align:center; background: var(--accent); color:white"><div class="card-title" style="color:white">Balance Total</div><div id="b-total" style="font-size:36px; font-weight:800">$0</div></div>
+            </div>
+            <div class="card" style="margin-bottom:25px;">
+                <div class="card-title">Añadir Movimiento</div>
+                <div class="form-group">
+                    <input type="text" id="pre-desc" placeholder="Descripción (Ej: Lavado auto)">
+                    <input type="number" id="pre-monto" placeholder="Monto $">
+                    <select id="pre-tipo"><option value="ingreso">Ingreso</option><option value="egreso">Egreso</option></select>
+                    <button class="btn-action" onclick="addPresupuesto()">Añadir</button>
+                </div>
             </div>
             <div class="card">
-                <div class="card-title">Añadir Movimiento</div>
-                <input type="text" id="pre-desc" placeholder="Descripción">
-                <input type="number" id="pre-monto" placeholder="Monto">
-                <select id="pre-tipo"><option value="ingreso">Ingreso</option><option value="egreso">Egreso</option></select>
-                <button class="btn-action" onclick="addPresupuesto()">Añadir</button>
+                <div class="card-title">Historial de Movimientos</div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>DESCRIPCIÓN</th><th>MONTO</th><th>TIPO</th><th>ACCIÓN</th></tr></thead>
+                        <tbody id="lista-presupuesto"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
 
@@ -173,57 +219,73 @@
     <script>
         let CAPITAL = 300000;
         let countdownSecs = 30;
-        let operaciones = [];
-        let presupuesto = [];
+        let operaciones = JSON.parse(localStorage.getItem('ops')) || [];
+        let presupuesto = JSON.parse(localStorage.getItem('pre')) || [];
 
-        // NAVEGACIÓN
-        function showView(viewId) {
+        const exchangeUrls = { 'LEMONCASH': 'https://www.lemon.me/', 'BELO': 'https://www.belo.app/', 'BUENBIT': 'https://www.buenbit.com/', 'FIWIND': 'https://www.fiwind.io/', 'RIPIO': 'https://www.ripio.com/ar/' };
+
+        function showView(viewId, element) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
             document.getElementById(viewId).classList.add('active');
-            event.currentTarget.classList.add('active');
+            element.classList.add('active');
         }
 
-        // REGISTRO OPERACIONES
+        // --- OPERACIONES ---
         function addOperacion() {
             const m = parseFloat(document.getElementById('op-monto').value);
             const c = parseFloat(document.getElementById('op-compra').value);
             const v = parseFloat(document.getElementById('op-venta').value);
             if(!m || !c || !v) return;
-            const ganancia = (m / c * v) - m;
-            operaciones.unshift({ fecha: new Date().toLocaleDateString(), monto: m, neta: ganancia });
-            renderOperaciones();
+            const gan = (m / c * v) - m;
+            operaciones.unshift({ id: Date.now(), fecha: new Date().toLocaleDateString(), monto: m, neta: gan });
+            saveAndRender();
+            document.querySelectorAll('#v-operaciones input').forEach(i => i.value = '');
         }
 
-        function renderOperaciones() {
-            const body = document.getElementById('lista-operaciones');
-            body.innerHTML = operaciones.map(o => `<tr><td>${o.fecha}</td><td>$${o.monto.toLocaleString()}</td><td style="color:${o.neta>0?'#05CD99':'#FF5B5B'}">$${o.neta.toLocaleString()}</td><td><span class="badge win">Completado</span></td></tr>`).join('');
-        }
+        function deleteOp(id) { operaciones = operaciones.filter(o => o.id !== id); saveAndRender(); }
 
-        // PRESUPUESTO
+        // --- PRESUPUESTO ---
         function addPresupuesto() {
             const d = document.getElementById('pre-desc').value;
             const m = parseFloat(document.getElementById('pre-monto').value);
             const t = document.getElementById('pre-tipo').value;
             if(!d || !m) return;
-            presupuesto.push({ desc: d, monto: m, tipo: t });
-            renderPresupuesto();
+            presupuesto.unshift({ id: Date.now(), desc: d, monto: m, tipo: t });
+            saveAndRender();
+            document.querySelectorAll('#v-presupuesto input').forEach(i => i.value = '');
         }
 
-        function renderPresupuesto() {
+        function deletePre(id) { presupuesto = presupuesto.filter(p => p.id !== id); saveAndRender(); }
+
+        function saveAndRender() {
+            localStorage.setItem('ops', JSON.stringify(operaciones));
+            localStorage.setItem('pre', JSON.stringify(presupuesto));
+            renderAll();
+        }
+
+        function renderAll() {
+            // Render Operaciones
+            document.getElementById('lista-operaciones').innerHTML = operaciones.map(o => `<tr><td>${o.fecha}</td><td>$${o.monto.toLocaleString()}</td><td style="color:${o.neta>0?'#05CD99':'#FF5B5B'}">$${o.neta.toLocaleString(undefined,{minimumFractionDigits:2})}</td><td><button class="btn-delete" onclick="deleteOp(${o.id})">🗑️</button></td></tr>`).join('');
+            
+            // Render Presupuesto
             let ing = 0, egr = 0;
-            presupuesto.forEach(p => p.tipo === 'ingreso' ? ing += p.monto : egr += p.monto);
+            document.getElementById('lista-presupuesto').innerHTML = presupuesto.map(p => {
+                if(p.tipo === 'ingreso') ing += p.monto; else egr += p.monto;
+                return `<tr><td>${p.desc}</td><td>$${p.monto.toLocaleString()}</td><td><span class="badge ${p.tipo==='ingreso'?'win':'loss'}">${p.tipo.toUpperCase()}</span></td><td><button class="btn-delete" onclick="deletePre(${p.id})">🗑️</button></td></tr>`;
+            }).join('');
+            
             document.getElementById('b-ingresos').innerText = `$${ing.toLocaleString()}`;
             document.getElementById('b-egresos').innerText = `$${egr.toLocaleString()}`;
             document.getElementById('b-total').innerText = `$${(ing - egr).toLocaleString()}`;
         }
 
-        // DASHBOARD LOGIC (Igual a tu versión maestra)
+        // --- DASHBOARD CORE ---
         const ctx = document.getElementById('balanceChart').getContext('2d');
         let dataPoints = [1450, 1460, 1455, 1470, 1465, 1480, 1475];
         let balanceChart = new Chart(ctx, {
             type: 'line',
-            data: { labels: ['','','','','','',''], datasets: [{ data: dataPoints, borderColor: '#4318FF', fill: true, backgroundColor: 'rgba(67, 24, 255, 0.1)', tension: 0.4, pointRadius: 0 }] },
+            data: { labels: ['','','','','','',''], datasets: [{ data: dataPoints, borderColor: '#4318FF', fill: true, backgroundColor: 'rgba(67, 24, 255, 0.05)', tension: 0.45, pointRadius: 0, borderWidth: 3 }] },
             options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } }, maintainAspectRatio: false }
         });
 
@@ -236,15 +298,19 @@
                 let html = '', mejorNeta = -999999, mejorEx = "";
 
                 exchanges.forEach(ex => {
+                    const name = ex.toUpperCase();
                     const ask = data[ex].ask;
                     const gan = (CAPITAL / ask * p2p) - CAPITAL;
-                    if(gan > mejorNeta) { mejorNeta = gan; mejorEx = ex.toUpperCase(); }
-                    html += `<tr><td>${ex.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td><span class="badge ${gan>0?'win':'loss'}">$${gan.toFixed(2)}</span></td><td>${(gan/CAPITAL*100).toFixed(2)}%</td></tr>`;
+                    if(gan > mejorNeta) { mejorNeta = gan; mejorEx = name; }
+                    html += `<tr><td><a href="${exchangeUrls[name]}" target="_blank" class="exchange-link">${name} ↗</a></td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td><span class="badge ${gan>0?'win':'loss'}">$${gan.toLocaleString(undefined,{minimumFractionDigits:2})}</span></td><td>${(gan/CAPITAL*100).toFixed(2)}%</td></tr>`;
                 });
-                document.querySelector('#pinocho-table tbody').innerHTML = html;
-                document.getElementById('neta-led').innerText = `$${mejorNeta.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
-                document.getElementById('neta-led').className = `modern-number ${mejorNeta>0?'num-green':'num-red'}`;
+                document.getElementById('pinocho-table').innerHTML = html;
+                const nLed = document.getElementById('neta-led');
+                nLed.innerText = `$${mejorNeta.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                nLed.className = `modern-number ${mejorNeta>0?'num-green':'num-red'}`;
                 document.getElementById('mejor-ex').innerText = mejorEx;
+                
+                dataPoints.shift(); dataPoints.push(p2p); balanceChart.update();
                 countdownSecs = 30;
             } catch (e) { countdownSecs = 5; }
         }
@@ -256,10 +322,11 @@
         }, 1000);
 
         function configurar() {
-            let n = prompt("Nuevo Capital:", CAPITAL);
+            let n = prompt("Nuevo Capital Base ARS:", CAPITAL);
             if(n) { CAPITAL = parseFloat(n); document.getElementById('inversion-display').innerText = '$' + CAPITAL.toLocaleString(); actualizar(); }
         }
 
+        renderAll();
         actualizar();
     </script>
 </body>
