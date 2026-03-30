@@ -3,49 +3,217 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinocho CashPanel - Live</title>
+    <title>Pinocho Elite Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg-color: #E6E9F0;
-            --text-main: #2D3A54;
-            --text-sec: #808D9A;
+            --bg-color: #F4F7FE;
+            --text-main: #1B2559;
+            --text-sec: #A3AED0;
             --card-bg: #FFFFFF;
-            --led-rojo: linear-gradient(135deg, #FF6F6F, #FF9B9B);
-            --led-verde: linear-gradient(135deg, #6FDC8C, #A7EEB4);
-            --led-base: linear-gradient(135deg, #FF9966, #FF66CC);
-            --accent: #4A90E2;
+            --led-base: linear-gradient(135deg, #4318FF, #B23AF3);
+            --led-rojo: linear-gradient(135deg, #FF5B5B, #F067B4);
+            --led-verde: linear-gradient(135deg, #05CD99, #66DDAA);
+            --accent: #4318FF;
         }
 
         body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
+            font-family: 'DM Sans', sans-serif;
             background-color: var(--bg-color);
             margin: 0; padding: 20px;
-            display: flex; justify-content: center; min-height: 100vh;
+            display: flex; justify-content: center; color: var(--text-main);
         }
 
-        .cash-panel { width: 900px; max-width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        .dashboard-container { width: 1100px; max-width: 100%; display: grid; grid-template-columns: 1.5fr 1fr 1fr; gap: 20px; }
 
         .card {
-            background: var(--card-bg); border-radius: 24px; padding: 25px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.04); position: relative;
-            overflow: hidden;
+            background: var(--card-bg); border-radius: 20px; padding: 20px;
+            box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.08);
+            position: relative;
         }
 
-        .card-header { display: flex; justify-content: space-between; align-items: center; color: var(--text-sec); font-size: 13px; font-weight: 600; margin-bottom: 15px; text-transform: uppercase; letter-spacing: 1px; }
+        .header-title { font-size: 14px; color: var(--text-sec); font-weight: 500; margin-bottom: 10px; }
 
-        /* --- CONTADOR ESTÉTICO --- */
-        .timer-container {
-            display: flex; align-items: center; gap: 10px; background: #f0f2f5; padding: 5px 12px; border-radius: 20px;
+        /* --- LED TEXT EFFECT --- */
+        .led-text {
+            font-size: 36px; font-weight: 700; display: inline-block;
+            background-size: 200% auto; -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent; animation: flow 3s linear infinite;
         }
+        .led-inversion { background-image: var(--led-base); }
+        .led-rojo { background-image: var(--led-rojo); }
+        .led-verde { background-image: var(--led-verde); }
+
+        @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
+
+        /* --- CHART SECTION --- */
+        .chart-container { height: 150px; margin-top: 10px; }
+
+        /* --- TABLE STYLE --- */
+        .table-card { grid-column: 1 / -1; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th { text-align: left; color: var(--text-sec); font-size: 12px; padding: 15px 5px; border-bottom: 1px solid #F4F7FE; }
+        td { padding: 15px 5px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 600; }
+
+        .ex-link {
+            color: var(--accent); text-decoration: none; background: #F4F7FE;
+            padding: 5px 12px; border-radius: 10px; transition: 0.3s;
+        }
+        .ex-link:hover { background: var(--accent); color: white; }
+
+        .status-badge {
+            padding: 4px 10px; border-radius: 8px; font-size: 12px;
+        }
+        .status-win { background: #05CD9922; color: #05CD99; }
+        .status-loss { background: #EE5D5022; color: #EE5D50; }
+
+        .timer-led { font-size: 24px; letter-spacing: 2px; }
+
+        .btn-config {
+            position: absolute; top: 20px; right: 20px; background: #F4F7FE;
+            border: none; border-radius: 10px; padding: 8px; cursor: pointer;
+        }
+
+        @media (max-width: 800px) { .dashboard-container { grid-template-columns: 1fr; } }
+    </style>
+</head>
+<body>
+
+    <div class="dashboard-container">
         
-        .timer-ring {
-            width: 18px; height: 18px; border: 3px solid #ddd; border-top: 3px solid var(--accent); border-radius: 50%; animation: spin 1s linear infinite;
+        <!-- CARD GRÁFICO (Inspirado en Highest Volume) -->
+        <div class="card">
+            <div class="header-title">PROYECCIÓN DE MERCADO (USDT/ARS)</div>
+            <div class="led-text led-inversion" id="cap-display">$300,000</div>
+            <div class="chart-container">
+                <canvas id="myChart"></canvas>
+            </div>
+        </div>
+
+        <!-- CARD TEMPORIZADOR LED -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <div class="header-title">PRÓXIMO REFRESH</div>
+            <div id="timer-display" class="led-text led-inversion timer-led">30s</div>
+            <div style="margin-top: 10px; font-size: 12px; color: var(--text-sec);" id="last-update">Actualizando...</div>
+        </div>
+
+        <!-- CARD GANANCIA MEJORADA -->
+        <div class="card" style="display: flex; flex-direction: column; justify-content: center; align-items: center;">
+            <button class="btn-config" onclick="configurar()">⚙️</button>
+            <div class="header-title">MEJOR OPORTUNIDAD</div>
+            <div id="ganancia-led" class="led-text led-rojo">$0.00</div>
+            <div id="mejor-ex-name" style="margin-top: 5px; font-weight: bold; color: var(--accent);">Esperando datos...</div>
+        </div>
+
+        <!-- TABLA DE ACTIVIDADES RECIENTES -->
+        <div class="card table-card">
+            <div class="header-title">EXCHANGES DISPONIBLES</div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>PLATAFORMA</th>
+                        <th>PRECIO COMPRA</th>
+                        <th>VENTA P2P</th>
+                        <th>RESULTADO NETA</th>
+                        <th>RENDIMIENTO</th>
+                    </tr>
+                </thead>
+                <tbody id="tabla-body">
+                    <!-- Filas dinámicas -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        let CAPITAL = 300000;
+        let OBJETIVO = 1500;
+        let seconds = 30;
+        const links = {
+            'lemoncash': 'https://www.lemon.me/',
+            'belo': 'https://www.belo.app/',
+            'buenbit': 'https://www.buenbit.com/',
+            'fiwind': 'https://www.fiwind.io/',
+            'ripio': 'https://www.ripio.com/ar/'
+        };
+
+        // --- INICIALIZAR GRÁFICO ---
+        const ctx = document.getElementById('myChart').getContext('2d');
+        let chart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['', '', '', '', '', '', ''],
+                datasets: [{
+                    label: 'USDT',
+                    data: [1450, 1465, 1460, 1480, 1475, 1490, 1485],
+                    borderColor: '#4318FF',
+                    backgroundColor: 'rgba(67, 24, 255, 0.1)',
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0
+                }]
+            },
+            options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } }, maintainAspectRatio: false }
+        });
+
+        function configurar() {
+            CAPITAL = parseFloat(prompt("Capital ARS:", CAPITAL)) || CAPITAL;
+            OBJETIVO = parseFloat(prompt("Ganancia mínima:", OBJETIVO)) || OBJETIVO;
+            document.getElementById('cap-display').innerText = '$' + CAPITAL.toLocaleString('es-AR');
+            actualizar();
         }
 
-        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        async function actualizar() {
+            try {
+                const res = await fetch('https://criptoya.com/api/usdt/ars/1');
+                const data = await res.json();
+                const p2p = data.binancep2p.bid;
+                const exchanges = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
+                
+                let html = '';
+                let mejorGan = -999999;
+                let mejorEx = "";
 
-        #seconds-left { font-family: monospace; font-size: 14px; color: var(--accent); font-weight: bold; }
+                exchanges.forEach(ex => {
+                    const compra = data[ex].ask;
+                    const ganancia = (CAPITAL / compra * p2p) - CAPITAL;
+                    const porc = (ganancia / CAPITAL * 100).toFixed(2);
+                    
+                    if(ganancia > mejorGan) { mejorGan = ganancia; mejorEx = ex.toUpperCase(); }
 
-        /* --- LED ANIMADOS --- */
-        .led-amount {
-            font-size: 48
+                    html += `<tr>
+                        <td><a href="${links[ex]}" target="_blank" class="ex-link">${ex.toUpperCase()} ↗</a></td>
+                        <td>$${compra.toLocaleString('es-AR')}</td>
+                        <td>$${p2p.toLocaleString('es-AR')}</td>
+                        <td><span class="status-badge ${ganancia >= OBJETIVO ? 'status-win' : 'status-loss'}">$${ganancia.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span></td>
+                        <td>${porc}%</td>
+                    </tr>`;
+                });
+
+                document.getElementById('tabla-body').innerHTML = html;
+                const gLed = document.getElementById('ganancia-led');
+                gLed.innerText = '$' + mejorGan.toLocaleString('es-AR', {minimumFractionDigits: 2});
+                gLed.className = mejorGan >= OBJETIVO ? 'led-text led-verde' : 'led-text led-rojo';
+                document.getElementById('mejor-ex-name').innerText = mejorEx;
+                document.getElementById('last-update').innerText = "Visto: " + new Date().toLocaleTimeString();
+                
+                // Actualizar gráfico con el valor de venta actual
+                chart.data.datasets[0].data.shift();
+                chart.data.datasets[0].data.push(p2p);
+                chart.update();
+
+                seconds = 30;
+            } catch (e) { seconds = 5; }
+        }
+
+        setInterval(() => {
+            seconds--;
+            const tDisplay = document.getElementById('timer-display');
+            tDisplay.innerText = seconds + "s";
+            if(seconds <= 0) { tDisplay.innerText = "REF..."; actualizar(); }
+        }, 1000);
+
+        actualizar();
+    </script>
+</body>
+</html>
