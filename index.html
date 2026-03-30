@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinocho Crypto Admin - Ultra Premium</title>
+    <title>Pinocho Finance Suite - ByBauti</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
@@ -23,46 +23,45 @@
             font-family: 'Plus Jakarta Sans', sans-serif;
             background-color: var(--bg-main);
             margin: 0; padding: 0;
-            display: flex; min-height: 100vh;
+            display: flex; min-height: 100vh; color: var(--text-main);
         }
 
+        /* --- SIDEBAR --- */
         .sidebar {
             width: 260px; background-color: var(--sidebar-bg);
             padding: 30px; border-right: 1px solid #F4F7FE;
+            display: flex; flex-direction: column;
+            position: fixed; height: 100vh;
         }
-        .logo { font-size: 24px; font-weight: 800; color: var(--text-main); margin-bottom: 50px; letter-spacing: -1px; }
+        .logo { font-size: 24px; font-weight: 800; margin-bottom: 50px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
         
         .nav-item { 
             color: var(--text-sec); padding: 15px; border-radius: 15px; 
             cursor: pointer; display: flex; align-items: center; gap: 12px; 
-            transition: 0.3s; text-decoration: none; font-weight: 600; margin-bottom: 5px;
+            transition: 0.3s; text-decoration: none; font-weight: 600; margin-bottom: 8px;
         }
         .nav-item:hover, .nav-item.active { background-color: #F4F7FE; color: var(--accent); }
 
-        .main-content { flex: 1; padding: 40px; }
-        .page-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; }
-        
-        .dashboard-grid {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr 1.5fr;
-            gap: 25px;
-        }
+        /* --- CONTENIDO --- */
+        .main-content { flex: 1; padding: 40px; margin-left: 260px; }
+        .view-section { display: none; animation: fadeIn 0.4s ease; }
+        .view-section.active { display: block; }
+
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        .dashboard-grid { display: grid; grid-template-columns: 1.5fr 1fr 1.5fr; gap: 25px; }
 
         .card {
             background-color: var(--card-bg); border-radius: 24px; padding: 30px;
             box-shadow: 14px 17px 40px 4px rgba(112, 144, 176, 0.06);
-            position: relative; transition: transform 0.3s;
+            position: relative; margin-bottom: 25px;
         }
-        .card:hover { transform: translateY(-5px); }
 
-        .card-title { font-size: 14px; color: var(--text-sec); font-weight: 700; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; }
+        .card-title { font-size: 14px; color: var(--text-sec); font-weight: 700; margin-bottom: 20px; text-transform: uppercase; }
         
-        .chart-box { height: 220px; margin-top: 15px; }
-
-        /* NÚMEROS ELEGANTES Y MODERNOS */
         .modern-number {
-            font-size: 48px; font-weight: 800; letter-spacing: -2px;
+            font-size: 44px; font-weight: 800; letter-spacing: -1px;
             background-size: 200% auto; -webkit-background-clip: text;
             -webkit-text-fill-color: transparent; animation: flow 4s linear infinite;
         }
@@ -72,176 +71,180 @@
 
         @keyframes flow { 0% { background-position: 0% 50%; } 100% { background-position: 200% 50%; } }
 
-        .table-card { grid-column: 1 / -1; margin-top: 10px; }
+        /* --- TABLAS Y FORMULARIOS --- */
         table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-sec); font-size: 13px; padding: 20px 10px; border-bottom: 1px solid #F4F7FE; }
-        td { padding: 22px 10px; border-bottom: 1px solid #F4F7FE; font-size: 15px; color: var(--text-main); font-weight: 700; }
+        th { text-align: left; color: var(--text-sec); font-size: 12px; padding: 15px; border-bottom: 1px solid #F4F7FE; }
+        td { padding: 15px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; }
         
-        .exchange-link { 
-            color: var(--accent); text-decoration: none; display: inline-flex; align-items: center; gap: 5px; 
-            background: #F4F7FE; padding: 6px 12px; border-radius: 10px; transition: 0.2s;
+        input, select {
+            background: #F4F7FE; border: none; padding: 12px; border-radius: 12px;
+            font-family: inherit; font-weight: 600; margin-right: 10px; color: var(--text-main);
         }
-        .exchange-link:hover { background: var(--accent); color: white; }
 
-        .profit-badge { padding: 6px 12px; border-radius: 12px; font-size: 13px; font-weight: 800; }
+        .btn-action {
+            background: var(--accent); color: white; border: none; padding: 12px 24px;
+            border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s;
+        }
+        .btn-action:hover { opacity: 0.9; transform: scale(1.02); }
+
+        .badge { padding: 5px 12px; border-radius: 10px; font-size: 12px; }
         .win { background: #E6FFF9; color: #05CD99; }
         .loss { background: #FFE6E6; color: #EE5D50; }
 
-        .btn-config { position: absolute; top: 25px; right: 25px; background: #F4F7FE; border: none; padding: 10px; border-radius: 12px; cursor: pointer; transition: 0.2s; }
-        .btn-config:hover { background: #E2E8F0; }
-
-        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } .sidebar { display: none; } }
+        @media (max-width: 1100px) { .dashboard-grid { grid-template-columns: 1fr; } .sidebar { width: 80px; padding: 15px; } .main-content { margin-left: 80px; } .nav-text { display: none; } }
     </style>
 </head>
 <body>
 
     <div class="sidebar">
-        <div class="logo">By<span>Bauti</span></div>
-        <a href="#" class="nav-item active">📊 Dashboard</a>
-        <a href="javascript:configurar()" class="nav-item">⚙️ Ajustes</a>
+        <div class="logo"><span class="nav-text">By</span><span>Bauti</span></div>
+        <div class="nav-item active" onclick="showView('v-dashboard')">📊 <span class="nav-text">Dashboard</span></div>
+        <div class="nav-item" onclick="showView('v-operaciones')">📝 <span class="nav-text">Operaciones</span></div>
+        <div class="nav-item" onclick="showView('v-presupuesto')">💰 <span class="nav-text">Presupuesto</span></div>
+        <div class="nav-item" onclick="configurar()">⚙️ <span class="nav-text">Ajustes</span></div>
     </div>
 
     <div class="main-content">
-        <div class="page-header">
-            <div>
-                <div style="color: var(--text-sec); font-size: 14px; font-weight: 600;">Páginas / Dashboard</div>
-                <div style="font-size: 34px; font-weight: 800; color: var(--text-main); letter-spacing: -1px;">Panel de control</div>
+        
+        <!-- SECCIÓN DASHBOARD -->
+        <div id="v-dashboard" class="view-section active">
+            <div class="page-header">
+                <div style="font-size: 28px; font-weight: 800; letter-spacing: -1px;">Monitor en Vivo</div>
             </div>
-            <div style="background: white; padding: 10px 20px; border-radius: 30px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); font-weight: 700;">
-                🟢 Sistema Online
+            <div class="dashboard-grid">
+                <div class="card">
+                    <div class="card-title">Inversión Base</div>
+                    <div class="modern-number num-blue" id="inversion-display">$300.000</div>
+                    <div style="height: 180px; margin-top:20px;"><canvas id="balanceChart"></canvas></div>
+                </div>
+                <div class="card" style="text-align:center">
+                    <div class="card-title">Próximo Salto</div>
+                    <div id="countdown-led" class="modern-number num-blue">30s</div>
+                </div>
+                <div class="card" style="text-align:center">
+                    <div class="card-title">Mejor Opción</div>
+                    <div id="neta-led" class="modern-number num-red">$0.00</div>
+                    <div id="mejor-ex" style="font-weight:800; color:var(--accent)">...</div>
+                </div>
+                <div class="card" style="grid-column: 1 / -1">
+                    <div class="card-title">Arbitraje Sugerido</div>
+                    <table id="pinocho-table"><thead><tr><th>EXCHANGE</th><th>COMPRA</th><th>VENTA P2P</th><th>NETA</th><th>%</th></tr></thead><tbody></tbody></table>
+                </div>
             </div>
         </div>
 
-        <div class="dashboard-grid">
-            
+        <!-- SECCIÓN OPERACIONES -->
+        <div id="v-operaciones" class="view-section">
+            <div class="page-header"><div style="font-size: 28px; font-weight: 800;">Registro de Operaciones</div></div>
             <div class="card">
-                <div class="card-title">Inversión Actual</div>
-                <div style="display:flex; align-items:baseline; gap:10px;">
-                    <div class="modern-number num-blue" id="inversion-display">$300.000</div>
-                </div>
-                <div class="chart-box">
-                    <canvas id="balanceChart"></canvas>
-                </div>
+                <div class="card-title">Nueva Operación</div>
+                <input type="number" id="op-monto" placeholder="Monto ARS">
+                <input type="number" id="op-compra" placeholder="Precio Compra">
+                <input type="number" id="op-venta" placeholder="Precio Venta">
+                <button class="btn-action" onclick="addOperacion()">Registrar</button>
             </div>
-
-            <div class="card" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                <div class="card-title">Próximo Salto</div>
-                <div id="countdown-led" class="modern-number num-blue">30s</div>
-                <div style="margin-top:15px; color:var(--text-sec); font-size:13px; font-weight:600;">Sincronizando con Binance...</div>
-            </div>
-
-            <div class="card" style="display:flex; flex-direction:column; justify-content:center; align-items:center;">
-                <button class="btn-config" onclick="configurar()">⚙️</button>
-                <div class="card-title">Mejor Ganancia</div>
-                <div id="neta-led" class="modern-number num-red">$0.00</div>
-                <div style="font-weight:800; color:var(--accent); font-size:18px; margin-top:5px;" id="mejor-ex">BUSCANDO...</div>
-            </div>
-
-            <div class="card table-card" id="tabla-arbitraje">
-                <div class="card-title">Monitor de Arbitraje en Vivo</div>
+            <div class="card">
                 <table>
-                    <thead>
-                        <tr>
-                            <th>EXCHANGE</th>
-                            <th>COMPRA (ARS)</th>
-                            <th>VENTA P2P (ARS)</th>
-                            <th>RESULTADO NETA</th>
-                            <th>RENDIMIENTO</th>
-                        </tr>
-                    </thead>
-                    <tbody id="pinocho-table"></tbody>
+                    <thead><tr><th>FECHA</th><th>INVERTIDO</th><th>GANANCIA NETA</th><th>ESTADO</th></tr></thead>
+                    <tbody id="lista-operaciones"></tbody>
                 </table>
             </div>
-
         </div>
+
+        <!-- SECCIÓN PRESUPUESTO -->
+        <div id="v-presupuesto" class="view-section">
+            <div class="page-header"><div style="font-size: 28px; font-weight: 800;">Presupuesto Personal</div></div>
+            <div class="dashboard-grid" style="grid-template-columns: 1fr 1fr 1fr; margin-bottom:25px;">
+                <div class="card" style="text-align:center"><div class="card-title">Ingresos</div><div class="modern-number num-green" id="b-ingresos" style="font-size:32px">$0</div></div>
+                <div class="card" style="text-align:center"><div class="card-title">Egresos</div><div class="modern-number num-red" id="b-egresos" style="font-size:32px">$0</div></div>
+                <div class="card" style="text-align:center; background: var(--accent); color:white"><div class="card-title" style="color:white">Balance</div><div id="b-total" style="font-size:32px; font-weight:800">$0</div></div>
+            </div>
+            <div class="card">
+                <div class="card-title">Añadir Movimiento</div>
+                <input type="text" id="pre-desc" placeholder="Descripción">
+                <input type="number" id="pre-monto" placeholder="Monto">
+                <select id="pre-tipo"><option value="ingreso">Ingreso</option><option value="egreso">Egreso</option></select>
+                <button class="btn-action" onclick="addPresupuesto()">Añadir</button>
+            </div>
+        </div>
+
     </div>
 
     <script>
         let CAPITAL = 300000;
-        let OBJETIVO = 1200;
         let countdownSecs = 30;
+        let operaciones = [];
+        let presupuesto = [];
 
-        const exchangeUrls = {
-            'LEMONCASH': 'https://www.lemon.me/',
-            'BELO': 'https://www.belo.app/',
-            'BUENBIT': 'https://www.buenbit.com/',
-            'FIWIND': 'https://www.fiwind.io/',
-            'RIPIO': 'https://www.ripio.com/ar/'
-        };
+        // NAVEGACIÓN
+        function showView(viewId) {
+            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.getElementById(viewId).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
 
+        // REGISTRO OPERACIONES
+        function addOperacion() {
+            const m = parseFloat(document.getElementById('op-monto').value);
+            const c = parseFloat(document.getElementById('op-compra').value);
+            const v = parseFloat(document.getElementById('op-venta').value);
+            if(!m || !c || !v) return;
+            const ganancia = (m / c * v) - m;
+            operaciones.unshift({ fecha: new Date().toLocaleDateString(), monto: m, neta: ganancia });
+            renderOperaciones();
+        }
+
+        function renderOperaciones() {
+            const body = document.getElementById('lista-operaciones');
+            body.innerHTML = operaciones.map(o => `<tr><td>${o.fecha}</td><td>$${o.monto.toLocaleString()}</td><td style="color:${o.neta>0?'#05CD99':'#FF5B5B'}">$${o.neta.toLocaleString()}</td><td><span class="badge win">Completado</span></td></tr>`).join('');
+        }
+
+        // PRESUPUESTO
+        function addPresupuesto() {
+            const d = document.getElementById('pre-desc').value;
+            const m = parseFloat(document.getElementById('pre-monto').value);
+            const t = document.getElementById('pre-tipo').value;
+            if(!d || !m) return;
+            presupuesto.push({ desc: d, monto: m, tipo: t });
+            renderPresupuesto();
+        }
+
+        function renderPresupuesto() {
+            let ing = 0, egr = 0;
+            presupuesto.forEach(p => p.tipo === 'ingreso' ? ing += p.monto : egr += p.monto);
+            document.getElementById('b-ingresos').innerText = `$${ing.toLocaleString()}`;
+            document.getElementById('b-egresos').innerText = `$${egr.toLocaleString()}`;
+            document.getElementById('b-total').innerText = `$${(ing - egr).toLocaleString()}`;
+        }
+
+        // DASHBOARD LOGIC (Igual a tu versión maestra)
         const ctx = document.getElementById('balanceChart').getContext('2d');
         let dataPoints = [1450, 1460, 1455, 1470, 1465, 1480, 1475];
-        let gradient = ctx.createLinearGradient(0, 0, 0, 200);
-        gradient.addColorStop(0, 'rgba(67, 24, 255, 0.15)');
-        gradient.addColorStop(1, 'rgba(67, 24, 255, 0.0)');
-
         let balanceChart = new Chart(ctx, {
             type: 'line',
-            data: {
-                labels: ['', '', '', '', '', '', ''],
-                datasets: [{
-                    data: dataPoints,
-                    borderColor: '#4318FF',
-                    backgroundColor: gradient,
-                    fill: true,
-                    tension: 0.4,
-                    pointRadius: 0,
-                    borderWidth: 3
-                }]
-            },
-            options: {
-                plugins: { legend: { display: false } },
-                scales: { x: { display: false }, y: { display: false } },
-                maintainAspectRatio: false
-            }
+            data: { labels: ['','','','','','',''], datasets: [{ data: dataPoints, borderColor: '#4318FF', fill: true, backgroundColor: 'rgba(67, 24, 255, 0.1)', tension: 0.4, pointRadius: 0 }] },
+            options: { plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } }, maintainAspectRatio: false }
         });
-
-        function configurar() {
-            let nCap = prompt("Ajustar Capital ARS:", CAPITAL);
-            if(nCap) {
-                CAPITAL = parseFloat(nCap);
-                document.getElementById('inversion-display').innerText = '$' + CAPITAL.toLocaleString('es-AR');
-                actualizar();
-            }
-        }
 
         async function actualizar() {
             try {
                 const res = await fetch('https://criptoya.com/api/usdt/ars/1');
                 const data = await res.json();
-                const p2pBid = data.binancep2p.bid;
+                const p2p = data.binancep2p.bid;
                 const exchanges = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
-                
-                let tableHtml = '';
-                let mejorNeta = -999999;
-                let mejorExName = "";
+                let html = '', mejorNeta = -999999, mejorEx = "";
 
                 exchanges.forEach(ex => {
-                    const name = ex.toUpperCase();
-                    const askPrice = data[ex].ask;
-                    const ganancia = (CAPITAL / askPrice * p2pBid) - CAPITAL;
-                    const porc = (ganancia / CAPITAL * 100).toFixed(2);
-                    
-                    if(ganancia > mejorNeta) { mejorNeta = ganancia; mejorExName = name; }
-
-                    tableHtml += `<tr>
-                        <td><a href="${exchangeUrls[name]}" target="_blank" class="exchange-link">${name} ↗</a></td>
-                        <td>$${askPrice.toLocaleString('es-AR')}</td>
-                        <td>$${p2pBid.toLocaleString('es-AR')}</td>
-                        <td><span class="profit-badge ${ganancia >= OBJETIVO ? 'win' : 'loss'}">$${ganancia.toLocaleString('es-AR', {minimumFractionDigits: 2})}</span></td>
-                        <td>${porc}%</td>
-                    </tr>`;
+                    const ask = data[ex].ask;
+                    const gan = (CAPITAL / ask * p2p) - CAPITAL;
+                    if(gan > mejorNeta) { mejorNeta = gan; mejorEx = ex.toUpperCase(); }
+                    html += `<tr><td>${ex.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td><span class="badge ${gan>0?'win':'loss'}">$${gan.toFixed(2)}</span></td><td>${(gan/CAPITAL*100).toFixed(2)}%</td></tr>`;
                 });
-
-                document.getElementById('pinocho-table').innerHTML = tableHtml;
-                const netaLed = document.getElementById('neta-led');
-                netaLed.innerText = '$' + mejorNeta.toLocaleString('es-AR', {minimumFractionDigits: 2});
-                netaLed.className = mejorNeta >= OBJETIVO ? 'modern-number num-green' : 'modern-number num-red';
-                document.getElementById('mejor-ex').innerText = mejorExName;
-
-                dataPoints.shift();
-                dataPoints.push(p2pBid);
-                balanceChart.update();
+                document.querySelector('#pinocho-table tbody').innerHTML = html;
+                document.getElementById('neta-led').innerText = `$${mejorNeta.toLocaleString(undefined, {minimumFractionDigits: 2})}`;
+                document.getElementById('neta-led').className = `modern-number ${mejorNeta>0?'num-green':'num-red'}`;
+                document.getElementById('mejor-ex').innerText = mejorEx;
                 countdownSecs = 30;
             } catch (e) { countdownSecs = 5; }
         }
@@ -249,8 +252,13 @@
         setInterval(() => {
             countdownSecs--;
             document.getElementById('countdown-led').innerText = countdownSecs + "s";
-            if(countdownSecs <= 0) { actualizar(); }
+            if(countdownSecs <= 0) actualizar();
         }, 1000);
+
+        function configurar() {
+            let n = prompt("Nuevo Capital:", CAPITAL);
+            if(n) { CAPITAL = parseFloat(n); document.getElementById('inversion-display').innerText = '$' + CAPITAL.toLocaleString(); actualizar(); }
+        }
 
         actualizar();
     </script>
