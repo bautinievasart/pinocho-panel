@@ -16,41 +16,54 @@
             --led-verde: linear-gradient(135deg, #05CD99, #66DDAA, #05CD99);
             --led-rojo: linear-gradient(135deg, #FF5B5B, #F067B4, #FF5B5B);
         }
+
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
+
+        /* SIDEBAR */
         .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 1000; transition: 0.3s; }
-        .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; }
+        .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
         .nav-container { display: flex; flex-direction: column; gap: 8px; }
-        .nav-item { color: var(--text-sec); padding: 12px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-weight: 600; }
+        .nav-item { color: var(--text-sec); padding: 12px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; text-decoration: none; }
         .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.2); }
+
+        /* MAIN */
         .main-wrapper { margin-left: 260px; width: 100%; padding: 40px; transition: 0.3s; }
         .view-section { display: none; max-width: 1100px; margin: 0 auto; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+
+        h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; }
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
-        .card-title { font-size: 13px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; margin-bottom: 10px; }
-        .flow-text { font-size: clamp(28px, 5vw, 44px); font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
+        .card-title { font-size: 13px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
+
+        .flow-text { font-size: clamp(24px, 4vw, 38px); font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
         @keyframes flow { to { background-position: 200% center; } }
         .num-blue { background-image: var(--led-blue); }
         .num-green { background-image: var(--led-verde); }
         .num-red { background-image: var(--led-rojo); }
-        .table-wrapper { overflow-x: auto; width: 100%; }
+
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 12px; }
         table { width: 100%; border-collapse: collapse; min-width: 500px; }
-        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; border-bottom: 1px solid #F4F7FE; }
+        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; }
         td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 600; }
-        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-        input, select { background: #F4F7FE; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; }
-        .btn-main { background: var(--accent); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; cursor: pointer; }
+
+        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        input, select { background: #F4F7FE; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; width: 100%; }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; }
+
         @media (max-width: 850px) {
-            .sidebar { width: 100%; height: 70px; bottom: 0; top: auto; flex-direction: row; border-top: 1px solid #E9EDF7; }
+            .sidebar { width: 100%; height: 70px; bottom: 0; top: auto; padding: 0; border-right: none; border-top: 1px solid #E9EDF7; flex-direction: row; }
             .logo { display: none; }
-            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; align-items: center; }
-            .nav-item { flex-direction: column; font-size: 11px; padding: 8px; flex: 1; }
-            .main-wrapper { margin-left: 0; padding: 20px 15px 90px; }
-            .grid-2 { grid-template-columns: 1fr; }
+            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; height: 100%; align-items: center; padding: 0 10px; }
+            .nav-item { flex-direction: column; gap: 4px; padding: 8px 5px; font-size: 11px; border-radius: 10px; text-align: center; flex: 1; height: 55px; justify-content: center; }
+            .nav-item i { font-size: 20px; margin: 0; width: auto; }
+            .main-wrapper { margin-left: 0; padding: 20px 15px 90px 15px; }
+            .grid-2 { grid-template-columns: 1fr; gap: 15px; }
+            h1 { font-size: 22px; }
         }
         #timer { font-size: 12px; background: #eee; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
     </style>
@@ -68,6 +81,8 @@
     </div>
 
     <div class="main-wrapper">
+        
+        <!-- DASHBOARD -->
         <div id="v-dash" class="view-section active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1>Panel de Control</h1>
@@ -76,20 +91,19 @@
             
             <div class="grid-2">
                 <div class="card">
-                    <div class="card-title">Capital trabajando</div>
-                    <div class="flow-text num-blue" id="disp-cap">$100.000</div>
+                    <div class="card-title">Dólar MEP (Bolsa)</div>
+                    <div class="flow-text num-blue" id="val-mep">$---</div>
                 </div>
                 <div class="card">
-                    <div class="card-title">Dólar MEP (AL30)</div>
-                    <div id="val-mep" class="flow-text num-blue">$0.00</div>
-                    <div id="val-brecha" style="font-weight: 800; color: var(--success); margin-top: 5px; font-size: 14px;">Brecha: 0%</div>
+                    <div class="card-title">Brecha P2P vs MEP</div>
+                    <div class="flow-text" id="val-brecha">0.00%</div>
                 </div>
             </div>
 
             <div class="card">
-                <div class="card-title">Mejor Opción Arbitraje</div>
-                <div id="top-gan" class="flow-text num-green" style="font-size: 32px;">$0.00</div>
-                <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px;">---</div>
+                <div class="card-title">Capital: <span id="cap-label">$100,000</span> | Mejor Opción</div>
+                <div id="top-gan" class="flow-text num-green">$0.00</div>
+                <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
             </div>
 
             <div class="card">
@@ -106,25 +120,58 @@
         <!-- OPERACIONES -->
         <div id="v-ops" class="view-section">
             <h1>Registro de Operaciones</h1>
-            <div class="card"><div class="form-inline"><input type="number" id="o-monto" placeholder="ARS Invertidos"><input type="number" id="o-buy" placeholder="C. Compra"><input type="number" id="o-sell" placeholder="C. Venta"><button class="btn-main" onclick="addOp()">Registrar</button></div></div>
-            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th></th></tr></thead><tbody id="hist-ops"></tbody></table></div></div>
+            <div class="card">
+                <div class="form-inline">
+                    <input type="number" id="o-monto" placeholder="ARS Invertidos">
+                    <input type="number" id="o-buy" placeholder="Cotiz. Compra">
+                    <input type="number" id="o-sell" placeholder="Cotiz. Venta">
+                    <button class="btn-main" onclick="addOp()">Registrar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th></th></tr></thead><tbody id="hist-ops"></tbody></table>
+                </div>
+            </div>
         </div>
 
         <!-- CAJA -->
         <div id="v-pre" class="view-section">
             <h1>Gestión de Caja</h1>
             <div class="grid-2">
-                <div class="card"><div class="card-title">Flujo</div><div style="height: 150px;"><canvas id="budgetWaveChart"></canvas></div></div>
+                <div class="card">
+                    <div class="card-title">Flujo de Fondos</div>
+                    <div style="height: 180px;"><canvas id="budgetWaveChart"></canvas></div>
+                </div>
                 <div style="display: flex; flex-direction: column; gap: 15px;">
-                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0;"><div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div><div id="sum-total" style="font-size:32px; font-weight:800">$0</div></div>
+                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0; padding: 20px;">
+                        <div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div>
+                        <div id="sum-total" style="font-size:32px; font-weight:800">$0</div>
+                    </div>
                     <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
-                        <div class="card" style="margin-bottom:0; padding:15px;"><div class="card-title" style="font-size:10px;">Ingresos</div><div id="sum-in" class="flow-text num-green" style="font-size:20px">$0</div></div>
-                        <div class="card" style="margin-bottom:0; padding:15px;"><div class="card-title" style="font-size:10px;">Egresos</div><div id="sum-out" class="flow-text num-red" style="font-size:20px">$0</div></div>
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div id="sum-in" class="flow-text num-green" style="font-size:20px">$0</div>
+                        </div>
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div id="sum-out" class="flow-text num-red" style="font-size:20px">$0</div>
+                        </div>
                     </div>
                 </div>
             </div>
-            <div class="card"><div class="form-inline"><input type="date" id="p-fecha"><input type="text" id="p-desc" placeholder="Detalle"><input type="number" id="p-monto" placeholder="Monto $"><select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select><button class="btn-main" onclick="addPre()">Agregar</button></div></div>
-            <div class="card"><div class="table-wrapper"><table><thead><tr><th>Fecha</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="hist-pre"></tbody></table></div></div>
+            <div class="card">
+                <div class="form-inline">
+                    <input type="date" id="p-fecha">
+                    <input type="text" id="p-desc" placeholder="Detalle">
+                    <input type="number" id="p-monto" placeholder="Monto $">
+                    <select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select>
+                    <button class="btn-main" onclick="addPre()">Agregar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="hist-pre"></tbody></table>
+                </div>
+            </div>
         </div>
     </div>
 
@@ -134,35 +181,48 @@
         let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
         let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
 
+        // Inicializar Gráfico
         const ctxPre = document.getElementById('budgetWaveChart').getContext('2d');
         const budgetChart = new Chart(ctxPre, {
             type: 'line',
-            options: { responsive: true, maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { y: { display: false }, x: { grid: { display: false } } }, elements: { line: { tension: 0.4, borderWidth: 3, borderColor: '#4318FF' }, point: { radius: 0 } } },
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { display: false }, x: { grid: { display: false } } },
+                elements: { line: { tension: 0.4, borderWidth: 3, borderColor: '#4318FF' }, point: { radius: 0 } }
+            },
             data: { labels: [], datasets: [{ data: [], fill: false }] }
         });
 
         function show(id, el) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); el.classList.add('active');
+            document.getElementById(id).classList.add('active');
+            el.classList.add('active');
+            window.scrollTo(0,0);
         }
 
         async function updateMarket() {
             try {
-                // Fetch de USDT
+                // Fetch de CriptoYa (Exchanges + Binance P2P)
                 const rU = await fetch('https://criptoya.com/api/usdt/ars/1');
                 const dU = await rU.json();
                 
-                // Fetch de Dólares (MEP)
-                const rD = await fetch('https://criptoya.com/api/dolares');
-                const dD = await rD.json();
+                // Fetch de DolarApi (MEP)
+                const rM = await fetch('https://dolarapi.com/v1/dolares/bolsa');
+                const dM = await rM.json();
 
-                const mep = dD.mep.al30.ci.price;
+                const mep = dM.venta;
                 const p2p = dU.binancep2p.bid;
                 
+                // Actualizar UI Dólares
                 document.getElementById('val-mep').innerText = `$${mep.toFixed(2)}`;
-                document.getElementById('val-brecha').innerText = `Brecha P2P: ${(((p2p/mep)-1)*100).toFixed(2)}%`;
+                const brecha = (((p2p/mep)-1)*100);
+                const brechaEl = document.getElementById('val-brecha');
+                brechaEl.innerText = `${brecha.toFixed(2)}%`;
+                brechaEl.className = `flow-text ${brecha > 0 ? 'num-green' : 'num-red'}`;
 
+                // Procesar Tabla
                 const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio', 'tiendacrypto'];
                 let h = '', mGan = -99999, mEx = '';
 
@@ -177,28 +237,38 @@
 
                 document.getElementById('table-p2p').innerHTML = h;
                 document.getElementById('top-gan').innerText = `$${mGan.toFixed(0)}`;
-                document.getElementById('top-ex').innerText = `RECOMENDADO: ${mEx}`;
+                document.getElementById('top-ex').innerText = `RECOMENDADO: COMPRA EN ${mEx}`;
+                document.getElementById('cap-label').innerText = `$${CAPITAL.toLocaleString()}`;
+                
                 segs = 30;
-            } catch(err) { console.error(err); segs = 5; }
+            } catch(err) { 
+                console.error("Fallo de API", err);
+                segs = 5; 
+            }
         }
 
+        // Lógica de datos (Ops y Caja)
         function addOp() {
             const m = parseFloat(document.getElementById('o-monto').value);
             const b = parseFloat(document.getElementById('o-buy').value);
             const s = parseFloat(document.getElementById('o-sell').value);
-            if(m && b && s) { dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString('es-AR'), m, gan: (m/b*s)-m }); save(); }
+            if(m && b && s) { 
+                dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString('es-AR',{day:'2-digit',month:'2-digit'}), m, gan: (m/b*s)-m }); 
+                save(); 
+                document.getElementById('o-monto').value = '';
+            }
         }
 
         function addPre() {
+            const fRaw = document.getElementById('p-fecha').value || new Date().toISOString().split('T')[0];
             const d = document.getElementById('p-desc').value;
             const m = parseFloat(document.getElementById('p-monto').value);
             const t = document.getElementById('p-tipo').value;
-            const f = document.getElementById('p-fecha').value || new Date().toISOString().split('T')[0];
-            if(d && m) { dbPre.unshift({ id: Date.now(), fRaw: f, f: f.split('-').reverse().slice(0,2).join('/'), d, m, t }); save(); }
+            if(d && m) { 
+                dbPre.unshift({ id: Date.now(), fRaw, f: fRaw.split('-').reverse().slice(0,2).join('/'), d, m, t }); 
+                save(); 
+            }
         }
-
-        function delOp(id) { dbOps = dbOps.filter(x => x.id !== id); save(); }
-        function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
 
         function save() {
             localStorage.setItem('b-ops', JSON.stringify(dbOps));
@@ -207,8 +277,10 @@
             render();
         }
 
+        function delOp(id) { dbOps = dbOps.filter(x => x.id !== id); save(); }
+        function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
+
         function render() {
-            document.getElementById('disp-cap').innerText = '$' + CAPITAL.toLocaleString();
             document.getElementById('hist-ops').innerHTML = dbOps.map(o => `<tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td style="color:${o.gan>0?'#05CD99':'#FF5B5B'}">$${o.gan.toFixed(0)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>`).join('');
             let i = 0, e = 0;
             document.getElementById('hist-pre').innerHTML = dbPre.map(p => {
@@ -230,7 +302,8 @@
         }
 
         setInterval(() => { segs--; document.getElementById('timer').innerText = segs+'s'; if(segs <= 0) updateMarket(); }, 1000);
-        render(); updateMarket();
+        render(); 
+        updateMarket();
     </script>
 </body>
 </html>
