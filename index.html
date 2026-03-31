@@ -119,49 +119,28 @@
                 <span id="timer">30s</span>
             </div>
             
-            <div id="v-dash" class="view-section active">
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Capital trabajando</div>
+                    <div class="flow-text num-blue" id="disp-cap">$100.000</div>
+                </div>
+                <div class="card">
+                    <div class="card-title">Mejor Opción</div>
+                    <div id="top-gan" class="flow-text num-green">$0.00</div>
+                    <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
+                </div>
+            </div>
 
-    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
-        <h1>Panel de Control</h1>
-        <span id="timer">30s</span>
-    </div>
-    
-    <div class="grid-2">
-        <div class="card">
-            <div class="card-title">Capital trabajando</div>
-            <div class="flow-text num-blue" id="disp-cap">$100.000</div>
+            <div class="card">
+                <div class="card-title">Arbitraje USDT (ARS)</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Exchange</th><th>Compra</th><th>Venta</th><th>Ganancia</th></tr></thead>
+                        <tbody id="table-p2p"></tbody>
+                    </table>
+                </div>
+            </div>
         </div>
-        <div class="card">
-            <div class="card-title">Mejor Opción</div>
-            <div id="top-gan" class="flow-text num-green">$0.00</div>
-            <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px; font-size: 14px;">---</div>
-        </div>
-    </div>
-
-    <div class="card">
-        <div class="card-title">Arbitraje USDT (ARS)</div>
-        <div class="table-wrapper">
-            <table>
-                <thead><tr><th>Exchange</th><th>Compra</th><th>Venta</th><th>Ganancia</th></tr></thead>
-                <tbody id="table-p2p"></tbody>
-            </table>
-        </div>
-    </div>
-
-    <!-- 🔥 NUEVAS CARDS BIEN UBICADAS -->
-    <div class="grid-2">
-        <div class="card">
-            <div class="card-title">Dólares</div>
-            <div id="mini-dolares" style="font-weight:700; font-size:14px; line-height:1.6;"></div>
-        </div>
-
-        <div class="card">
-            <div class="card-title">Crypto (Spreads)</div>
-            <div id="mini-crypto" style="font-weight:700; font-size:14px; line-height:1.6;"></div>
-        </div>
-    </div>
-
-</div>
 
         <!-- OPERACIONES (V-OPS) -->
         <div id="v-ops" class="view-section">
@@ -298,99 +277,28 @@
         }
 
         async function updateMarket() {
-    try {
-        // --- USDT ---
-        const rUsdt = await fetch('https://criptoya.com/api/usdt/ars');
-        const dUsdt = await rUsdt.json();
-        const p2p = dUsdt.binancep2p?.bid || 0;
+            try {
+                const r = await fetch('https://criptoya.com/api/usdt/ars/1');
+                const d = await r.json();
+                const p2p = d.binancep2p.bid;
+                const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
+                let h = '', mGan = -99999, mEx = '';
 
-        // --- DÓLARES ---
-        const rDol = await fetch('https://criptoya.com/api/dolares');
-        const dDol = await rDol.json();
+                exs.forEach(e => {
+                    const ask = d[e].ask;
+                    const gan = (CAPITAL / ask * p2p) - CAPITAL;
+                    if(gan > mGan) { mGan = gan; mEx = e.toUpperCase(); }
+                    h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(0)}</td></tr>`;
+                });
 
-        document.getElementById('mini-dolares').innerHTML = `
-            Blue: $${dDol.blue?.ask || '-'}<br>
-            MEP: $${dDol.mep?.al30?.ci?.price?.toFixed(0) || '-'}<br>
-            CCL: $${dDol.ccl?.al30?.ci?.price?.toFixed(0) || '-'}<br>
-            Crypto: $${p2p.toFixed(0)}
-        `;
-
-        // --- ARBITRAJE (tu lógica intacta pero segura) ---
-        const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
-        let h = '', mGan = -99999, mEx = '';
-
-        exs.forEach(e => {
-            const ex = dUsdt[e];
-            if (!ex || !ex.ask) return;
-
-            const ask = ex.ask;
-            const gan = (CAPITAL / ask * p2p) - CAPITAL;
-
-            if (gan > mGan) {
-                mGan = gan;
-                mEx = e.toUpperCase();
-            }
-
-            h += `<tr>
-                <td>${e.toUpperCase()}</td>
-                <td>$${ask.toLocaleString()}</td>
-                <td>$${p2p.toLocaleString()}</td>
-                <td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(0)}</td>
-            </tr>`;
-        });
-
-        document.getElementById('table-p2p').innerHTML = h;
-
-        const topGanEl = document.getElementById('top-gan');
-        topGanEl.innerText = `$${mGan.toFixed(0)}`;
-        topGanEl.className = `flow-text ${mGan > 0 ? 'num-green' : 'num-red'}`;
-        document.getElementById('top-ex').innerText = mEx;
-
-        // --- CRYPTO MULTI-EXCHANGE ---
-        const coins = ['btc','eth','sol'];
-        let htmlCrypto = '';
-
-        for (let coin of coins) {
-            const r = await fetch(`https://criptoya.com/api/${coin}/ars`);
-            const d = await r.json();
-
-            let prices = [];
-
-            ['binance','ripio','belo','lemoncash'].forEach(ex => {
-                if (d[ex]?.bid) {
-                    prices.push({ ex, price: d[ex].bid });
-                }
-            });
-
-            if (prices.length < 2) continue;
-
-            prices.sort((a,b)=>b.price-a.price);
-
-            const high = prices[0];
-            const low = prices[prices.length - 1];
-            const spread = ((high.price / low.price) - 1) * 100;
-
-            htmlCrypto += `
-                <div style="margin-bottom:6px;">
-                    <b>${coin.toUpperCase()}</b> 
-                    <span style="color:${spread>1?'#05CD99':'#A3AED0'}">
-                        ${spread.toFixed(2)}%
-                    </span><br>
-                    ↑ ${high.ex} $${high.price.toLocaleString()}<br>
-                    ↓ ${low.ex} $${low.price.toLocaleString()}
-                </div>
-            `;
+                document.getElementById('table-p2p').innerHTML = h;
+                const topGanEl = document.getElementById('top-gan');
+                topGanEl.innerText = `$${mGan.toFixed(0)}`;
+                topGanEl.className = `flow-text ${mGan > 0 ? 'num-green' : 'num-red'}`;
+                document.getElementById('top-ex').innerText = mEx;
+                segs = 30;
+            } catch(err) { segs = 5; }
         }
-
-        document.getElementById('mini-crypto').innerHTML = htmlCrypto;
-
-        segs = 30;
-
-    } catch(err) {
-        console.error(err);
-        segs = 5;
-    }
-}
 
         setInterval(() => { segs--; document.getElementById('timer').innerText = segs+'s'; if(segs <= 0) updateMarket(); }, 1000);
         
