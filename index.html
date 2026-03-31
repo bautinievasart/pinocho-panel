@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pinocho Elite Scanner | ByBauti</title>
+    <title>Pinocho Mega Scanner | ByBauti</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -19,15 +19,12 @@
         * { box-sizing: border-box; outline: none; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
 
-        /* SIDEBAR */
         .sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; left: 0; top: 0; padding: 40px 24px; border-right: 1px solid var(--border); z-index: 1000; }
         .logo { font-size: 26px; font-weight: 800; margin-bottom: 50px; color: #2B3674; }
         .logo span { color: var(--accent); }
         .nav-item { color: var(--text-sec); padding: 16px 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 700; transition: 0.3s; margin-bottom: 8px; }
-        .nav-item:hover { background: #F7F9FF; }
         .nav-item.active { background: #F4F7FE; color: var(--accent); border-right: 4px solid var(--accent); }
 
-        /* MAIN CONTENT */
         .main-wrapper { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
         .view-section { display: none; animation: fadeIn 0.4s ease; }
         .view-section.active { display: block; }
@@ -35,7 +32,6 @@
 
         h1 { font-size: 30px; font-weight: 800; color: #2B3674; margin: 0 0 30px 0; }
         
-        /* GRID & CARDS */
         .grid-top { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
         .card { background: var(--card-bg); border-radius: 20px; padding: 20px; border: 1px solid var(--border); position: relative; }
         .card-label { font-size: 11px; color: var(--text-sec); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
@@ -48,21 +44,29 @@
 
         .big-val { font-size: 28px; margin: 5px 0; }
 
-        /* TABLES */
-        .table-card { padding: 25px; margin-top: 20px; }
+        .table-card { padding: 25px; margin-top: 20px; overflow-x: auto; }
         table { width: 100%; border-collapse: collapse; }
         th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; border-bottom: 1px solid var(--border); }
-        td { padding: 15px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; color: #2B3674; }
+        td { padding: 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; color: #2B3674; }
         
-        .badge-coin { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 800; margin-right: 5px; }
-        .coin-usdt { background: #E6FCF5; color: #087F5B; }
-        .coin-btc { background: #FFF4E6; color: #D9480F; }
-        .coin-eth { background: #F3F0FF; color: #5F3DC4; }
-        .coin-sol { background: #E3FAFC; color: #0B7285; }
+        /* BADGES */
+        .badge-coin { padding: 4px 8px; border-radius: 8px; font-size: 10px; font-weight: 800; margin-right: 5px; display: inline-block; min-width: 45px; text-align: center; }
+        .c-usdt { background: #E6FCF5; color: #087F5B; }
+        .c-usdc { background: #E7F5FF; color: #1971C2; }
+        .c-dai { background: #FFF9DB; color: #F08C00; }
+        .c-btc, .c-wbtc { background: #FFF4E6; color: #D9480F; }
+        .c-eth { background: #F3F0FF; color: #5F3DC4; }
+        .c-sol { background: #E3FAFC; color: #0B7285; }
+        .c-ada { background: #EDF2FF; color: #364FC7; }
+        .c-dot { background: #FFF0F6; color: #C2255C; }
+        .c-bnb { background: #FFF9DB; color: #947300; }
+        .c-xrp { background: #E9ECEF; color: #343A40; }
+        .c-trx { background: #FFF5F5; color: #C92A2A; }
+        .c-doge { background: #FEF9E7; color: #9A7D0A; }
+        .c-bch { background: #EBFBEE; color: #2B8A3E; }
+        .c-xlm { background: #F8F9FA; color: #212529; }
 
-        /* FORMS */
-        .btn-add { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; transition: 0.3s; }
-        .btn-add:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-add { background: var(--accent); color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 800; cursor: pointer; width: 100%; }
         input, select { background: #F4F7FE; border: 1px solid var(--border); padding: 12px; border-radius: 12px; font-weight: 600; width: 100%; color: var(--text-main); }
         .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 15px; margin-bottom: 10px; }
     </style>
@@ -80,92 +84,57 @@
     </div>
 
     <div class="main-wrapper">
-        <!-- VISTA DASHBOARD / ESCANER -->
         <div id="v-dash" class="view-section active">
-            <h1>Monitor Multicripto</h1>
+            <h1>Monitor Pro (18 Activos)</h1>
             <div class="grid-top">
-                <div class="card">
-                    <div class="card-label">Capital Actual</div>
-                    <div id="cap-display" class="flow-text num-blue big-val">$0</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Dólar MEP</div>
-                    <div id="val-mep" class="flow-text num-blue big-val">$0.00</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Refresco en</div>
-                    <div id="timer" class="flow-text num-blue big-val">--s</div>
-                </div>
-                <div class="card">
-                    <div class="card-label">Mejor Opción</div>
-                    <div id="top-gan" class="flow-text num-green big-val">$0</div>
-                    <div id="top-ex" style="font-size: 11px; font-weight: 800; color: var(--accent); margin-top: 5px;">BUSCANDO...</div>
-                </div>
+                <div class="card"><div class="card-label">Capital ARS</div><div id="cap-display" class="flow-text num-blue big-val">$0</div></div>
+                <div class="card"><div class="card-label">Dólar MEP</div><div id="val-mep" class="flow-text num-blue big-val">$0.00</div></div>
+                <div class="card"><div class="card-label">Siguiente Scan</div><div id="timer" class="flow-text num-blue big-val">--s</div></div>
+                <div class="card"><div class="card-label">Top Arbitraje</div><div id="top-gan" class="flow-text num-green big-val">$0</div><div id="top-ex" style="font-size:11px;font-weight:800;color:var(--accent);margin-top:5px">...</div></div>
             </div>
 
             <div class="card table-card">
-                <div class="card-label">Oportunidades vs Binance P2P</div>
                 <table>
                     <thead>
-                        <tr>
-                            <th>MONEDA / EXCHANGE</th>
-                            <th>COMPRA</th>
-                            <th>VENTA P2P</th>
-                            <th>GANANCIA</th>
-                            <th>BRECHA %</th>
-                        </tr>
+                        <tr><th>MONEDA / EX</th><th>COMPRA</th><th>P2P BINANCE</th><th>GANANCIA</th><th>BRECHA</th></tr>
                     </thead>
                     <tbody id="table-scanner"></tbody>
                 </table>
             </div>
         </div>
 
-        <!-- VISTA OPERACIONES -->
         <div id="v-ops" class="view-section">
-            <h1>Registro de Operaciones</h1>
-            <div class="card">
-                <div class="form-row">
-                    <div><label class="card-label">Inversión (ARS)</label><input type="number" id="o-monto" placeholder="Ex: 500000"></div>
-                    <div><label class="card-label">Precio Compra</label><input type="number" id="o-buy" placeholder="Ex: 1450"></div>
-                    <div><label class="card-label">Precio Venta</label><input type="number" id="o-sell" placeholder="Ex: 1470"></div>
-                    <div style="display: flex; align-items: flex-end;"><button class="btn-add" onclick="addOp()">Guardar Op</button></div>
-                </div>
-            </div>
-            <div class="card table-card">
-                <table>
-                    <thead><tr><th>FECHA</th><th>INVERSIÓN</th><th>GANANCIA NETA</th><th>ACCIÓN</th></tr></thead>
-                    <tbody id="hist-ops"></tbody>
-                </table>
-            </div>
+            <h1>Operaciones</h1>
+            <div class="card"><div class="form-row">
+                <input type="number" id="o-monto" placeholder="ARS">
+                <input type="number" id="o-buy" placeholder="Precio Compra">
+                <input type="number" id="o-sell" placeholder="Precio Venta">
+                <button class="btn-add" onclick="addOp()">Registrar</button>
+            </div></div>
+            <div class="card table-card"><table><tbody id="hist-ops"></tbody></table></div>
         </div>
 
-        <!-- VISTA CAJA / GASTOS -->
         <div id="v-pre" class="view-section">
-            <h1>Caja y Gastos Personales</h1>
-            <div class="card">
-                <div class="form-row">
-                    <div><label class="card-label">Fecha</label><input type="date" id="p-fecha"></div>
-                    <div><label class="card-label">Descripción</label><input type="text" id="p-desc" placeholder="Gasto o Ingreso"></div>
-                    <div><label class="card-label">Monto</label><input type="number" id="p-monto" placeholder="0.00"></div>
-                    <div><label class="card-label">Tipo</label><select id="p-tipo"><option value="out">Gasto (-)</option><option value="in">Ingreso (+)</option></select></div>
-                    <div style="display: flex; align-items: flex-end;"><button class="btn-add" onclick="addPre()">Cargar</button></div>
-                </div>
-            </div>
-            <div class="card table-card">
-                <table>
-                    <thead><tr><th>FECHA</th><th>DETALLE</th><th>MONTO ARS</th><th>ACCIÓN</th></tr></thead>
-                    <tbody id="hist-pre"></tbody>
-                </table>
-            </div>
+            <h1>Caja</h1>
+            <div class="card"><div class="form-row">
+                <input type="date" id="p-fecha">
+                <input type="text" id="p-desc" placeholder="Detalle">
+                <input type="number" id="p-monto" placeholder="Monto">
+                <select id="p-tipo"><option value="out">Gasto</option><option value="in">Ingreso</option></select>
+                <button class="btn-add" onclick="addPre()">Cargar</button>
+            </div></div>
+            <div class="card table-card"><table><tbody id="hist-pre"></tbody></table></div>
         </div>
     </div>
 
     <script>
-        let CAPITAL = localStorage.getItem('b-cap') ? parseFloat(localStorage.getItem('b-cap')) : 300000;
+        let CAPITAL = localStorage.getItem('b-cap') ? parseFloat(localStorage.getItem('b-cap')) : 500000;
         let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
         let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
         let timer = 1;
-        const COINS = ['usdt', 'btc', 'eth', 'sol'];
+        
+        // LISTA EXTENDIDA
+        const COINS = ['usdt', 'usdc', 'dai', 'btc', 'wbtc', 'eth', 'sol', 'ada', 'bnb', 'xrp', 'trx', 'doge', 'bch', 'xlm', 'dot'];
         const EXS = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'tiendacrypto', 'ripio'];
 
         async function scan() {
@@ -174,9 +143,7 @@
                 const dMep = await rMep.json();
                 document.getElementById('val-mep').innerText = `$${dMep.venta}`;
 
-                let html = "";
-                let bestP = -999999;
-                let bestD = "Buscando...";
+                let html = "", bestP = -999999, bestD = "Buscando...";
 
                 const promises = COINS.map(c => fetch(`https://criptoya.com/api/${c}/ars/1`).then(r => r.json()));
                 const results = await Promise.all(promises);
@@ -184,37 +151,31 @@
                 results.forEach((data, index) => {
                     const coin = COINS[index];
                     const p2pSell = data.binancep2p ? data.binancep2p.bid : 0;
+                    if(p2pSell <= 0) return;
 
-                    if(p2pSell > 0) {
-                        EXS.forEach(ex => {
-                            if(data[ex]) {
-                                const ask = data[ex].ask;
-                                const profit = (CAPITAL / ask * p2pSell) - CAPITAL;
-                                const spread = ((p2pSell / ask) - 1) * 100;
+                    EXS.forEach(ex => {
+                        if(data[ex]) {
+                            const cost = data[ex].ask;
+                            const profit = (CAPITAL / cost * p2pSell) - CAPITAL;
+                            const spread = ((p2pSell / cost) - 1) * 100;
+                            if(profit > bestP) { bestP = profit; bestD = `COMPRA ${coin.toUpperCase()} EN ${ex.toUpperCase()}`; }
 
-                                if(profit > bestP) {
-                                    bestP = profit;
-                                    bestD = `COMPRA ${coin.toUpperCase()} EN ${ex.toUpperCase()}`;
-                                }
-
-                                html += `<tr>
-                                    <td><span class="badge-coin coin-${coin}">${coin.toUpperCase()}</span> ${ex.toUpperCase()}</td>
-                                    <td>$${ask.toLocaleString()}</td>
-                                    <td>$${p2pSell.toLocaleString()}</td>
-                                    <td class="flow-text ${profit >= 0 ? 'num-green' : 'num-rojo'}">$${Math.abs(profit).toFixed(0)}</td>
-                                    <td style="color:${spread >= 0 ? '#05CD99' : '#EE5D50'}">${spread.toFixed(2)}%</td>
-                                </tr>`;
-                            }
-                        });
-                    }
+                            html += `<tr>
+                                <td><span class="badge-coin c-${coin}">${coin.toUpperCase()}</span> ${ex.toUpperCase()}</td>
+                                <td>$${cost.toLocaleString()}</td>
+                                <td>$${p2pSell.toLocaleString()}</td>
+                                <td class="flow-text ${profit >= 0 ? 'num-green' : 'num-rojo'}">$${Math.abs(profit).toFixed(0)}</td>
+                                <td style="color:${spread >= 0 ? '#05CD99' : '#EE5D50'}">${spread.toFixed(2)}%</td>
+                            </tr>`;
+                        }
+                    });
                 });
-
                 document.getElementById('table-scanner').innerHTML = html;
                 document.getElementById('top-gan').innerText = `$${bestP.toFixed(0)}`;
                 document.getElementById('top-ex').innerText = bestD;
                 document.getElementById('cap-display').innerText = `$${CAPITAL.toLocaleString()}`;
-                timer = 20;
-            } catch (e) { console.error(e); timer = 5; }
+                timer = 30;
+            } catch (e) { timer = 5; }
         }
 
         function show(id, el) {
@@ -227,10 +188,7 @@
             const m = parseFloat(document.getElementById('o-monto').value);
             const b = parseFloat(document.getElementById('o-buy').value);
             const s = parseFloat(document.getElementById('o-sell').value);
-            if(m && b && s) {
-                dbOps.unshift({id: Date.now(), f: new Date().toLocaleDateString(), m, gan: (m/b*s)-m});
-                save(); render();
-            }
+            if(m && b && s) { dbOps.unshift({id: Date.now(), f: new Date().toLocaleDateString(), m, gan: (m/b*s)-m}); save(); render(); }
         }
 
         function addPre() {
@@ -238,10 +196,7 @@
             const d = document.getElementById('p-desc').value;
             const m = parseFloat(document.getElementById('p-monto').value);
             const t = document.getElementById('p-tipo').value;
-            if(f && d && m) {
-                dbPre.unshift({id: Date.now(), f, d, m, t});
-                save(); render();
-            }
+            if(f && d && m) { dbPre.unshift({id: Date.now(), f, d, m, t}); save(); render(); }
         }
 
         function deleteItem(type, id) {
@@ -262,7 +217,7 @@
         }
 
         function cambiarCapital() {
-            let p = prompt("Ingresá tu capital de trabajo en ARS:", CAPITAL);
+            let p = prompt("Nuevo Capital ARS:", CAPITAL);
             if(p) { CAPITAL = parseFloat(p); save(); scan(); }
         }
 
