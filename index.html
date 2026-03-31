@@ -17,48 +17,67 @@
             --accent: #4318FF;
             --success: #05CD99;
             --danger: #EE5D50;
+            --led-blue: linear-gradient(135deg, #4318FF, #B23AF3, #4318FF);
+            --led-verde: linear-gradient(135deg, #05CD99, #66DDAA, #05CD99);
+            --led-rojo: linear-gradient(135deg, #FF5B5B, #F067B4, #FF5B5B);
         }
 
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
-        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
+        body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; overflow-x: hidden; }
 
-        /* Sidebar similar a tu captura */
+        /* Sidebar */
         .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 1000; transition: 0.3s; }
         .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
         .nav-container { display: flex; flex-direction: column; gap: 8px; }
         .nav-item { color: var(--text-sec); padding: 12px 18px; border-radius: 12px; cursor: pointer; display: flex; align-items: center; gap: 12px; transition: 0.2s; font-weight: 600; text-decoration: none; }
         .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.2); }
+        .nav-item i { font-size: 18px; width: 24px; text-align: center; }
 
-        .main-wrapper { margin-left: 260px; width: 100%; padding: 40px; transition: 0.3s; }
-        .view-section { display: none; max-width: 1200px; margin: 0 auto; }
-        .view-section.active { display: block; }
+        /* Layout */
+        .main-wrapper { margin-left: 260px; width: calc(100% - 260px); padding: 40px; transition: 0.3s; }
+        .view-section { display: none; max-width: 1100px; margin: 0 auto; }
+        .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
 
         h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; }
 
-        /* Tarjetas Superiores */
+        /* Efectos LED Dinámicos */
+        .flow-text { font-size: clamp(24px, 4vw, 38px); font-weight: 800; background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; }
+        @keyframes flow { to { background-position: 200% center; } }
+        .num-blue { background-image: var(--led-blue); }
+        .num-green { background-image: var(--led-verde); }
+        .num-red { background-image: var(--led-rojo); }
+
+        /* Tarjetas */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
-        .card-mini { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); }
-        .card-mini .label { font-size: 12px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; margin-bottom: 8px; }
-        .card-mini .value { font-size: 36px; font-weight: 800; color: #7038FF; }
+        .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
+        .card-title { font-size: 12px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 12px; }
 
-        /* Contenedor de Tablas Estilo Tu Captura */
-        .card-table { background: var(--card-bg); border-radius: 20px; padding: 30px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
-        .card-table h3 { font-size: 14px; color: var(--text-sec); text-transform: uppercase; margin-bottom: 20px; letter-spacing: 0.5px; }
-        
-        table { width: 100%; border-collapse: collapse; }
-        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; }
-        td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; }
+        /* Tablas Pro */
+        .table-wrapper { overflow-x: auto; width: 100%; border-radius: 12px; }
+        table { width: 100%; border-collapse: collapse; min-width: 500px; }
+        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; text-transform: uppercase; }
+        td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; color: var(--text-main); }
 
-        .up { color: var(--success); }
-        .down { color: var(--danger); }
-        #timer { font-size: 12px; background: #eee; padding: 4px 10px; border-radius: 20px; font-weight: 700; }
+        /* Formularios */
+        .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; }
+        input, select { background: #F4F7FE; border: 1px solid transparent; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; width: 100%; transition: 0.2s; }
+        input:focus { border-color: var(--accent); background: white; }
+        .btn-main { background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
+        .btn-main:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(67, 24, 255, 0.3); }
+        .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; transition: 0.2s; }
+        .btn-del:hover { background: var(--danger); color: white; }
+
+        #timer { font-size: 12px; font-weight: 800; background: #EEEFFF; color: var(--accent); padding: 5px 12px; border-radius: 20px; }
 
         @media (max-width: 850px) {
-            .sidebar { width: 100%; height: 70px; bottom: 0; top: auto; padding: 0; border-right: none; display: flex; align-items: center; }
+            .sidebar { width: 100%; height: 70px; bottom: 0; top: auto; padding: 0; border-right: none; border-top: 1px solid #E9EDF7; flex-direction: row; }
             .logo { display: none; }
-            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; }
-            .main-wrapper { margin-left: 0; padding: 20px 15px 90px 15px; }
+            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; height: 100%; align-items: center; }
+            .nav-item { flex-direction: column; gap: 4px; padding: 8px; font-size: 10px; }
+            .nav-item i { margin: 0; font-size: 18px; }
+            .main-wrapper { margin-left: 0; padding: 20px 15px 90px 15px; width: 100%; }
             .grid-2 { grid-template-columns: 1fr; }
         }
     </style>
@@ -76,56 +95,143 @@
     </div>
 
     <div class="main-wrapper">
+        
+        <!-- VISTA DASHBOARD -->
         <div id="v-dash" class="view-section active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1>Panel de Control</h1>
                 <span id="timer">30s</span>
             </div>
-
+            
             <div class="grid-2">
-                <div class="card-mini">
-                    <div class="label">Capital Trabajando</div>
-                    <div class="value" id="disp-cap">$100.000</div>
+                <div class="card">
+                    <div class="card-title">Capital ARS</div>
+                    <div class="flow-text num-blue" id="disp-cap">$0</div>
                 </div>
-                <div class="card-mini">
-                    <div class="label">Mejor Opción Ganancia</div>
-                    <div class="value" id="top-gan" style="color: #FF5B87;">$0.00</div>
-                    <div id="top-ex" style="font-weight: 700; color: var(--text-sec); font-size: 12px;">Cargando...</div>
+                <div class="card">
+                    <div class="card-title">Oportunidad Real</div>
+                    <div id="top-gan" class="flow-text num-green">$0.00</div>
+                    <div id="top-ex" style="font-weight: 800; color: var(--accent); margin-top: 5px; font-size: 13px;">CARGANDO...</div>
                 </div>
             </div>
 
-            <!-- TABLA 1: DÓLARES -->
-            <div class="card-table">
-                <h3>Cotización Dólares & Brecha</h3>
-                <table>
-                    <thead><tr><th>TIPO</th><th>COMPRA</th><th>VENTA</th><th>VS USDT</th></tr></thead>
-                    <tbody id="table-dolares"></tbody>
-                </table>
+            <div class="card">
+                <div class="card-title">Cotización Dólares</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Tipo</th><th>Compra</th><th>Venta</th><th>Brecha vs USDT</th></tr></thead>
+                        <tbody id="table-dolares"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- TABLA 2: USDT ARBITRAJE -->
-            <div class="card-table">
-                <h3>Arbitraje USDT (ARS)</h3>
-                <table>
-                    <thead><tr><th>EXCHANGE</th><th>COMPRA</th><th>VENTA</th><th>GANANCIA</th></tr></thead>
-                    <tbody id="table-p2p"></tbody>
-                </table>
+            <div class="card">
+                <div class="card-title">Oportunidades Altcoins</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Crypto</th><th>Mejor Venta (Exchange)</th><th>Precio ARS</th><th>Estado</th></tr></thead>
+                        <tbody id="table-alts"></tbody>
+                    </table>
+                </div>
             </div>
 
-            <!-- TABLA 3: ALTCOINS -->
-            <div class="card-table">
-                <h3>Oportunidades Altcoins</h3>
-                <table>
-                    <thead><tr><th>CRYPTO</th><th>MEJOR VENTA</th><th>PRECIO ARS</th><th>ESTADO</th></tr></thead>
-                    <tbody id="table-alts"></tbody>
-                </table>
+            <div class="card">
+                <div class="card-title">Arbitraje USDT (ARS)</div>
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Exchange</th><th>Compra (Exchange)</th><th>Venta (P2P)</th><th>Ganancia</th></tr></thead>
+                        <tbody id="table-p2p"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA OPERACIONES -->
+        <div id="v-ops" class="view-section">
+            <h1>Registro de Operaciones</h1>
+            <div class="card">
+                <div class="card-title">Nueva Operación</div>
+                <div class="form-inline">
+                    <input type="number" id="o-monto" placeholder="Monto ARS">
+                    <input type="number" id="o-buy" placeholder="Precio Compra">
+                    <input type="number" id="o-sell" placeholder="Precio Venta">
+                    <button class="btn-main" onclick="addOp()">Registrar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th>Acción</th></tr></thead>
+                        <tbody id="hist-ops"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- VISTA CAJA -->
+        <div id="v-pre" class="view-section">
+            <h1>Gestión de Caja</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Flujo de Fondos</div>
+                    <div style="height: 180px;"><canvas id="budgetWaveChart"></canvas></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0; padding: 20px;">
+                        <div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div>
+                        <div id="sum-total" style="font-size:32px; font-weight:800">$0</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Ingresos</div>
+                            <div id="sum-in" class="flow-text num-green" style="font-size:20px">$0</div>
+                        </div>
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Egresos</div>
+                            <div id="sum-out" class="flow-text num-red" style="font-size:20px">$0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="card">
+                <div class="card-title">Nuevo Movimiento</div>
+                <div class="form-inline">
+                    <input type="date" id="p-fecha">
+                    <input type="text" id="p-desc" placeholder="Descripción">
+                    <input type="number" id="p-monto" placeholder="Monto $">
+                    <select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select>
+                    <button class="btn-main" onclick="addPre()">Agregar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table>
+                        <thead><tr><th>Fecha</th><th>Detalle</th><th>Monto</th><th>Acción</th></tr></thead>
+                        <tbody id="hist-pre"></tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
 
     <script>
-        let CAPITAL = 100000; 
+        let CAPITAL = localStorage.getItem('b-capital') ? parseFloat(localStorage.getItem('b-capital')) : 100000;
+        let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
+        let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
         let segs = 30;
+
+        // Configuración de Gráfico
+        const ctxPre = document.getElementById('budgetWaveChart').getContext('2d');
+        let budgetChart = new Chart(ctxPre, {
+            type: 'line',
+            options: {
+                responsive: true, maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: { y: { display: false }, x: { grid: { display: false } } },
+                elements: { line: { tension: 0.4, borderWidth: 4, borderColor: '#4318FF' }, point: { radius: 0 } }
+            },
+            data: { labels: [], datasets: [{ data: [], fill: true, backgroundColor: 'rgba(67, 24, 255, 0.05)' }] }
+        });
 
         function show(id, el) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
@@ -136,77 +242,122 @@
 
         async function updateMarket() {
             try {
-                // Datos de USDT
                 const rUsdt = await fetch('https://criptoya.com/api/usdt/ars/1');
                 const dUsdt = await rUsdt.json();
-                const p2p = dUsdt.binancep2p.bid; // El precio al que vendés en P2P
+                const p2p = dUsdt.binancep2p.bid;
 
-                // Datos de Dólares
                 const rDol = await fetch('https://criptoya.com/api/dolares');
                 const dDol = await rDol.json();
 
-                // 1. Lógica Dólares
+                // Dólares
                 document.getElementById('table-dolares').innerHTML = `
-                    <tr><td>DÓLAR MEP (AL30)</td><td>-</td><td>$${dDol.mep.al30.ci.price.toFixed(2)}</td><td class="up">+${((p2p/dDol.mep.al30.ci.price-1)*100).toFixed(2)}%</td></tr>
-                    <tr><td>DÓLAR BLUE</td><td>$${dDol.blue.bid}</td><td>$${dDol.blue.ask}</td><td>-</td></tr>
+                    <tr><td>Dólar MEP (AL30)</td><td>-</td><td>$${dDol.mep.al30.ci.price.toFixed(2)}</td><td style="color:var(--success)">+${((p2p/dDol.mep.al30.ci.price-1)*100).toFixed(2)}%</td></tr>
+                    <tr><td>Dólar Blue</td><td>$${dDol.blue.bid}</td><td>$${dDol.blue.ask}</td><td>-</td></tr>
+                    <tr><td>Dólar Cripto (Prom)</td><td>-</td><td>$${p2p.toFixed(2)}</td><td>-</td></tr>
                 `;
 
-                // 2. Lógica USDT Arbitraje (Calculado real)
+                // USDT e Inteligencia de mejor opción
                 const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
                 let hUsdt = '', mGan = -99999, mEx = '';
 
                 exs.forEach(e => {
                     if(dUsdt[e]) {
-                        const compra = dUsdt[e].ask; // Lo que pagás por el USDT
+                        const compra = dUsdt[e].ask;
                         const ganancia = (CAPITAL / compra * p2p) - CAPITAL;
                         if(ganancia > mGan) { mGan = ganancia; mEx = e.toUpperCase(); }
-                        
-                        hUsdt += `
-                            <tr>
-                                <td>${e.toUpperCase()}</td>
-                                <td>$${compra.toLocaleString()}</td>
-                                <td>$${p2p.toLocaleString()}</td>
-                                <td class="${ganancia > 0 ? 'up' : 'down'}">$${ganancia.toFixed(0)}</td>
-                            </tr>`;
+                        hUsdt += `<tr><td>${e.toUpperCase()}</td><td>$${compra.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${ganancia>0?'var(--success)':'var(--danger)'}">$${ganancia.toFixed(0)}</td></tr>`;
                     }
                 });
                 document.getElementById('table-p2p').innerHTML = hUsdt;
                 document.getElementById('top-gan').innerText = `$${mGan.toFixed(0)}`;
-                document.getElementById('top-ex').innerText = mEx;
+                document.getElementById('top-ex').innerText = "VÍA " + mEx;
 
-                // 3. Lógica Altcoins
-                const alts = ['sol', 'xrp', 'ltc'];
+                // Altcoins
+                const alts = ['sol', 'xrp', 'ltc', 'eth'];
                 let hAlts = '';
                 for(let coin of alts){
-                    const rAlt = await fetch(`https://criptoya.com/api/${coin}/ars/1`);
-                    const dAlt = await rAlt.json();
-                    let mejorVenta = 0, mejorEx = '---';
-                    
-                    exs.forEach(e => {
-                        if(dAlt[e] && dAlt[e].bid > mejorVenta) {
-                            mejorVenta = dAlt[e].bid;
-                            mejorEx = e.toUpperCase();
-                        }
-                    });
-                    hAlts += `<tr><td>${coin.toUpperCase()}</td><td>${mejorEx}</td><td>$${mejorVenta.toLocaleString()}</td><td>Estable</td></tr>`;
+                    const rA = await fetch(`https://criptoya.com/api/${coin}/ars/1`);
+                    const dA = await rA.json();
+                    let bestB = 0, bestE = '---';
+                    exs.forEach(e => { if(dA[e] && dA[e].bid > bestB) { bestB = dA[e].bid; bestE = e.toUpperCase(); } });
+                    hAlts += `<tr><td>${coin.toUpperCase()}</td><td>${bestE}</td><td>$${bestB.toLocaleString()}</td><td style="color:var(--success)">Activo</td></tr>`;
                 }
                 document.getElementById('table-alts').innerHTML = hAlts;
 
                 segs = 30;
-            } catch(e) { console.error(e); }
+            } catch(err) { segs = 5; }
         }
 
-        setInterval(() => { 
-            segs--; 
-            document.getElementById('timer').innerText = segs+'s'; 
-            if(segs <= 0) updateMarket(); 
-        }, 1000);
+        // Lógica de datos y guardado
+        function addOp() {
+            const m = parseFloat(document.getElementById('o-monto').value);
+            const b = parseFloat(document.getElementById('o-buy').value);
+            const s = parseFloat(document.getElementById('o-sell').value);
+            if(!m || !b || !s) return;
+            dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString('es-AR'), m, gan: (m/b*s)-m });
+            save();
+            document.getElementById('o-monto').value = '';
+        }
+
+        function addPre() {
+            const fRaw = document.getElementById('p-fecha').value || new Date().toISOString().split('T')[0];
+            const d = document.getElementById('p-desc').value;
+            const m = parseFloat(document.getElementById('p-monto').value);
+            const t = document.getElementById('p-tipo').value;
+            if(!d || !m) return;
+            dbPre.unshift({ id: Date.now(), fRaw, f: fRaw.split('-').reverse().slice(0,2).join('/'), d, m, t });
+            save();
+            document.getElementById('p-desc').value = ''; document.getElementById('p-monto').value = '';
+        }
+
+        function delOp(id) { dbOps = dbOps.filter(x => x.id !== id); save(); }
+        function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
+
+        function save() {
+            localStorage.setItem('b-ops', JSON.stringify(dbOps));
+            localStorage.setItem('b-pre', JSON.stringify(dbPre));
+            localStorage.setItem('b-capital', CAPITAL);
+            render();
+        }
+
+        function render() {
+            document.getElementById('disp-cap').innerText = '$' + CAPITAL.toLocaleString();
+            
+            // Render Ops
+            document.getElementById('hist-ops').innerHTML = dbOps.map(o => `
+                <tr><td>${o.f}</td><td>$${o.m.toLocaleString()}</td><td style="color:${o.gan>0?'var(--success)':'var(--danger)'}">$${o.gan.toFixed(0)}</td><td><button class="btn-del" onclick="delOp(${o.id})">✕</button></td></tr>
+            `).join('');
+
+            // Render Caja
+            let i = 0, e = 0;
+            document.getElementById('hist-pre').innerHTML = dbPre.map(p => {
+                p.t === 'in' ? i += p.m : e += p.m;
+                return `<tr><td>${p.f}</td><td>${p.d}</td><td style="color:${p.t==='in'?'var(--success)':'var(--danger)'}">$${p.m.toLocaleString()}</td><td><button class="btn-del" onclick="delPre(${p.id})">✕</button></td></tr>`;
+            }).join('');
+
+            document.getElementById('sum-in').innerText = `$${i.toLocaleString()}`;
+            document.getElementById('sum-out').innerText = `$${e.toLocaleString()}`;
+            document.getElementById('sum-total').innerText = `$${(i - e).toLocaleString()}`;
+
+            // Update Chart
+            const sorted = [...dbPre].sort((a,b) => new Date(a.fRaw) - new Date(b.fRaw)).slice(-10);
+            budgetChart.data.labels = sorted.map(x => x.f);
+            budgetChart.data.datasets[0].data = sorted.map(x => x.t==='in' ? x.m : -x.m);
+            budgetChart.update();
+        }
 
         function cambiarCapital() {
-            let p = prompt("Ingresa el capital en ARS para calcular:", CAPITAL);
-            if(p) { CAPITAL = parseFloat(p); document.getElementById('disp-cap').innerText = '$' + CAPITAL.toLocaleString(); updateMarket(); }
+            let p = prompt("Ingresa el Capital de Trabajo (ARS):", CAPITAL);
+            if(p) { CAPITAL = parseFloat(p); save(); updateMarket(); }
         }
 
+        setInterval(() => {
+            segs--;
+            document.getElementById('timer').innerText = segs + 's';
+            if(segs <= 0) updateMarket();
+        }, 1000);
+
+        render();
         updateMarket();
     </script>
 </body>
