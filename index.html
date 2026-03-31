@@ -2,8 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Pinocho Suite | V5 Pro | ByBauti</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pinocho Arbitraje Pro | ByBauti</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css">
     <style>
@@ -12,57 +12,39 @@
             --text-main: #1B2559; --text-sec: #A3AED0; --accent: #4318FF;
             --success: #05CD99; --danger: #EE5D50; --border: #E9EDF7;
             --led-blue: linear-gradient(135deg, #4318FF, #B23AF3, #4318FF);
+            --led-verde: linear-gradient(135deg, #05CD99, #66DDAA, #05CD99);
         }
-
-        * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
+        * { box-sizing: border-box; outline: none; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
-
-        /* SIDEBAR ORIGINAL (280px) */
-        .sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; left: 0; top: 0; padding: 40px 24px; border-right: 1px solid var(--border); z-index: 1000; transition: 0.3s; }
-        .logo { font-size: 26px; font-weight: 800; margin-bottom: 50px; padding-left: 10px; color: #2B3674; }
+        
+        .sidebar { width: 280px; background: var(--sidebar-bg); height: 100vh; position: fixed; left: 0; top: 0; padding: 40px 24px; border-right: 1px solid var(--border); z-index: 1000; }
+        .logo { font-size: 26px; font-weight: 800; margin-bottom: 50px; color: #2B3674; }
         .logo span { color: var(--accent); }
-        .nav-container { display: flex; flex-direction: column; gap: 10px; }
-        .nav-item { color: var(--text-sec); padding: 16px 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 700; text-decoration: none; transition: 0.2s; }
+        .nav-item { color: var(--text-sec); padding: 16px 20px; border-radius: 16px; cursor: pointer; display: flex; align-items: center; gap: 15px; font-weight: 700; transition: 0.3s; margin-bottom: 8px; }
         .nav-item.active { background: #F4F7FE; color: var(--accent); border-right: 4px solid var(--accent); }
 
-        /* MAIN WRAPPER (Desplazado para no pisar el sidebar) */
-        .main-wrapper { margin-left: 280px; width: calc(100% - 280px); padding: 40px; transition: 0.3s; }
-        .view-section { display: none; max-width: 1200px; margin: 0 auto; animation: fadeIn 0.4s ease; }
-        .view-section.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        h1 { font-size: 32px; font-weight: 800; margin: 0 0 30px 0; letter-spacing: -0.5px; color: #2B3674; }
-
-        /* GRIDS & CARDS MODERNAS */
+        .main-wrapper { margin-left: 280px; width: calc(100% - 280px); padding: 40px; }
         .grid-top { display: grid; grid-template-columns: repeat(3, 1fr); gap: 24px; margin-bottom: 30px; }
         .card { background: var(--card-bg); border-radius: 20px; padding: 25px; border: 1px solid var(--border); box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); }
-        .card-label { font-size: 11px; color: var(--text-sec); font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
-
-        .big-val { font-size: 36px; font-weight: 800; margin: 5px 0; letter-spacing: -1px; }
+        .card-label { font-size: 11px; color: var(--text-sec); font-weight: 800; text-transform: uppercase; margin-bottom: 10px; }
         
-        /* EFECTO FLOW */
-        .flow-text { background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; display: inline-block; background-image: var(--led-blue); }
+        .big-val { font-size: 32px; font-weight: 800; margin: 5px 0; }
+        .flow-text { background-size: 200% auto; -webkit-background-clip: text; -webkit-text-fill-color: transparent; animation: flow 4s linear infinite; }
+        .blue-flow { background-image: var(--led-blue); }
+        .green-flow { background-image: var(--led-verde); }
         @keyframes flow { to { background-position: 200% center; } }
 
-        /* TABLA MODERNA */
-        .table-card { padding: 30px; }
-        table { width: 100%; border-collapse: separate; border-spacing: 0; }
-        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 15px; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 18px 15px; border-bottom: 1px solid #F4F7FE; font-weight: 700; color: #2B3674; font-size: 14px; }
-        .badge { background: #F4F7FE; padding: 6px 12px; border-radius: 8px; font-size: 11px; color: var(--accent); }
-
-        /* RESPONSIVE */
-        @media (max-width: 1100px) {
-            .grid-top { grid-template-columns: 1fr; }
-        }
-
-        @media (max-width: 850px) {
-            .sidebar { width: 100%; height: 75px; bottom: 0; top: auto; padding: 0; flex-direction: row; border-top: 1px solid var(--border); border-right: none; }
-            .logo { display: none; }
-            .nav-container { flex-direction: row; width: 100%; justify-content: space-around; padding: 0 10px; }
-            .nav-item { flex-direction: column; font-size: 10px; gap: 4px; padding: 10px; border-radius: 0; height: 100%; border-right: none !important; }
-            .main-wrapper { margin-left: 0; width: 100%; padding: 20px 20px 100px; }
-        }
+        .table-card { padding: 30px; margin-top: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; }
+        th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; border-bottom: 1px solid var(--border); }
+        td { padding: 15px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 700; color: #2B3674; }
+        
+        .badge-coin { background: var(--accent); color: white; padding: 4px 8px; border-radius: 6px; font-size: 10px; margin-right: 8px; }
+        .ex-name { color: var(--text-sec); font-size: 12px; font-weight: 600; }
+        .profit-tag { color: var(--success); font-weight: 800; }
+        .loss-tag { color: var(--danger); font-weight: 800; }
+        
+        .status-dot { height: 10px; width: 10px; background-color: var(--success); border-radius: 50%; display: inline-block; margin-right: 5px; }
     </style>
 </head>
 <body>
@@ -70,95 +52,116 @@
     <div class="sidebar">
         <div class="logo">By<span>Bauti</span></div>
         <div class="nav-container">
-            <div class="nav-item active" onclick="show('v-dash', this)"><i class="fa-solid fa-chart-line"></i><span>Monitor</span></div>
-            <div class="nav-item" onclick="show('v-ops', this)"><i class="fa-solid fa-shuffle"></i><span>Ops</span></div>
-            <div class="nav-item" onclick="show('v-pre', this)"><i class="fa-solid fa-wallet"></i><span>Caja</span></div>
-            <div class="nav-item" onclick="cambiarCapital()"><i class="fa-solid fa-sliders"></i><span>Ajustes</span></div>
+            <div class="nav-item active"><i class="fa-solid fa-bolt"></i><span>Escáner Live</span></div>
+            <div class="nav-item" onclick="cambiarCapital()"><i class="fa-solid fa-wallet"></i><span>Capital</span></div>
+            <div class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Historial</span></div>
         </div>
     </div>
 
     <div class="main-wrapper">
-        <div id="v-dash" class="view-section active">
-            <h1>Monitor Multicripto <small style="font-size: 12px; color: var(--green);">v5 Multi-API</small></h1>
-            
-            <div class="grid-top">
-                <div class="card"><div class="card-label">Capital ARS</div><div id="cap-display" class="flow-text big-val">$0</div></div>
-                <div class="card"><div class="card-label">Dólar MEP</div><div id="mep-display" class="flow-text big-val">$0</div></div>
-                <div class="card"><div class="card-label">Estado de Red</div><div id="status" class="flow-text big-val" style="color:var(--green);font-size:24px;">ACTIVO</div></div>
-            </div>
-
-            <div class="card table-card">
-                <div class="card-label" style="margin-bottom: 20px;">Precios de Mercado (Base ARS Estimada)</div>
-                <div style="overflow-x: auto;">
-                    <table>
-                        <thead><tr><th>MONEDA</th><th>PRECIO U$D (Binance)</th><th>PRECIO ARS (Est.)</th></tr></thead>
-                        <tbody id="table-body">
-                            
-</tbody>
-                    </table>
-                </div>
-            </div>
+        <h1 id="title">Scanner de Brechas ARS</h1>
+        
+        <div class="grid-top">
+            <div class="card"><div class="card-label">Tu Capital</div><div id="cap-display" class="big-val flow-text blue-flow">$0</div></div>
+            <div class="card"><div class="card-label">Dólar MEP</div><div id="mep-display" class="big-val flow-text blue-flow">$0</div></div>
+            <div class="card"><div class="card-label">Mejor Oportunidad</div><div id="best-opp" class="big-val flow-text green-flow">$0</div></div>
         </div>
 
-        
-<div id="v-ops" class="view-section"><h1>Registro Operaciones</h1><p>En desarrollo...</p></div>
-        <div id="v-pre" class="view-section"><h1>Caja de Fondos</h1><p>En desarrollo...</p></div>
+        <div class="card table-card">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <div class="card-label">Monitor de Exchanges vs P2P</div>
+                <div id="status-msg" style="font-size: 12px; font-weight: 700; color: var(--accent);"><span class="status-dot"></span>Iniciando...</div>
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>MERCADO / EXCHANGE</th>
+                        <th>COSTO COMPRA</th>
+                        <th>VENTA P2P (Binance)</th>
+                        <th>GANANCIA EST.</th>
+                        <th>BRECHA %</th>
+                    </tr>
+                </thead>
+                <tbody id="scanner-body">
+                    <!-- Filas dinámicas -->
+                </tbody>
+            </table>
+        </div>
     </div>
 
     <script>
         let CAPITAL = localStorage.getItem('b-cap') ? parseFloat(localStorage.getItem('b-cap')) : 500000;
-        const COINS = ['BTCUSDT', 'ETHUSDT', 'BNBUSDT', 'SOLUSDT', 'ADAUSDT', 'XRPUSDT', 'TRXUSDT', 'DOGEUSDT', 'BCHUSDT', 'XLMUSDT', 'DOTUSDT', 'WBTCUSDT', 'DAIUSDT'];
+        const EXCHANGES = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'tiendacrypto', 'ripio'];
+        const COINS = ['usdt', 'usdc', 'dai', 'btc', 'eth', 'sol'];
+        let isScanning = false;
 
-        function show(id, el) {
-            document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active'); el.classList.add('active');
-        }
-
-        async function updateMarket() {
+        async function updateScanner() {
+            if(isScanning) return;
+            isScanning = true;
+            document.getElementById('status-msg').innerHTML = '<span class="status-dot" style="background:orange"></span>Escaneando monedas...';
+            
             try {
-                // 1. Dolar MEP de DolarAPI (Estable)
-                const rM = await fetch('https://dolarapi.com/v1/dolares/bolsa');
-                const dM = await rM.json();
-                const mep = dM.venta;
-                document.getElementById('mep-display').innerText = `$${mep.toFixed(0)}`;
+                // 1. Dólar MEP
+                const rMep = await fetch('https://dolarapi.com/v1/dolares/bolsa');
+                const dMep = await rMep.json();
+                document.getElementById('mep-display').innerText = `$${dMep.venta.toFixed(2)}`;
                 document.getElementById('cap-display').innerText = `$${CAPITAL.toLocaleString()}`;
 
-                // 2. Precios Binance (Ilimitado y Gratis)
-                const rB = await fetch('https://api.binance.com/api/v3/ticker/price');
-                const pB = await rB.json();
-
-                // 3. USDT/ARS de CriptoYa (Solo una llamada para base)
-                const rC = await fetch('https://criptoya.com/api/usdt/ars/1');
-                const dC = await rC.json();
-                const baseCripto = dC.lemoncash.ask; // Usamos Lemoncash como referencia
-
                 let html = "";
-                COINS.forEach(symbol => {
-                    const priceNode = pB.find(p => p.symbol === symbol);
-                    if(priceNode) {
-                        const usd = parseFloat(priceNode.price);
-                        const ars = usd * baseCripto;
-                        const coin = symbol.replace('USDT', '');
-                        html += `<tr><td><span class="badge">${coin}</span></td><td>U$D ${usd < 1 ? usd.toFixed(4) : usd.toLocaleString()}</td><td>$${ars.toLocaleString()}</td></tr>`;
-                    }
-                });
-                document.getElementById('table-body').innerHTML = html;
-                document.getElementById('status').innerText = "ACTUALIZADO";
+                let maxProfit = 0;
 
-            } catch(e) { 
-                console.error(e);
-                document.getElementById('status').innerText = "ERROR RED"; 
+                // 2. Escaneo secuencial para evitar BAN de CriptoYa
+                for (let coin of COINS) {
+                    try {
+                        const res = await fetch(`https://criptoya.com/api/${coin}/ars/1`);
+                        const data = await res.json();
+                        const p2pSell = data.binancep2p ? data.binancep2p.bid : 0;
+
+                        if(p2pSell > 0) {
+                            EXCHANGES.forEach(ex => {
+                                if(data[ex] && data[ex].ask) {
+                                    const cost = data[ex].ask;
+                                    const profit = (CAPITAL / cost * p2pSell) - CAPITAL;
+                                    const spread = ((p2pSell / cost) - 1) * 100;
+
+                                    if(profit > maxProfit) maxProfit = profit;
+
+                                    html += `
+                                        <tr>
+                                            <td><span class="badge-coin">${coin.toUpperCase()}</span> <span class="ex-name">${ex.toUpperCase()}</span></td>
+                                            <td>$${cost.toLocaleString()}</td>
+                                            <td>$${p2pSell.toLocaleString()}</td>
+                                            <td class="${profit >= 0 ? 'profit-tag' : 'loss-tag'}">$${profit.toFixed(0)}</td>
+                                            <td style="color:${spread >= 0 ? 'var(--success)' : 'var(--danger)'}">${spread.toFixed(2)}%</td>
+                                        </tr>
+                                    `;
+                                }
+                            });
+                        }
+                        // Actualizar tabla progresivamente
+                        document.getElementById('scanner-body').innerHTML = html;
+                        // Delay de cortesía para la API (300ms)
+                        await new Promise(r => setTimeout(r, 300));
+                    } catch(e) { console.warn("Error en " + coin); }
+                }
+
+                document.getElementById('best-opp').innerText = `$${maxProfit.toFixed(0)}`;
+                document.getElementById('status-msg').innerHTML = '<span class="status-dot"></span>Sincronizado';
+
+            } catch (error) {
+                document.getElementById('status-msg').innerHTML = '<span class="status-dot" style="background:red"></span>Error de conexión';
             }
+            isScanning = false;
         }
 
         function cambiarCapital() {
-            let p = prompt("Nuevo Capital ARS:", CAPITAL);
-            if(p) { CAPITAL = parseFloat(p); localStorage.setItem('b-cap', CAPITAL); updateMarket(); }
+            let val = prompt("Nuevo Capital ARS:", CAPITAL);
+            if(val) { CAPITAL = parseFloat(val); localStorage.setItem('b-cap', CAPITAL); updateScanner(); }
         }
 
-        updateMarket();
-        setInterval(updateMarket, 10000); // 10s
+        // Ejecución inicial y bucle cada 60 segundos (seguro para la API)
+        updateScanner();
+        setInterval(updateScanner, 60000);
     </script>
 </body>
 </html>
