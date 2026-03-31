@@ -112,8 +112,7 @@
 
     <div class="main-wrapper">
         
-        <!-- DASHBOARD -->
-        <div id="v-dash" class="view-section active">
+     <div id="v-dash" class="view-section active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1>Panel de Control</h1>
                 <span id="timer">30s</span>
@@ -141,6 +140,67 @@
                 </div>
             </div>
         </div>
+
+        <!-- OPERACIONES (V-OPS) -->
+        <div id="v-ops" class="view-section">
+            <h1>Registro de Operaciones</h1>
+            <div class="card">
+                <div class="form-inline">
+                    <input type="number" id="o-monto" placeholder="ARS Invertidos">
+                    <input type="number" id="o-buy" placeholder="C. Compra">
+                    <input type="number" id="o-sell" placeholder="C. Venta">
+                    <button class="btn-main" onclick="addOp()">Registrar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Invertido</th><th>Ganancia</th><th></th></tr></thead><tbody id="hist-ops"></tbody></table>
+                </div>
+            </div>
+        </div>
+
+        <!-- CAJA (V-PRE) -->
+        <div id="v-pre" class="view-section">
+            <h1>Gestión de Caja</h1>
+            <div class="grid-2">
+                <div class="card">
+                    <div class="card-title">Flujo de Fondos</div>
+                    <div style="height: 180px;"><canvas id="budgetWaveChart"></canvas></div>
+                </div>
+                <div style="display: flex; flex-direction: column; gap: 15px;">
+                    <div class="card" style="background: var(--accent); color: white; margin-bottom:0; padding: 20px;">
+                        <div class="card-title" style="color:rgba(255,255,255,0.7)">Saldo Neto</div>
+                        <div id="sum-total" style="font-size:32px; font-weight:800">$0</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Ingresos</div>
+                            <div id="sum-in" class="flow-text num-green" style="font-size:20px">$0</div>
+                        </div>
+                        <div class="card" style="margin-bottom:0; padding:15px;">
+                            <div class="card-title" style="font-size:10px;">Egresos</div>
+                            <div id="sum-out" class="flow-text num-red" style="font-size:20px">$0</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="form-inline">
+                    <input type="date" id="p-fecha">
+                    <input type="text" id="p-desc" placeholder="Detalle">
+                    <input type="number" id="p-monto" placeholder="Monto $">
+                    <select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select>
+                    <button class="btn-main" onclick="addPre()">Agregar</button>
+                </div>
+            </div>
+            <div class="card">
+                <div class="table-wrapper">
+                    <table><thead><tr><th>Fecha</th><th>Detalle</th><th>Monto</th><th></th></tr></thead><tbody id="hist-pre"></tbody></table>
+                </div>
+            </div>
+        </div>
+    </div>
 
         <!-- OPERACIONES (V-OPS) -->
         <div id="v-ops" class="view-section">
