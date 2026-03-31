@@ -25,6 +25,7 @@
         * { box-sizing: border-box; outline: none; -webkit-tap-highlight-color: transparent; }
         body { font-family: 'Plus Jakarta Sans', sans-serif; background: var(--bg-main); margin: 0; display: flex; color: var(--text-main); min-height: 100vh; }
 
+        /* Sidebar */
         .sidebar { width: 260px; background: var(--sidebar-bg); height: 100vh; position: fixed; padding: 40px 20px; border-right: 1px solid #E9EDF7; z-index: 1000; transition: 0.3s; }
         .logo { font-size: 24px; font-weight: 800; margin-bottom: 40px; padding-left: 15px; letter-spacing: -1px; }
         .logo span { color: var(--accent); }
@@ -33,6 +34,7 @@
         .nav-item.active { background: var(--accent); color: white; box-shadow: 0px 10px 20px rgba(67, 24, 255, 0.2); }
         .nav-item i { font-size: 18px; width: 24px; text-align: center; }
 
+        /* Main Content */
         .main-wrapper { margin-left: 260px; width: 100%; padding: 40px; transition: 0.3s; }
         .view-section { display: none; max-width: 1100px; margin: 0 auto; }
         .view-section.active { display: block; animation: fadeIn 0.3s ease-out; }
@@ -40,6 +42,7 @@
 
         h1 { font-size: 28px; font-weight: 800; margin-bottom: 25px; }
 
+        /* Cards */
         .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 24px; }
         .card { background: var(--card-bg); border-radius: 20px; padding: 24px; box-shadow: 0px 12px 30px rgba(0, 0, 0, 0.02); border: 1px solid rgba(233, 237, 247, 0.6); margin-bottom: 24px; }
         .card-title { font-size: 13px; color: var(--text-sec); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 10px; }
@@ -55,8 +58,9 @@
         th { text-align: left; color: var(--text-sec); font-size: 11px; padding: 12px; font-weight: 700; border-bottom: 1px solid #F4F7FE; }
         td { padding: 16px 12px; border-bottom: 1px solid #F4F7FE; font-size: 14px; font-weight: 600; }
 
+        /* Forms */
         .form-inline { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
-        input, select { background: #F4F7FE; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; width: 100%; }
+        input { background: #F4F7FE; border: none; padding: 14px; border-radius: 12px; font-weight: 600; font-family: inherit; width: 100%; }
         .btn-main { background: var(--accent); color: white; border: none; padding: 14px 24px; border-radius: 12px; font-weight: 700; cursor: pointer; transition: 0.2s; }
         .btn-del { color: var(--danger); background: #FFF5F5; border: none; width: 32px; height: 32px; border-radius: 8px; cursor: pointer; }
 
@@ -89,7 +93,7 @@
         <div id="v-dash" class="view-section active">
             <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
                 <h1>Panel de Control</h1>
-                <span id="timer">Cargando...</span>
+                <span id="timer">30s</span>
             </div>
             
             <div class="grid-2">
@@ -104,9 +108,10 @@
                 </div>
             </div>
 
+            <!-- Card Comparativa MEP -->
             <div class="card">
                 <div class="card-title">Comparativa Dólar vs P2P</div>
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
                     <div>
                         <p style="margin: 0; font-size: 12px; color: var(--text-sec);">Dólar MEP (AL30)</p>
                         <div id="val-mep" class="flow-text num-blue" style="font-size: 28px;">$0.00</div>
@@ -116,7 +121,7 @@
                         <div id="val-brecha" style="font-size: 28px; font-weight: 800; color: var(--success);">$0.00</div>
                     </div>
                 </div>
-                <p id="mep-status" style="margin-top: 15px; font-size: 11px; font-weight: 800; color: var(--text-sec); text-transform: uppercase;">INICIANDO...</p>
+                <p id="mep-status" style="margin-top: 15px; font-size: 11px; font-weight: 800; color: var(--text-sec);">CARGANDO...</p>
             </div>
 
             <div class="card">
@@ -130,7 +135,7 @@
             </div>
         </div>
 
-        <!-- Secciones Ops y Caja simplificadas para asegurar carga -->
+        <!-- Secciones Ops y Caja (Tu código original que funciona) -->
         <div id="v-ops" class="view-section">
             <h1>Registro de Operaciones</h1>
             <div class="card">
@@ -150,7 +155,6 @@
                 <div class="form-inline">
                     <input type="text" id="p-desc" placeholder="Detalle">
                     <input type="number" id="p-monto" placeholder="Monto $">
-                    <select id="p-tipo"><option value="in">Ingreso</option><option value="out">Egreso</option></select>
                     <button class="btn-main" onclick="addPre()">Agregar</button>
                 </div>
             </div>
@@ -160,9 +164,9 @@
 
     <script>
         let CAPITAL = localStorage.getItem('b-capital') ? parseFloat(localStorage.getItem('b-capital')) : 100000;
-        let segs = 30;
         let dbOps = JSON.parse(localStorage.getItem('b-ops')) || [];
         let dbPre = JSON.parse(localStorage.getItem('b-pre')) || [];
+        let segs = 30;
 
         function show(id, el) {
             document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
@@ -173,38 +177,34 @@
 
         async function updateMarket() {
             try {
-                // Fetch con timestamp para evitar caché del navegador
-                const ts = Date.now();
-                const [rUsdt, rDol] = await Promise.all([
-                    fetch(`https://criptoya.com/api/usdt/ars/1?t=${ts}`),
-                    fetch(`https://criptoya.com/api/dolares?t=${ts}`)
-                ]);
+                // LLAMADAS SIMPLES (Como antes)
+                const resUsdt = await fetch('https://criptoya.com/api/usdt/ars/1');
+                const dataUsdt = await resUsdt.json();
+                
+                const resDol = await fetch('https://criptoya.com/api/dolares');
+                const dataDol = await resDol.json();
 
-                if (!rUsdt.ok || !rDol.ok) throw new Error("Error en servidor de CriptoYa");
+                const p2p = dataUsdt.binancep2p.bid;
+                const mep = dataDol.mep.al30.ci.price;
 
-                const dUsdt = await rUsdt.json();
-                const dDol = await rDol.json();
-
-                const p2p = dUsdt.binancep2p.bid;
-                const mepAL30 = dDol.mep.al30.ci.price;
-
-                // Actualizar UI
-                document.getElementById('val-mep').innerText = `$${mepAL30.toFixed(2)}`;
-                const brecha = ((p2p / mepAL30) - 1) * 100;
+                // Actualizar MEP
+                document.getElementById('val-mep').innerText = `$${mep.toFixed(2)}`;
+                const brecha = ((p2p / mep) - 1) * 100;
                 const brechaEl = document.getElementById('val-brecha');
                 brechaEl.innerText = `${brecha.toFixed(2)}%`;
                 brechaEl.style.color = brecha > 0 ? 'var(--success)' : 'var(--danger)';
-                document.getElementById('mep-status').innerText = `P2P:$${p2p.toFixed(2)} | MEP: $${mepAL30.toFixed(2)}`;
+                document.getElementById('mep-status').innerText = `USDT P2P:$${p2p} | MEP AL30: $${mep}`;
 
-                const exs = ['lemoncash', 'belo', 'buenbit', 'fiwind', 'ripio'];
+                // Tabla de Exchanges
+                const exchanges = ['lemoncash', 'belo', 'fiwind', 'buenbit', 'tiendacrypto'];
                 let h = '', mGan = -99999, mEx = '';
 
-                exs.forEach(e => {
-                    if(dUsdt[e]) {
-                        const ask = dUsdt[e].ask;
+                exchanges.forEach(e => {
+                    if(dataUsdt[e]) {
+                        const ask = dataUsdt[e].ask;
                         const gan = (CAPITAL / ask * p2p) - CAPITAL;
                         if(gan > mGan) { mGan = gan; mEx = e.toUpperCase(); }
-                        h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toLocaleString()}</td><td>$${p2p.toLocaleString()}</td><td style="color:${gan>0?'#05CD99':'#FF5B5B'}">$${gan.toFixed(0)}</td></tr>`;
+                        h += `<tr><td>${e.toUpperCase()}</td><td>$${ask.toFixed(2)}</td><td>$${p2p}</td><td style="color:${gan>0?'var(--success)':'var(--danger)'}">$${gan.toFixed(0)}</td></tr>`;
                     }
                 });
 
@@ -213,21 +213,17 @@
                 document.getElementById('top-ex').innerText = mEx;
                 
                 segs = 30;
-            } catch (err) {
-                console.error(err);
-                document.getElementById('mep-status').innerText = "ERROR DE CONEXIÓN - REINTENTANDO...";
+            } catch (e) {
+                console.log("Error API:", e);
+                document.getElementById('mep-status').innerText = "ERROR DE CARGA - REINTENTANDO...";
                 segs = 5;
             }
         }
 
         setInterval(() => {
-            if (segs <= 0) {
-                updateMarket();
-                segs = 30;
-            } else {
-                segs--;
-            }
+            segs--;
             document.getElementById('timer').innerText = segs + 's';
+            if(segs <= 0) updateMarket();
         }, 1000);
 
         function render() {
@@ -247,6 +243,26 @@
             let p = prompt("Capital ARS:", CAPITAL);
             if(p) { CAPITAL = parseFloat(p); save(); updateMarket(); }
         }
+
+        function addOp() {
+            const m = parseFloat(document.getElementById('o-monto').value);
+            const b = parseFloat(document.getElementById('o-buy').value);
+            const s = parseFloat(document.getElementById('o-sell').value);
+            if(!m || !b || !s) return;
+            dbOps.unshift({ id: Date.now(), f: new Date().toLocaleDateString(), m, gan: (m/b*s)-m });
+            save();
+        }
+
+        function addPre() {
+            const d = document.getElementById('p-desc').value;
+            const m = parseFloat(document.getElementById('p-monto').value);
+            if(!d || !m) return;
+            dbPre.unshift({ id: Date.now(), f: new Date().toLocaleDateString(), d, m });
+            save();
+        }
+
+        function delOp(id) { dbOps = dbOps.filter(x => x.id !== id); save(); }
+        function delPre(id) { dbPre = dbPre.filter(x => x.id !== id); save(); }
 
         render();
         updateMarket();
