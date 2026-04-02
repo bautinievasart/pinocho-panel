@@ -3,126 +3,185 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Parejas Sync</title>
+    <title>Finanzly | Parejas Sync Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     
-    <!-- FIREBASE CORE SDK -->
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <style>
-        :root { --bg: #fdfeff; --primary: #4f46e5; --text: #0f172a; --secondary: #64748b; --white: #ffffff; --success: #10b981; --error: #ef4444; }
-        @keyframes dynamicGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        :root {
+            --bg: #fdfeff; --primary: #4f46e5; --text: #0f172a;
+            --secondary: #64748b; --white: #ffffff; --success: #10b981;
+            --error: #ef4444; 
+        }
+
+        /* ANIMACIONES DE COLOR DINÁMICO */
+        @keyframes dynamicGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
+        @keyframes glowSuccess {
+            0% { color: #10b981; }
+            50% { color: #34d399; }
+            100% { color: #059669; }
+        }
+
+        @keyframes glowError {
+            0% { color: #ef4444; }
+            50% { color: #f87171; }
+            100% { color: #dc2626; }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         body { background: var(--bg); color: var(--text); overflow: hidden; }
         .app-shell { width: 100vw; height: 100dvh; display: flex; flex-direction: column; position: relative; }
 
+        #setup-screen { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+
+        /* HEADER */
         .header {
             background: linear-gradient(-45deg, #4f46e5, #9333ea, #2563eb, #06b6d4);
             background-size: 300% 300%;
             animation: dynamicGlow 6s ease infinite;
-            padding: 50px 24px 50px;
-            border-radius: 0 0 50px 50px;
+            padding: 70px 24px 80px; /* Más espacio inferior */
+            border-radius: 0 0 60px 60px;
             flex-shrink: 0; text-align: center; z-index: 10;
             box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
-            transition: 0.1s linear;
+            transition: transform 0.1s linear, opacity 0.1s linear;
         }
 
-        .month-selector { background: rgba(255,255,255,0.15); border: none; color: white; padding: 8px 15px; border-radius: 12px; font-weight: 700; font-size: 0.8rem; margin-bottom: 15px; outline: none; }
-        .balance-label { font-size: 0.75rem; opacity: 0.8; font-weight: 800; text-transform: uppercase; letter-spacing: 2px; color: white; margin-bottom: 5px; }
-        .balance-value { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; color: white; }
+        .month-selector {
+            background: rgba(255,255,255,0.15);
+            border: none; color: white; padding: 8px 15px;
+            border-radius: 12px; font-weight: 700; font-size: 0.8rem;
+            margin-bottom: 15px; cursor: pointer; outline: none;
+        }
 
-        /* CONFIG PANTALLA INICIAL */
-        #setup-screen { position: fixed; inset: 0; background: white; z-index: 1000; display: flex; flex-direction: column; align-items: center; justify-content: center; padding: 40px; text-align: center; }
+        .balance-label { font-size: 0.8rem; opacity: 0.8; font-weight: 800; text-transform: uppercase; letter-spacing: 3px; color: white; margin-bottom: 8px; }
+        .balance-value { font-size: 3.8rem; font-weight: 800; letter-spacing: -2px; color: white; }
 
-        .content { flex-grow: 1; overflow-y: scroll; padding: 30px 0 160px; position: relative; z-index: 20; -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%); }
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 0 24px; margin-bottom: 30px; margin-top: -30px; }
-        .card { background: var(--white); padding: 20px 15px; border-radius: 28px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); text-align: center; }
-        .chart-card { background: white; margin: 0 24px 30px; padding: 25px; border-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
-        .view { display: none; } .view.active { display: block; }
-        .section-title { padding: 0 28px; font-weight: 800; color: var(--text); margin-bottom: 20px; font-size: 1.3rem; }
+        .content {
+            flex-grow: 1; overflow-y: scroll; padding: 20px 0 160px; position: relative; z-index: 20;
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+        }
 
-        .mov-item { display: flex; align-items: center; justify-content: space-between; background: var(--white); padding: 20px 24px; margin: 0 24px 10px; border-radius: 30px; transition: 0.4s ease; }
-        .btn-delete { background: #fee2e2; color: #ef4444; border: none; width: 30px; height: 30px; border-radius: 8px; display: flex; align-items: center; justify-content: center; }
+        /* GRID DE RESUMEN - Bajado para evitar solapamiento */
+        .summary-grid { 
+            display: grid; 
+            grid-template-columns: 1fr 1fr; 
+            gap: 18px; 
+            padding: 0 24px; 
+            margin-bottom: 40px; 
+            margin-top: -45px; /* Ajuste preciso para que "floten" sobre el header sin pisarlo */
+            position: relative;
+            z-index: 30;
+        }
 
-        .nav-bar { position: fixed; bottom: 0; left: 0; width: 100%; height: 90px; background: rgba(255,255,255,0.9); backdrop-filter: blur(15px); display: flex; justify-content: space-around; align-items: center; padding-bottom: 20px; z-index: 50; border-top: 1px solid #f1f5f9; }
-        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; font-weight: 800; }
+        .card { background: var(--white); padding: 25px 15px; border-radius: 32px; box-shadow: 0 15px 35px rgba(0,0,0,0.08); text-align: center; }
+        .card span { font-size: 0.75rem; font-weight: 800; color: var(--secondary); display: block; margin-bottom: 8px; }
+        
+        /* Efecto dinámico en números de ingresos y gastos */
+        .val-ing { font-size: 1.4rem; font-weight: 800; animation: glowSuccess 4s infinite ease-in-out; }
+        .val-egr { font-size: 1.4rem; font-weight: 800; animation: glowError 4s infinite ease-in-out; }
+
+        .chart-card { background: white; margin: 0 24px 40px; padding: 30px; border-radius: 40px; box-shadow: 0 10px 30px rgba(0,0,0,0.02); }
+        .view { display: none; }
+        .view.active { display: block; }
+        .section-title { padding: 0 28px; font-weight: 800; color: var(--text); margin-bottom: 25px; font-size: 1.4rem; }
+
+        .mov-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: var(--white); padding: 22px 24px; margin: 0 24px 15px;
+            border-radius: 35px; transition: all 0.5s ease;
+            opacity: 0.2; transform: translateY(20px);
+        }
+        .mov-item.in-view { opacity: 1; transform: translateY(0); margin: 0 0 2px; border-radius: 0; border-bottom: 1px solid #f1f5f9; }
+
+        .btn-delete { background: #fee2e2; color: #ef4444; border: none; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+
+        .nav-bar {
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: 25px; z-index: 50; border-top: 1px solid #f1f5f9;
+        }
+        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 800; gap: 5px; }
         .nav-item.active { color: var(--primary); }
-        .btn-plus { width: 65px; height: 65px; background: var(--text); color: white; border: none; border-radius: 20px; display: flex; align-items: center; justify-content: center; transform: translateY(-20px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
+        .btn-plus { width: 70px; height: 70px; background: var(--text); color: white; border: none; border-radius: 22px; display: flex; align-items: center; justify-content: center; transform: translateY(-25px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); }
 
         #modal { position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); display: none; flex-direction: column; justify-content: flex-end; z-index: 100; backdrop-filter: blur(8px); }
-        .modal-body { background: var(--white); width: 100%; padding: 40px 30px; border-radius: 40px 40px 0 0; }
-        input, select { width: 100%; padding: 18px; border-radius: 18px; border: 2px solid #f1f5f9; background: #f8fafc; margin-bottom: 12px; font-weight: 700; outline: none; }
-        .btn-confirm { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 800; font-size: 1.1rem; }
+        .modal-body { background: var(--white); width: 100%; padding: 40px 30px; border-radius: 40px 40px 0 0; animation: slideUp 0.3s ease-out; }
+        input, select { width: 100%; padding: 20px; border-radius: 20px; border: 2px solid #f1f5f9; background: #f8fafc; margin-bottom: 15px; font-weight: 700; font-size: 1rem; outline: none; }
+        .btn-confirm { width: 100%; padding: 22px; background: var(--primary); color: white; border: none; border-radius: 20px; font-weight: 800; font-size: 1.1rem; }
     </style>
 </head>
 <body>
 
-    <!-- PANTALLA DE VINCULACIÓN -->
     <div id="setup-screen">
-        <div style="background: #f1f5f9; padding: 20px; border-radius: 30px; margin-bottom: 30px;">
-            <i data-lucide="users" size="48" color="#4f46e5"></i>
-        </div>
-        <h2 style="font-weight: 800; margin-bottom: 10px;">Conecta con tu pareja</h2>
-        <p style="color: var(--secondary); margin-bottom: 30px;">Ingresen el mismo código ambos para compartir sus cuentas.</p>
-        <input type="text" id="couple-id" placeholder="Ej: amor-y-finanzas-2024" style="text-align: center; text-transform: lowercase;">
-        <button class="btn-confirm" onclick="startSync()">Vincular y Empezar</button>
+        <div style="background: #f1f5f9; padding: 25px; border-radius: 35px; margin-bottom: 30px;"><i data-lucide="users" size="40" color="#4f46e5"></i></div>
+        <h2 style="font-weight: 800; margin-bottom: 15px;">Finanzas Compartidas</h2>
+        <p style="color: var(--secondary); margin-bottom: 30px;">Ingresen el mismo código ambos.</p>
+        <input type="text" id="couple-id" placeholder="Código de pareja" style="text-align: center;">
+        <button class="btn-confirm" onclick="startSync()">Vincular</button>
     </div>
 
     <div class="app-shell">
         <div class="header" id="dynamic-header">
             <select class="month-selector" id="month-picker" onchange="changePeriod(this.value)"></select>
-            <p class="balance-label">Balance compartido</p>
+            <p class="balance-label">Disponible</p>
             <h1 class="balance-value" id="dom-balance">$0</h1>
         </div>
 
         <div class="content" id="scroll-area">
             <div class="summary-grid">
-                <div class="card"><span>INGRESOS</span><p style="color:var(--success)" id="dom-ing">+$0</p></div>
-                <div class="card"><span>GASTOS</span><p style="color:var(--error)" id="dom-egr">-$0</p></div>
+                <div class="card"><span>INGRESOS</span><p class="val-ing" id="dom-ing">+$0</p></div>
+                <div class="card"><span>GASTOS</span><p class="val-egr" id="dom-egr">-$0</p></div>
             </div>
 
             <div id="v-home" class="view active">
-                <div class="chart-card"><canvas id="lineChart" height="130"></canvas></div>
-                <p class="section-title">Movimientos en pareja</p>
+                <div class="chart-card"><canvas id="lineChart" height="140"></canvas></div>
+                <p class="section-title">Actividad Reciente</p>
                 <div id="dom-list"></div>
             </div>
 
             <div id="v-goals" class="view" style="padding: 0 24px;">
                 <p class="section-title" style="padding-left:0">Nuestras Metas</p>
-                <div class="card" style="text-align: left; margin-bottom: 25px; padding: 25px; border-radius: 30px;">
+                <div class="card" style="text-align: left; margin-bottom: 30px; padding: 30px; border-radius: 35px;">
                     <input type="text" id="g-name" placeholder="Nombre de la meta">
-                    <input type="number" id="g-amount" placeholder="Monto ($)">
-                    <button class="btn-confirm" onclick="saveGoal()">Establecer Meta</button>
+                    <input type="number" id="g-amount" placeholder="Monto objetivo ($)">
+                    <button class="btn-confirm" onclick="saveGoal()">Crear Meta</button>
                 </div>
                 <div id="dom-goals-list"></div>
             </div>
         </div>
 
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="calendar"></i>MES</div>
-            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="30"></i></button>
+            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="zap"></i>INICIO</div>
+            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="34"></i></button>
             <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
         </nav>
 
         <div id="modal" onclick="if(event.target==this) closeM()">
             <div class="modal-body">
                 <h2 style="margin-bottom:20px; font-weight: 800;">Nuevo Registro</h2>
-                <input type="text" id="m-desc" placeholder="¿Qué fue?">
+                <input type="text" id="m-desc" placeholder="Descripción">
                 <input type="number" id="m-amount" placeholder="0.00" inputmode="decimal">
                 <select id="m-type">
                     <option value="out">Gasto (-)</option>
                     <option value="in">Ingreso (+)</option>
                 </select>
-                <button class="btn-confirm" onclick="saveData()">Publicar para ambos</button>
+                <button class="btn-confirm" onclick="saveData()">Publicar</button>
             </div>
         </div>
     </div>
 
     <script>
-        // --- CONFIGURACIÓN FIREBASE (DEBES PONER LAS TUYAS AQUÍ) ---
+        // --- CONFIG FIREBASE ---
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_PROYECTO.firebaseapp.com",
@@ -138,7 +197,6 @@
         let currentCoupleID = localStorage.getItem('fz_coupleID');
         let currentPeriod = new Date().toLocaleString('es-ES', { month: 'long', year: 'numeric' });
 
-        // --- LÓGICA DE INICIO ---
         if(currentCoupleID) {
             document.getElementById('setup-screen').style.display = 'none';
             initApp();
@@ -146,7 +204,7 @@
 
         function startSync() {
             const id = document.getElementById('couple-id').value.trim().toLowerCase();
-            if(id.length < 4) return alert("Usa un código más largo");
+            if(id.length < 3) return;
             localStorage.setItem('fz_coupleID', id);
             currentCoupleID = id;
             document.getElementById('setup-screen').style.display = 'none';
@@ -154,37 +212,27 @@
         }
 
         function initApp() {
-            // Escuchar cambios en la nube en tiempo real
             database.ref('couples/' + currentCoupleID).on('value', (snapshot) => {
-                const data = snapshot.val();
-                if(data) {
-                    window.db = data;
-                } else {
-                    window.db = { data: {}, g: [] };
-                }
+                window.db = snapshot.val() || { data: {}, g: [] };
                 updateUI();
             });
         }
 
-        // --- FUNCIONES DE DATOS ---
+        function push() { database.ref('couples/' + currentCoupleID).set(window.db); }
+
         function saveData() {
             const d = document.getElementById('m-desc').value, a = parseFloat(document.getElementById('m-amount').value), t = document.getElementById('m-type').value;
             if(!d || isNaN(a)) return;
-
             if(!window.db.data) window.db.data = {};
             if(!window.db.data[currentPeriod]) window.db.data[currentPeriod] = { m: [] };
-            
-            const newItem = { id: Date.now(), d, a, t, date: new Date().toLocaleDateString() };
-            window.db.data[currentPeriod].m.unshift(newItem);
-            
-            pushToCloud();
-            closeM();
+            window.db.data[currentPeriod].m.unshift({ id: Date.now(), d, a, t, date: new Date().toLocaleDateString() });
+            push(); closeM();
             document.getElementById('m-desc').value = ''; document.getElementById('m-amount').value = '';
         }
 
         function deleteItem(id) {
             window.db.data[currentPeriod].m = window.db.data[currentPeriod].m.filter(x => x.id !== id);
-            pushToCloud();
+            push();
         }
 
         function saveGoal() {
@@ -192,42 +240,43 @@
             if(!n || isNaN(a)) return;
             if(!window.db.g) window.db.g = [];
             window.db.g.unshift({ id: Date.now(), n, a });
-            pushToCloud();
+            push();
             document.getElementById('g-name').value = ''; document.getElementById('g-amount').value = '';
         }
 
-        function pushToCloud() {
-            database.ref('couples/' + currentCoupleID).set(window.db);
-        }
+        const header = document.getElementById('dynamic-header');
+        const scrollArea = document.getElementById('scroll-area');
 
-        // --- UI Y RENDERING ---
+        scrollArea.addEventListener('scroll', () => {
+            const st = scrollArea.scrollTop;
+            let opacity = 1 - (st / 140);
+            header.style.opacity = Math.max(opacity, 0);
+            header.style.transform = `translateY(-${st * 0.4}px)`;
+        });
+
         function updateUI() {
-            if(!window.db) return;
             let i = 0, e = 0, mHtml = '';
             const movements = window.db.data?.[currentPeriod]?.m || [];
-
             movements.forEach(x => {
                 const isI = x.t === 'in';
                 if(isI) i += x.a; else e += x.a;
                 mHtml += `<div class="mov-item">
-                    <div style="display:flex; align-items:center; flex:1;">
-                        <div style="width:45px; height:45px; border-radius:12px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center; margin-right:12px;"><i data-lucide="${isI?'arrow-up':'shopping-bag'}" size="20"></i></div>
-                        <div style="flex:1;"><b style="font-size:1rem;">${x.d}</b><br><small style="color:var(--secondary);font-weight:600">${x.date}</small></div>
-                        <div style="text-align:right; margin-right:12px"><b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.1rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b></div>
-                        <button class="btn-delete" onclick="deleteItem(${x.id})"><i data-lucide="trash-2" size="14"></i></button>
-                    </div></div>`;
+                            <div style="display:flex; align-items:center; flex:1;">
+                                <div style="width:50px; height:50px; border-radius:15px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center; margin-right:15px;"><i data-lucide="${isI?'arrow-up':'shopping-bag'}" size="22"></i></div>
+                                <div style="flex:1;"><b style="font-size:1.1rem;">${x.d}</b><br><small style="color:var(--secondary);font-weight:600">${x.date}</small></div>
+                                <div style="text-align:right; margin-right:12px"><b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.2rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b></div>
+                                <button class="btn-delete" onclick="deleteItem(${x.id})"><i data-lucide="trash-2" size="14"></i></button>
+                            </div></div>`;
             });
-
-            const bal = i - e;
-            document.getElementById('dom-balance').innerText = `$${bal.toLocaleString()}`;
+            document.getElementById('dom-balance').innerText = `$${(i - e).toLocaleString()}`;
             document.getElementById('dom-ing').innerText = `+$${i.toLocaleString()}`;
             document.getElementById('dom-egr').innerText = `-$${e.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; opacity:0.4;">Sin registros compartidos</p>';
-            
+            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; opacity:0.4;">Sin movimientos</p>';
             fillMonthPicker();
-            updateGoals(bal);
+            updateGoals(i - e);
             renderLine();
             lucide.createIcons();
+            initObserver();
         }
 
         function fillMonthPicker() {
@@ -241,26 +290,20 @@
         function switchTab(id, el) { 
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
             document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            document.getElementById(id).classList.add('active');
-            el.classList.add('active');
+            document.getElementById(id).classList.add('active'); el.classList.add('active');
             lucide.createIcons();
         }
         function openM() { document.getElementById('modal').style.display = 'flex'; }
         function closeM() { document.getElementById('modal').style.display = 'none'; }
 
-        // (Aquí irían las funciones de renderLine y updateGoals similares a las anteriores...)
         function updateGoals(balance) {
             let gHtml = '';
             (window.db.g || []).forEach(x => {
                 let perc = Math.max(0, Math.min((balance / x.a) * 100, 100));
-                gHtml += `<div class="card" style="margin-bottom:15px; text-align:left; padding:25px;">
-                            <div style="display:flex; justify-content:space-between; align-items:center"><b style="font-size:1.1rem;">${x.n}</b></div>
-                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:700; color:var(--secondary); font-size:0.8rem;">
-                                <span>$${balance.toLocaleString()}</span><span>Meta:$${x.a.toLocaleString()}</span>
-                            </div>
-                            <div style="width:100%; height:8px; background:#f1f5f9; border-radius:10px; margin-top:8px; overflow:hidden">
-                                <div style="width:${perc}%; height:100%; background:linear-gradient(90deg, #4f46e5, #9333ea);"></div>
-                            </div></div>`;
+                gHtml += `<div class="card" style="margin-bottom:20px; text-align:left; padding:30px;">
+                            <div style="display:flex; justify-content:space-between; align-items:center"><b>${x.n}</b></div>
+                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-size:0.85rem; color:var(--secondary);"><span>$${balance.toLocaleString()}</span><span>Meta:$${x.a.toLocaleString()}</span></div>
+                            <div style="width:100%; height:10px; background:#f1f5f9; border-radius:10px; margin-top:10px; overflow:hidden"><div style="width:${perc}%; height:100%; background:linear-gradient(90deg, #4f46e5, #9333ea);"></div></div></div>`;
             });
             document.getElementById('dom-goals-list').innerHTML = gHtml;
         }
@@ -270,9 +313,15 @@
             const movements = window.db.data?.[currentPeriod]?.m || [];
             let b = 0; const pts = [...movements].reverse().map(x => { b += (x.t === 'in' ? x.a : -x.a); return b; });
             if(window.lc) window.lc.destroy();
-            window.lc = new Chart(ctx, { type: 'line', data: { labels: pts.map(()=>''), datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 3, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.03)' }] }, options: { maintainAspectRatio: false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } });
+            window.lc = new Chart(ctx, { type: 'line', data: { labels: pts.map(()=>''), datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 4, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.04)' }] }, options: { maintainAspectRatio: false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } });
         }
-        
+
+        function initObserver() {
+            const items = document.querySelectorAll('.mov-item');
+            const observer = new IntersectionObserver((entries) => { entries.forEach(entry => { if (entry.isIntersecting) entry.target.classList.add('in-view'); }); }, { threshold: 0.2 });
+            items.forEach(item => observer.observe(item));
+        }
+
         lucide.createIcons();
     </script>
 </body>
