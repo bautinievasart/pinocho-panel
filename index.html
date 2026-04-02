@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Pro Couple</title>
+    <title>Finanzly Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -12,130 +12,147 @@
 
     <style>
         :root {
-            --bg: #f8fafc; --primary: #4f46e5; --text: #0f172a;
-            --secondary: #64748b; --white: #ffffff; --success: #10b981; --error: #ef4444;
+            --bg: #f1f5f9; --primary: #6366f1; --text: #0f172a;
+            --white: #ffffff; --success: #10b981; --error: #ef4444;
         }
 
-        /* ANIMACIONES */
-        @keyframes dynamicGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes textGlowSuccess { 0% { color: #10b981; } 50% { color: #34d399; } 100% { color: #10b981; } }
-        @keyframes textGlowError { 0% { color: #ef4444; } 50% { color: #f87171; } 100% { color: #ef4444; } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
+        body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
-        body { background: var(--bg); color: var(--text); height: 100vh; overflow: hidden; }
-        .app-shell { display: flex; flex-direction: column; height: 100vh; }
-
-        /* HEADER */
+        /* HEADER REDISEÑADO */
         .header {
-            background: linear-gradient(-45deg, #4f46e5, #9333ea, #2563eb, #06b6d4);
-            background-size: 300% 300%;
-            animation: dynamicGlow 6s ease infinite;
-            padding: 60px 24px 40px;
-            border-radius: 0 0 50px 50px;
-            text-align: center; color: white; flex-shrink: 0;
-            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.15);
+            background: linear-gradient(135deg, #4f46e5, #9333ea);
+            padding: 50px 20px 30px;
+            color: white;
+            text-align: center;
+            border-radius: 0 0 30px 30px;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
+            z-index: 10;
         }
-        .month-selector { background: rgba(255,255,255,0.2); border: none; color: white; padding: 8px 15px; border-radius: 12px; font-weight: 700; margin-bottom: 10px; outline: none; }
-        .balance-value { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; }
+        .balance-val { font-size: 3rem; font-weight: 800; margin: 5px 0; letter-spacing: -2px; }
 
-        /* CONTENIDO */
-        .content { flex: 1; overflow-y: auto; padding: 0 20px 120px; margin-top: 20px; }
-        .summary-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -40px; margin-bottom: 25px; position: relative; z-index: 10; }
-        .card { background: white; padding: 22px; border-radius: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.04); text-align: center; }
-        .val-ing { font-size: 1.4rem; font-weight: 800; animation: textGlowSuccess 3s infinite; }
-        .val-egr { font-size: 1.4rem; font-weight: 800; animation: textGlowError 3s infinite; }
-
-        /* VISTAS */
-        .view { display: none; }
-        .view.active { display: block; }
-
-        /* MOVIMIENTOS CON ANIMACIÓN AL SCROLL */
-        .mov-item {
-            display: flex; align-items: center; justify-content: space-between;
-            background: white; padding: 18px; margin-bottom: 12px;
-            border-radius: 24px; transition: 0.4s ease;
-            transform: translateY(10px); opacity: 0.9;
+        /* CONTENEDOR DE TARJETAS (EVITA EL DESASTRE VISUAL) */
+        .main-container {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
         }
-        .btn-delete { background: #fee2e2; color: var(--error); border: none; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
 
-        /* METAS */
-        .goal-card { background: white; padding: 25px; border-radius: 30px; margin-bottom: 15px; box-shadow: 0 10px 20px rgba(0,0,0,0.02); }
-        .progress-bar { width: 100%; height: 10px; background: #f1f5f9; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #4f46e5, #9333ea); transition: width 1s ease; }
-
-        /* NAV BAR */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 90px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: 20px; border-top: 1px solid #f1f5f9; z-index: 100;
+        .summary-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
         }
-        .nav-item { color: #cbd5e1; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; font-weight: 800; cursor: pointer; }
-        .nav-item.active { color: var(--primary); }
-        .btn-plus { width: 65px; height: 65px; background: var(--text); color: white; border: none; border-radius: 22px; display: flex; align-items: center; justify-content: center; transform: translateY(-20px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
+
+        .stats-card {
+            background: var(--white);
+            padding: 20px;
+            border-radius: 20px;
+            box-shadow: 0 4px 6px -1px rgba(0,0,0,0.05);
+            text-align: center;
+        }
+
+        .stats-label { font-size: 0.65rem; font-weight: 800; color: #64748b; text-transform: uppercase; margin-bottom: 8px; display: block; }
+        .stats-num { font-size: 1.2rem; font-weight: 800; }
+        .num-in { color: var(--success); }
+        .num-out { color: var(--error); }
+
+        /* LISTA DE MOVIMIENTOS */
+        .list-container { background: var(--white); border-radius: 24px; padding: 20px; min-height: 200px; }
+        .item { 
+            display: flex; align-items: center; justify-content: space-between; 
+            padding: 15px 0; border-bottom: 1px solid #f1f5f9;
+        }
+
+        /* NAVEGACIÓN */
+        .nav {
+            background: var(--white); height: 85px; display: flex; 
+            justify-content: space-around; align-items: center;
+            border-top: 1px solid #e2e8f0; padding-bottom: 15px;
+        }
+        .add-btn {
+            width: 60px; height: 60px; background: var(--text); color: white;
+            border: none; border-radius: 20px; margin-top: -40px;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2);
+        }
 
         /* MODAL */
-        #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.4); display: none; align-items: flex-end; z-index: 200; backdrop-filter: blur(5px); }
-        .modal-body { background: white; width: 100%; padding: 35px; border-radius: 40px 40px 0 0; animation: slideUp 0.3s ease; }
-        input, select { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #f1f5f9; background: #f8fafc; margin-bottom: 12px; font-weight: 700; outline: none; }
-        .btn-confirm { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 800; font-size: 1.1rem; }
+        #modal {
+            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            display: none; align-items: flex-end; z-index: 100;
+        }
+        .modal-content { 
+            background: white; width: 100%; padding: 30px; 
+            border-radius: 30px 30px 0 0; 
+        }
+        input, select { 
+            width: 100%; padding: 15px; margin-bottom: 15px; 
+            border-radius: 12px; border: 1px solid #e2e8f0; font-size: 1rem;
+        }
+        .save-btn { 
+            width: 100%; padding: 15px; background: var(--primary); 
+            color: white; border: none; border-radius: 12px; font-weight: 800;
+        }
     </style>
 </head>
 <body>
 
-    <div class="app-shell">
-        <div class="header">
-            <select class="month-selector" id="month-picker" onchange="changePeriod(this.value)"></select>
-            <p style="font-size:0.75rem; font-weight:800; letter-spacing:2px; opacity:0.8">DISPONIBLE</p>
-            <h1 class="balance-value" id="dom-balance">$0</h1>
-        </div>
-
-        <div class="content">
-            <div class="summary-grid">
-                <div class="card"><span>INGRESOS</span><p class="val-ing" id="dom-ing">+$0</p></div>
-                <div class="card"><span>GASTOS</span><p class="val-egr" id="dom-egr">-$0</p></div>
-            </div>
-
-            <div id="v-home" class="view active">
-                <div style="background:white; padding:20px; border-radius:30px; margin-bottom:25px;"><canvas id="lineChart" height="120"></canvas></div>
-                <p style="font-weight:800; margin-bottom:15px">Movimientos</p>
-                <div id="dom-list"></div>
-            </div>
-
-            <div id="v-goals" class="view">
-                <p style="font-weight:800; margin-bottom:15px">Nuestras Metas</p>
-                <div class="card" style="text-align:left; padding:25px; margin-bottom:25px;">
-                    <input type="text" id="g-name" placeholder="Nombre (ej: Vacaciones)">
-                    <input type="number" id="g-amount" placeholder="Monto objetivo">
-                    <button class="btn-confirm" onclick="saveGoal()">Crear Meta</button>
-                </div>
-                <div id="dom-goals-list"></div>
-            </div>
-        </div>
-
-        <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="home"></i>INICIO</div>
-            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="32"></i></button>
-            <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
-        </nav>
+    <div class="header">
+        <span style="font-size: 0.8rem; font-weight: 700; opacity: 0.8;">DISPONIBLE TOTAL</span>
+        <div class="balance-val" id="dom-bal">$0</div>
     </div>
 
-    <div id="modal" onclick="if(event.target==this) closeM()">
-        <div class="modal-body">
-            <h3 style="margin-bottom:20px; font-weight:800">Nuevo Movimiento</h3>
-            <input type="text" id="m-desc" placeholder="Descripción">
-            <input type="number" id="m-amount" placeholder="Monto">
+    <div class="main-container">
+        <div class="summary-row">
+            <div class="stats-card">
+                <span class="stats-label">Ingresos</span>
+                <div class="stats-num num-in" id="dom-in">+$0</div>
+            </div>
+            <div class="stats-card">
+                <span class="stats-label">Gastos</span>
+                <div class="stats-num num-out" id="dom-out">-$0</div>
+            </div>
+        </div>
+
+        <div id="v-home" class="view">
+            <div class="list-container">
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Actividad</h4>
+                <div id="dom-list"></div>
+            </div>
+        </div>
+
+        <div id="v-metas" class="view" style="display:none;">
+            <div class="list-container">
+                <h4 style="margin-bottom: 15px; font-weight: 800;">Metas</h4>
+                <div id="dom-metas"></div>
+            </div>
+        </div>
+    </div>
+
+    <nav class="nav">
+        <div onclick="showView('v-home')"><i data-lucide="home"></i></div>
+        <button class="add-btn" onclick="openModal()"><i data-lucide="plus"></i></button>
+        <div onclick="showView('v-metas')"><i data-lucide="target"></i></div>
+    </nav>
+
+    <div id="modal" onclick="if(event.target==this) closeModal()">
+        <div class="modal-content">
+            <h3 style="margin-bottom: 20px;">Nuevo Movimiento</h3>
+            <input type="text" id="m-desc" placeholder="¿Qué es? (Ej: Supermercado)">
+            <input type="number" id="m-amount" placeholder="Monto ($)">
             <select id="m-type">
-                <option value="out">Gasto (-)</option>
-                <option value="in">Ingreso (+)</option>
+                <option value="out">Gasto</option>
+                <option value="in">Ingreso</option>
             </select>
-            <button class="btn-confirm" onclick="saveData()">Guardar Registro</button>
+            <button class="save-btn" onclick="actionSave()">Guardar Registro</button>
         </div>
     </div>
 
     <script>
-        // CONFIG FIREBASE (Rellena esto para que sincronice con tu pareja)
+        // --- CONFIGURACIÓN FIREBASE ---
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_PROYECTO.firebaseapp.com",
@@ -146,117 +163,75 @@
         };
         
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        let coupleID = localStorage.getItem('fz_coupleID') || 'pareja_demo';
-        let currentPeriod = new Date().toLocaleString('es-ES', { month: 'long', year: 'numeric' });
+        const db = firebase.database();
+        const coupleID = "nuestra_cuenta_123"; 
+        const period = new Date().toLocaleString('es-ES', { month: 'long', year: 'numeric' });
 
-        function init() {
-            database.ref('couples/' + coupleID).on('value', (snap) => {
-                window.db = snap.val() || { data: {}, g: [] };
-                updateUI();
+        // --- LÓGICA DE DATOS ---
+        function actionSave() {
+            const desc = document.getElementById('m-desc').value;
+            const amount = parseFloat(document.getElementById('m-amount').value);
+            const type = document.getElementById('m-type').value;
+
+            if (!desc || isNaN(amount)) {
+                alert("Por favor completa los datos");
+                return;
+            }
+
+            const newRef = db.ref(`couples/${coupleID}/data/${period}/m`).push();
+            newRef.set({
+                desc, amount, type, 
+                date: new Date().toLocaleDateString(),
+                ts: Date.now()
+            }).then(() => {
+                closeModal();
+                document.getElementById('m-desc').value = '';
+                document.getElementById('m-amount').value = '';
+            }).catch(err => alert("Error: " + err.message));
+        }
+
+        function updateDashboard() {
+            db.ref(`couples/${coupleID}/data/${period}/m`).on('value', (snap) => {
+                let tin = 0, tout = 0, html = '';
+                const data = snap.val();
+                
+                if (data) {
+                    Object.values(data).reverse().forEach(x => {
+                        const isIn = x.type === 'in';
+                        if (isIn) tin += x.amount; else tout += x.amount;
+                        
+                        html += `
+                        <div class="item">
+                            <div>
+                                <strong>${x.desc}</strong><br>
+                                <small style="color:gray">${x.date}</small>
+                            </div>
+                            <span style="font-weight:800; color:${isIn? 'var(--success)':'var(--text)'}">
+                                ${isIn?'+':'-'}$${x.amount.toLocaleString()}
+                            </span>
+                        </div>`;
+                    });
+                }
+
+                document.getElementById('dom-bal').innerText = `$${(tin - tout).toLocaleString()}`;
+                document.getElementById('dom-in').innerText = `+$${tin.toLocaleString()}`;
+                document.getElementById('dom-out').innerText = `-$${tout.toLocaleString()}`;
+                document.getElementById('dom-list').innerHTML = html || '<p style="color:gray; text-align:center; padding:20px;">No hay movimientos</p>';
+                lucide.createIcons();
             });
         }
 
-        function saveData() {
-            const d = document.getElementById('m-desc').value, a = parseFloat(document.getElementById('m-amount').value), t = document.getElementById('m-type').value;
-            if(!d || isNaN(a)) return;
-            if(!window.db.data) window.db.data = {};
-            if(!window.db.data[currentPeriod]) window.db.data[currentPeriod] = { m: [] };
-            
-            window.db.data[currentPeriod].m.unshift({ id: Date.now(), d, a, t, date: new Date().toLocaleDateString() });
-            database.ref('couples/' + coupleID).set(window.db);
-            closeM();
-            document.getElementById('m-desc').value = ''; document.getElementById('m-amount').value = '';
+        // --- UI HELPER ---
+        function openModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        function showView(id) {
+            document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+            document.getElementById(id).style.display = 'block';
         }
 
-        function saveGoal() {
-            const n = document.getElementById('g-name').value, a = parseFloat(document.getElementById('g-amount').value);
-            if(!n || isNaN(a)) return;
-            if(!window.db.g) window.db.g = [];
-            window.db.g.unshift({ id: Date.now(), n, a });
-            database.ref('couples/' + coupleID).set(window.db);
-            document.getElementById('g-name').value = ''; document.getElementById('g-amount').value = '';
-        }
-
-        function deleteItem(id) {
-            window.db.data[currentPeriod].m = window.db.data[currentPeriod].m.filter(x => x.id !== id);
-            database.ref('couples/' + coupleID).set(window.db);
-        }
-
-        function deleteGoal(id) {
-            window.db.g = window.db.g.filter(x => x.id !== id);
-            database.ref('couples/' + coupleID).set(window.db);
-        }
-
-        function updateUI() {
-            let i = 0, e = 0, mHtml = '';
-            const movements = window.db.data?.[currentPeriod]?.m || [];
-            
-            movements.forEach(x => {
-                const isI = x.t === 'in';
-                if(isI) i += x.a; else e += x.a;
-                mHtml += `<div class="mov-item">
-                    <div style="display:flex; align-items:center;">
-                        <div style="width:45px; height:45px; border-radius:14px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center; margin-right:12px;"><i data-lucide="${isI?'arrow-up':'shopping-bag'}" size="20"></i></div>
-                        <div><b style="font-size:0.95rem">${x.d}</b><br><small style="color:var(--secondary)">${x.date}</small></div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <b style="font-size:1.1rem">${isI?'+':'-'}$${x.a.toLocaleString()}</b>
-                        <button class="btn-delete" onclick="deleteItem(${x.id})"><i data-lucide="trash-2" size="14"></i></button>
-                    </div>
-                </div>`;
-            });
-
-            const balance = i - e;
-            document.getElementById('dom-balance').innerText = `$${balance.toLocaleString()}`;
-            document.getElementById('dom-ing').innerText = `+$${i.toLocaleString()}`;
-            document.getElementById('dom-egr').innerText = `-$${e.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; opacity:0.5; padding:40px;">Sin registros</p>';
-
-            // Render Metas
-            let gHtml = '';
-            (window.db.g || []).forEach(x => {
-                let perc = Math.min((balance / x.a) * 100, 100);
-                gHtml += `<div class="goal-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><b>${x.n}</b><button onclick="deleteGoal(${x.id})" style="border:none; background:none; color:red">X</button></div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--secondary)"><span>$${balance.toLocaleString()} ahorrados</span><span>Meta: $${x.a.toLocaleString()}</span></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width:${perc}%"></div></div>
-                </div>`;
-            });
-            document.getElementById('dom-goals-list').innerHTML = gHtml;
-
-            // Selector de meses
-            const periods = window.db.data ? Object.keys(window.db.data) : [currentPeriod];
-            if(!periods.includes(currentPeriod)) periods.push(currentPeriod);
-            document.getElementById('month-picker').innerHTML = periods.map(p => `<option value="${p}" ${p===currentPeriod?'selected':''}>${p.toUpperCase()}</option>`).join('');
-
-            renderChart(movements);
-            lucide.createIcons();
-        }
-
-        function renderChart(movements) {
-            const ctx = document.getElementById('lineChart').getContext('2d');
-            let b = 0; const pts = [...movements].reverse().map(x => { b += (x.t === 'in' ? x.a : -x.a); return b; });
-            if(window.lc) window.lc.destroy();
-            window.lc = new Chart(ctx, {
-                type: 'line',
-                data: { labels: pts.map(()=>''), datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 3, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.05)' }] },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-            });
-        }
-
-        function switchTab(tab, el) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-        }
-
-        function changePeriod(p) { currentPeriod = p; updateUI(); }
-        function openM() { document.getElementById('modal').style.display = 'flex'; }
-        function closeM() { document.getElementById('modal').style.display = 'none'; }
-
-        init();
+        // --- INIT ---
+        updateDashboard();
+        lucide.createIcons();
     </script>
 </body>
 </html>
