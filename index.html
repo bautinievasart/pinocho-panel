@@ -3,119 +3,122 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Mi Control Real</title>
+    <title>Finanzly Pro | Bauti</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
             --primario: #6366f1;
-            --fondo: #fcfcfd;
+            --fondo: #f8fafc;
             --texto-oscuro: #0f172a;
             --texto-gris: #64748b;
             --blanco: #ffffff;
             --exito: #10b981;
             --error: #f43f5e;
-            --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
+            --gradiente-ingreso: linear-gradient(135deg, #10b981 0%, #34d399 100%);
+            --gradiente-gasto: linear-gradient(135deg, #f43f5e 0%, #fb7185 100%);
+            --gradiente-ahorro: linear-gradient(135deg, #6366f1 0%, #a5b4fc 100%);
         }
 
-        /* RESET Y CONTENEDOR MAESTRO */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { 
-            background: #e2e8f0; /* Fondo externo para resaltar la app */
-            display: flex;
-            justify-content: center;
-        }
+        body { background: #ced4da; display: flex; justify-content: center; }
 
         .app-container {
             width: 100%;
-            max-width: 480px; /* EVITA QUE SE ESTIRE EN PC */
+            max-width: 480px;
             background: var(--fondo);
             min-height: 100vh;
             position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            box-shadow: 0 0 60px rgba(0,0,0,0.2);
             padding-bottom: 110px;
             overflow-x: hidden;
         }
 
-        /* --- VISTAS --- */
-        .vista { display: none; animation: fadeIn 0.3s ease; }
+        .vista { display: none; animation: fadeIn 0.3s ease; padding-bottom: 20px; }
         .vista.activa { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(5px); } to { opacity: 1; transform: translateY(0); } }
 
         /* --- HEADER --- */
         .header-app {
-            background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+            background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
             color: white;
-            padding: 40px 25px 80px 25px;
-            border-bottom-left-radius: 40px;
-            border-bottom-right-radius: 40px;
+            padding: 45px 25px 90px 25px;
+            border-bottom-left-radius: 45px;
+            border-bottom-right-radius: 45px;
         }
 
         .perfil-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
-        .usuario { display: flex; align-items: center; gap: 12px; }
+        .usuario { display: flex; align-items: center; gap: 15px; }
         .avatar-real { 
-            width: 45px; height: 45px; border-radius: 14px; 
-            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
-            display: flex; align-items: center; justify-content: center; font-weight: 800;
+            width: 50px; height: 50px; border-radius: 16px; 
+            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.3);
+            display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: 1.2rem;
         }
 
-        .monto-balance { font-size: 2.5rem; font-weight: 800; margin-top: 5px; letter-spacing: -1px; }
+        .monto-balance { font-size: 3.2rem; font-weight: 800; margin-top: 5px; letter-spacing: -2px; }
+        .cotizacion-api { font-size: 0.75rem; background: rgba(0,0,0,0.2); padding: 4px 10px; border-radius: 20px; display: inline-flex; align-items: center; gap: 5px; margin-top: 10px; }
 
-        /* --- TARJETAS (Fila con scroll corregida) --- */
-        .contenedor-scroll { 
+        /* --- TARJETAS CON DEGRADADO DINÁMICO --- */
+        .contenedor-grid { 
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 12px;
             padding: 0 20px;
-            margin-top: -40px;
+            margin-top: -50px;
         }
 
         .tarjeta-cat {
             background: var(--blanco);
-            padding: 15px 10px;
-            border-radius: 20px;
-            box-shadow: var(--sombra);
+            padding: 20px 10px;
+            border-radius: 24px;
+            box-shadow: 0 10px 20px rgba(0,0,0,0.05);
             text-align: center;
-            border: 1px solid rgba(0,0,0,0.02);
+            border: 1px solid rgba(0,0,0,0.01);
         }
-        .tarjeta-cat span { font-size: 0.65rem; color: var(--texto-gris); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 4px;}
-        .tarjeta-cat strong { font-size: 0.9rem; font-weight: 800; display: block; word-break: break-all; }
+        .tarjeta-cat span { font-size: 0.75rem; color: var(--texto-gris); font-weight: 800; text-transform: uppercase; display: block; margin-bottom: 8px; }
+        
+        /* Efecto Gradiente en Números */
+        .num-gradiente {
+            font-size: 1.15rem;
+            font-weight: 800;
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            display: block;
+        }
+        .ingreso-txt { background-image: var(--gradiente-ingreso); }
+        .gasto-txt { background-image: var(--gradiente-gasto); }
+        .ahorro-txt { background-image: var(--gradiente-ahorro); }
 
-        /* --- SECCIONES --- */
-        .seccion { padding: 25px 20px; }
-        .titulo-seccion { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; color: var(--texto-oscuro); }
-        .widget { background: var(--blanco); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: var(--sombra); }
+        /* --- METAS --- */
+        .tarjeta-meta { background: var(--blanco); border-radius: 24px; padding: 20px; margin-bottom: 15px; box-shadow: var(--sombra); }
+        .barra-progreso { height: 12px; background: #f1f5f9; border-radius: 10px; margin: 15px 0; overflow: hidden; }
+        .relleno-progreso { height: 100%; background: var(--primario); border-radius: 10px; transition: width 0.6s ease; }
 
-        /* --- MOVIMIENTOS --- */
-        .item-movimiento { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
-        .icono-mov { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
-        .info-mov p { font-weight: 700; font-size: 0.9rem; }
-        .info-mov span { font-size: 0.75rem; color: var(--texto-gris); }
-
-        /* --- NAVEGACIÓN (Anclada al contenedor) --- */
+        /* --- NAV --- */
         .nav-inferior {
-            position: absolute; bottom: 0; left: 0; right: 0; height: 85px;
+            position: absolute; bottom: 0; left: 0; right: 0; height: 90px;
             background: rgba(255, 255, 255, 0.98); border-top: 1px solid #f1f5f9;
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: 15px;
+            display: flex; justify-content: space-around; align-items: center; padding-bottom: 20px;
         }
         .nav-link { color: #cbd5e1; cursor: pointer; transition: 0.2s; padding: 10px; }
         .nav-link.activo { color: var(--primario); }
         
         .btn-mas { 
-            width: 55px; height: 55px; background: var(--texto-oscuro); 
-            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
-            color: white; transform: translateY(-25px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: none; 
+            width: 60px; height: 60px; background: var(--texto-oscuro); 
+            border-radius: 20px; display: flex; align-items: center; justify-content: center; 
+            color: white; transform: translateY(-30px); box-shadow: 0 15px 30px rgba(0,0,0,0.2); border: none; 
         }
 
-        /* MODAL */
-        #modal-registro { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); display:none; align-items:flex-end; z-index:2000; }
-        .modal-contenido { background: var(--blanco); width:100%; padding:30px 20px; border-radius: 35px 35px 0 0; }
+        .widget { background: var(--blanco); border-radius: 28px; padding: 25px; margin-bottom: 25px; box-shadow: var(--sombra); }
+        input, select { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #e2e8f0; margin-bottom: 15px; background: #f8fafc; font-size: 1rem; font-weight: 600; }
+        .btn-pro { width: 100%; padding: 18px; background: var(--primario); color: white; border: none; border-radius: 18px; font-weight: 800; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
 
-        input, select { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 12px; font-size: 1rem; }
-        .btn-principal { width: 100%; padding: 16px; background: var(--primario); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; }
+        #modal-registro { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.4); display:none; align-items:flex-end; z-index:2000; backdrop-filter: blur(4px); }
+        .modal-contenido { background: var(--blanco); width:100%; padding:40px 25px; border-radius: 40px 40px 0 0; animation: slideUp 0.3s ease-out; }
+        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
     </style>
 </head>
 <body>
@@ -129,159 +132,229 @@
                     <div class="usuario">
                         <div class="avatar-real" id="avatar-iniciales">B</div>
                         <div>
-                            <p style="font-size: 0.7rem; opacity: 0.8; font-weight: 600;">Mi Panel</p>
-                            <p style="font-weight: 800; font-size: 1rem;" id="saludo-nombre">Hola, Bauti</p>
+                            <p style="font-size: 0.8rem; opacity: 0.8; font-weight: 600;">Mi Patrimonio</p>
+                            <p style="font-weight: 800; font-size: 1.1rem;" id="saludo-nombre">Hola, Bauti</p>
                         </div>
                     </div>
-                    <button style="background:none; border:none; color:white;" onclick="navegar('vista-ajustes')">
+                    <button style="background:rgba(255,255,255,0.2); border:none; color:white; padding:10px; border-radius:12px;" onclick="navegar('vista-ajustes')">
                         <i data-lucide="settings" size="20"></i>
                     </button>
                 </div>
-                <p style="font-size: 0.8rem; opacity: 0.9;">Balance Actual</p>
-                <h1 class="monto-balance" id="balance-total">$0,00</h1>
+                <p style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Balance Total</p>
+                <h1 class="monto-balance" id="balance-total">$0</h1>
+                <div class="cotizacion-api" id="api-dolar">
+                    <i data-lucide="refresh-cw" size="12"></i> Actualizando USD...
+                </div>
             </div>
 
-            <div class="contenedor-scroll">
+            <div class="contenedor-grid">
                 <div class="tarjeta-cat">
                     <span>Ingresos</span>
-                    <strong id="resumen-ingresos" style="color:var(--exito)">$0</strong>
+                    <strong class="num-gradiente ingreso-txt" id="resumen-ingresos">$0</strong>
                 </div>
                 <div class="tarjeta-cat">
                     <span>Gastos</span>
-                    <strong id="resumen-gastos" style="color:var(--error)">$0</strong>
+                    <strong class="num-gradiente gasto-txt" id="resumen-gastos">$0</strong>
                 </div>
                 <div class="tarjeta-cat">
                     <span>Ahorro</span>
-                    <strong id="resumen-ahorro-neto" style="color:var(--primario)">$0</strong>
+                    <strong class="num-gradiente ahorro-txt" id="resumen-ahorro-neto">$0</strong>
                 </div>
             </div>
 
-            <div class="seccion">
-                <div class="titulo-seccion">Actividad Reciente</div>
+            <div style="padding: 30px 20px;">
+                <h3 class="titulo-seccion">Rendimiento Mensual</h3>
                 <div class="widget">
                     <canvas id="graficoFlujo" height="180"></canvas>
                 </div>
-                <div id="lista-movimientos-inicio">
-                    <!-- Dinámico -->
+                <h3 class="titulo-seccion">Últimos Movimientos</h3>
+                <div id="lista-movimientos-inicio"></div>
+            </div>
+        </div>
+
+        <!-- VISTA METAS (REACTIVADA) -->
+        <div id="vista-metas" class="vista">
+            <div style="padding: 40px 25px;">
+                <h1 style="font-weight: 800; font-size: 1.8rem; margin-bottom: 5px;">Mis Metas</h1>
+                <p style="color: var(--texto-gris); margin-bottom: 25px;">Calculadora de ahorro automática.</p>
+                
+                <div class="widget">
+                    <input type="text" id="meta-nombre" placeholder="¿Para qué ahorramos?">
+                    <input type="number" id="meta-monto" placeholder="Objetivo total $">
+                    <input type="number" id="meta-mensual" placeholder="Ahorro mensual extra $">
+                    <button class="btn-pro" onclick="crearMeta()">Establecer Meta</button>
                 </div>
+
+                <div id="lista-metas"></div>
             </div>
         </div>
 
         <!-- VISTA AJUSTES -->
         <div id="vista-ajustes" class="vista">
-            <div class="seccion">
+            <div style="padding: 40px 25px;">
                 <h2 class="titulo-seccion">Configuración</h2>
                 <div class="widget">
-                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--texto-gris);">NOMBRE DE USUARIO</label>
                     <input type="text" id="config-nombre" placeholder="Tu nombre">
-                    <button class="btn-principal" onclick="guardarConfiguracion()">Guardar Nombre</button>
+                    <button class="btn-pro" onclick="guardarConfiguracion()">Actualizar Perfil</button>
                 </div>
-                <button onclick="resetearDatos()" style="color: var(--error); background: none; border: none; font-weight: 700; width: 100%;">Borrar todo y empezar de cero</button>
+                <button onclick="resetearDatos()" style="color: var(--error); background: none; border: none; font-weight: 800; width: 100%; margin-top: 20px;">RESTABLECER TODOS LOS DATOS</button>
             </div>
         </div>
 
         <!-- NAVEGACIÓN -->
         <div class="nav-inferior">
             <div class="nav-link activo" onclick="navegar('vista-inicio', this)"><i data-lucide="home"></i></div>
-            <div class="nav-link"><i data-lucide="target"></i></div>
+            <div class="nav-link" onclick="navegar('vista-metas', this)"><i data-lucide="target"></i></div>
             <button class="btn-mas" onclick="abrirModal()"><i data-lucide="plus" size="28"></i></button>
-            <div class="nav-link"><i data-lucide="pie-chart"></i></div>
+            <div class="nav-link"><i data-lucide="bar-chart-3"></i></div>
             <div class="nav-link" onclick="navegar('vista-ajustes', this)"><i data-lucide="user"></i></div>
         </div>
 
-        <!-- MODAL REGISTRO -->
+        <!-- MODAL -->
         <div id="modal-registro" onclick="if(event.target == this) cerrarModal()">
             <div class="modal-contenido">
-                <h3 style="margin-bottom: 20px; font-weight: 800;">Nuevo Movimiento</h3>
-                <input type="text" id="reg-desc" placeholder="¿En qué gastaste?">
-                <input type="number" id="reg-monto" placeholder="Monto $0.00">
+                <div style="width: 40px; height: 6px; background: #e2e8f0; border-radius: 10px; margin: -20px auto 30px auto;"></div>
+                <h3 style="margin-bottom: 25px; font-weight: 800; font-size: 1.5rem;">Nuevo Registro</h3>
+                <input type="text" id="reg-desc" placeholder="Descripción">
+                <input type="number" id="reg-monto" placeholder="Monto $">
                 <select id="reg-tipo">
                     <option value="egreso">Gasto (-)</option>
                     <option value="ingreso">Ingreso (+)</option>
                 </select>
-                <button class="btn-principal" onclick="registrarMovimiento()">Confirmar</button>
+                <button class="btn-pro" onclick="registrarMovimiento()">Guardar Cambios</button>
             </div>
         </div>
 
-    </div> <!-- FIN APP CONTAINER -->
+    </div>
 
     <script>
-        const defecto = { usuario: { nombre: 'Bauti', iniciales: 'B' }, movimientos: [] };
-        let db = JSON.parse(localStorage.getItem('finanzly_db_v2')) || defecto;
+        let db = JSON.parse(localStorage.getItem('finanzly_v3')) || { 
+            usuario: { nombre: 'Bauti', iniciales: 'B' }, 
+            movimientos: [],
+            metas: []
+        };
 
+        // --- API DE MONEDA (FUNCIONALIDAD PRO) ---
+        async function obtenerDolar() {
+            try {
+                // Usamos una API gratuita de tipos de cambio
+                const res = await fetch('https://open.er-api.com/v6/latest/USD');
+                const data = await res.json();
+                const rate = data.rates.ARS || 900; // Backup si falla
+                window.precioDolar = rate;
+                actualizarConversionDolar();
+            } catch(e) {
+                document.getElementById('api-dolar').innerHTML = "Modo Offline";
+            }
+        }
+
+        function actualizarConversionDolar() {
+            const totalArs = calcularBalance();
+            const totalUsd = (totalArs / (window.precioDolar || 900)).toFixed(2);
+            document.getElementById('api-dolar').innerHTML = `<i data-lucide="globe" size="12"></i> Equivale a U$D ${totalUsd}`;
+            lucide.createIcons();
+        }
+
+        function calcularBalance() {
+            return db.movimientos.reduce((acc, m) => m.tipo === 'ingreso' ? acc + m.monto : acc - m.monto, 0);
+        }
+
+        // --- LÓGICA DE VISTAS ---
         function navegar(id, el) {
             document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('activo'));
             document.getElementById(id).classList.add('activa');
             if(el) el.classList.add('activo');
+            if(id === 'vista-inicio') renderGrafico();
         }
 
         function abrirModal() { document.getElementById('modal-registro').style.display = 'flex'; }
         function cerrarModal() { document.getElementById('modal-registro').style.display = 'none'; }
 
+        // --- ACCIONES ---
         function registrarMovimiento() {
             const desc = document.getElementById('reg-desc').value;
             const monto = parseFloat(document.getElementById('reg-monto').value);
             const tipo = document.getElementById('reg-tipo').value;
             if(!desc || !monto) return;
-
-            db.movimientos.unshift({ id: Date.now(), desc, monto, tipo, fecha: 'Hoy' });
-            localStorage.setItem('finanzly_db_v2', JSON.stringify(db));
-            actualizarUI();
+            db.movimientos.unshift({ id: Date.now(), desc, monto, tipo, fecha: new Date().toLocaleDateString('es-AR', {day:'2-digit', month:'short'}) });
+            guardarYRefrescar();
             cerrarModal();
         }
 
-        function guardarConfiguracion() {
-            const n = document.getElementById('config-nombre').value;
-            if(n) {
-                db.usuario.nombre = n;
-                db.usuario.iniciales = n[0].toUpperCase();
-                localStorage.setItem('finanzly_db_v2', JSON.stringify(db));
-                actualizarUI();
-                alert("Guardado");
-            }
+        function crearMeta() {
+            const nombre = document.getElementById('meta-nombre').value;
+            const monto = parseFloat(document.getElementById('meta-monto').value);
+            const mensual = parseFloat(document.getElementById('meta-mensual').value);
+            if(!nombre || !monto) return;
+            db.metas.push({ id: Date.now(), nombre, monto, mensual });
+            guardarYRefrescar();
+            document.getElementById('meta-nombre').value = '';
+            document.getElementById('meta-monto').value = '';
         }
 
-        function resetearDatos() {
-            if(confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); }
+        function borrarMeta(id) {
+            db.metas = db.metas.filter(m => m.id !== id);
+            guardarYRefrescar();
+        }
+
+        function guardarYRefrescar() {
+            localStorage.setItem('finanzly_v3', JSON.stringify(db));
+            actualizarUI();
         }
 
         function actualizarUI() {
             document.getElementById('saludo-nombre').innerText = `Hola, ${db.usuario.nombre}`;
-            document.getElementById('avatar-iniciales').innerText = db.usuario.iniciales;
+            document.getElementById('avatar-iniciales').innerText = db.usuario.nombre[0].toUpperCase();
 
-            let total = 0, ing = 0, egr = 0;
+            let total = calcularBalance();
+            let ing = db.movimientos.filter(m => m.tipo === 'ingreso').reduce((a, b) => a + b.monto, 0);
+            let egr = db.movimientos.filter(m => m.tipo === 'egreso').reduce((a, b) => a + b.monto, 0);
+
+            document.getElementById('balance-total').innerText = `$${total.toLocaleString('es-AR')}`;
+            document.getElementById('resumen-ingresos').innerText = `$${ing.toLocaleString('es-AR')}`;
+            document.getElementById('resumen-gastos').innerText = `$${egr.toLocaleString('es-AR')}`;
+            document.getElementById('resumen-ahorro-neto').innerText = `$${(ing - egr).toLocaleString('es-AR')}`;
+
+            // Movimientos
             const lista = document.getElementById('lista-movimientos-inicio');
-            lista.innerHTML = '';
-
-            db.movimientos.forEach((m, i) => {
-                const esIng = m.tipo === 'ingreso';
-                if(esIng) { total += m.monto; ing += m.monto; }
-                else { total -= m.monto; egr += m.monto; }
-
-                if(i < 4) {
-                    lista.innerHTML += `
-                        <div class="item-movimiento">
-                            <div style="display:flex; align-items:center; gap:12px;">
-                                <div class="icono-mov" style="background:${esIng ? '#dcfce7':'#fee2e2'}; color:${esIng ? 'var(--exito)':'var(--error)'}">
-                                    <i data-lucide="${esIng ? 'plus' : 'shopping-bag'}" size="18"></i>
-                                </div>
-                                <div class="info-mov">
-                                    <p>${m.desc}</p>
-                                    <span>${m.fecha}</span>
-                                </div>
-                            </div>
-                            <strong style="color:${esIng ? 'var(--exito)':'var(--texto-oscuro)'}">${esIng?'+':'-'}$${m.monto}</strong>
+            lista.innerHTML = db.movimientos.slice(0, 4).map(m => `
+                <div class="item-movimiento">
+                    <div style="display:flex; align-items:center; gap:12px;">
+                        <div class="icono-mov" style="background:${m.tipo === 'ingreso' ? '#dcfce7':'#fee2e2'}; color:${m.tipo === 'ingreso' ? 'var(--exito)':'var(--error)'}">
+                            <i data-lucide="${m.tipo === 'ingreso' ? 'trending-up' : 'shopping-cart'}" size="18"></i>
                         </div>
-                    `;
-                }
-            });
+                        <div class="info-mov">
+                            <p>${m.desc}</p>
+                            <span>${m.fecha}</span>
+                        </div>
+                    </div>
+                    <strong style="font-weight:800;">${m.tipo === 'ingreso' ? '+' : '-'}$${m.monto.toLocaleString()}</strong>
+                </div>
+            `).join('');
 
-            document.getElementById('balance-total').innerText = `$${total.toLocaleString()}`;
-            document.getElementById('resumen-ingresos').innerText = `$${ing}`;
-            document.getElementById('resumen-gastos').innerText = `$${egr}`;
-            document.getElementById('resumen-ahorro-neto').innerText = `$${ing - egr}`;
-            
+            // Metas
+            const lMetas = document.getElementById('lista-metas');
+            lMetas.innerHTML = db.metas.map(meta => {
+                const progreso = Math.min(100, (total / meta.monto) * 100).toFixed(0);
+                const meses = meta.mensual > 0 ? Math.ceil((meta.monto - total) / meta.mensual) : 'N/A';
+                return `
+                    <div class="tarjeta-meta">
+                        <div style="display:flex; justify-content:space-between; align-items:start;">
+                            <strong style="font-size:1.1rem;">${meta.nombre}</strong>
+                            <button onclick="borrarMeta(${meta.id})" style="border:none; background:none; color:var(--error); font-weight:800;">×</button>
+                        </div>
+                        <p style="font-size:0.8rem; color:var(--texto-gris); margin-top:5px;">Objetivo: $${meta.monto.toLocaleString()}</p>
+                        <div class="barra-progreso"><div class="relleno-progreso" style="width:${progreso}%"></div></div>
+                        <div style="display:flex; justify-content:space-between; font-size:0.8rem; font-weight:700;">
+                            <span style="color:var(--primario)">${progreso}% completado</span>
+                            <span style="color:var(--texto-gris)">${progreso >= 100 ? '¡Logrado!' : `Faltan ~${meses} meses`}</span>
+                        </div>
+                    </div>
+                `;
+            }).join('');
+
+            obtenerDolar();
             renderGrafico();
             lucide.createIcons();
         }
@@ -292,23 +365,25 @@
             window.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
+                    labels: ['S1', 'S2', 'S3', 'S4'],
                     datasets: [{
-                        data: [20, 50, 30, 70, 40, 90, 60],
-                        borderColor: '#6366f1',
-                        borderWidth: 3,
-                        pointRadius: 0,
-                        tension: 0.4,
-                        fill: true,
+                        data: [totalXSemana(3), totalXSemana(2), totalXSemana(1), totalXSemana(0)],
+                        borderColor: '#6366f1', borderWidth: 4, pointRadius: 5, pointBackgroundColor: '#fff', tension: 0.4, fill: true,
                         backgroundColor: 'rgba(99, 102, 241, 0.05)'
                     }]
                 },
-                options: { 
-                    plugins: { legend: { display: false } },
-                    scales: { x: { grid: { display: false } }, y: { display: false } }
-                }
+                options: { plugins: { legend: { display: false } }, scales: { x: { grid: { display: false } }, y: { display: false } } }
             });
         }
+
+        function totalXSemana(offset) { return 400 + (offset * 150); } // Simulación
+
+        function guardarConfiguracion() {
+            const n = document.getElementById('config-nombre').value;
+            if(n) { db.usuario.nombre = n; guardarYRefrescar(); alert("Perfil Actualizado"); }
+        }
+
+        function resetearDatos() { if(confirm("¿Seguro? Se borrará todo.")) { localStorage.clear(); location.reload(); } }
 
         actualizarUI();
     </script>
