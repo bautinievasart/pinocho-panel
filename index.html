@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Ultra Dynamic</title>
+    <title>Finanzly | Ultra Pro</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg: #ffffff; --primary: #4f46e5; --text: #0f172a;
+            --bg: #fdfeff; --primary: #4f46e5; --text: #0f172a;
             --secondary: #64748b; --white: #ffffff; --success: #10b981;
             --error: #ef4444; 
         }
@@ -23,19 +23,17 @@
             display: flex; flex-direction: column; position: relative;
         }
 
-        /* --- HEADER CON DEGRADADO ANIMADO REAL --- */
+        /* --- HEADER DINÁMICO --- */
         .header {
-            background: linear-gradient(135deg, #4f46e5, #9333ea, #3b82f6, #4f46e5);
-            background-size: 300% 300%;
-            animation: moveGradient 8s ease infinite;
+            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #2563eb, #6366f1);
+            background-size: 400% 400%;
+            animation: moveGradient 12s ease infinite;
             color: white;
-            padding: 70px 24px 90px;
+            padding: 60px 24px 100px;
             border-radius: 0 0 50px 50px;
             flex-shrink: 0;
             text-align: center;
-            position: relative;
-            z-index: 10;
-            box-shadow: 0 15px 40px rgba(79, 70, 229, 0.25);
+            z-index: 5; /* Por debajo de las tarjetas */
         }
 
         @keyframes moveGradient {
@@ -44,80 +42,81 @@
             100% { background-position: 0% 50%; }
         }
 
-        .balance-label { font-size: 0.9rem; opacity: 0.9; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .balance-value { font-size: 3.8rem; font-weight: 800; letter-spacing: -2px; margin-top: 10px; }
+        .balance-label { font-size: 0.85rem; opacity: 0.9; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .balance-value { font-size: 3.8rem; font-weight: 800; letter-spacing: -2px; margin-top: 8px; }
 
-        /* --- CONTENT AREA CON MÁSCARA DE SCROLL --- */
+        /* --- CONTENT AREA --- */
         .content {
             flex-grow: 1;
-            overflow-y: scroll;
+            overflow-y: auto;
             padding: 0 0 140px;
-            margin-top: -50px;
-            -webkit-overflow-scrolling: touch;
-            scroll-behavior: smooth;
+            margin-top: -60px; /* Sube las tarjetas sobre el azul */
+            position: relative;
+            z-index: 10;
         }
 
         .summary-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 16px;
             padding: 0 20px; margin-bottom: 30px;
-            position: relative; z-index: 20;
+            position: sticky; top: 0; /* Mantiene las tarjetas visibles un momento */
+            z-index: 30;
         }
 
         .card {
-            background: var(--white); padding: 25px 15px; border-radius: 30px;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;
+            background: var(--white); 
+            padding: 25px 15px; 
+            border-radius: 28px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.08); 
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.02);
         }
-        .card span { font-size: 0.85rem; font-weight: 800; color: var(--secondary); }
-        .card p { font-size: 1.4rem; font-weight: 800; margin-top: 8px; }
+        .card span { font-size: 0.8rem; font-weight: 800; color: var(--secondary); display: block; margin-bottom: 5px; }
+        .card p { font-size: 1.4rem; font-weight: 800; }
 
-        /* --- CHART CARD --- */
-        .chart-container {
+        /* --- CHART --- */
+        .chart-card {
             background: white; margin: 0 20px 30px; padding: 25px;
-            border-radius: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.03);
+            border-radius: 35px; box-shadow: 0 10px 30px rgba(0,0,0,0.04);
         }
 
         /* --- VISTAS --- */
         .view { display: none; }
         .view.active { display: block; }
 
-        /* --- MOVIMIENTOS DINÁMICOS --- */
-        .section-title { padding: 0 24px; font-weight: 800; color: var(--text); margin-bottom: 20px; font-size: 1.2rem; }
+        /* --- MOVIMIENTOS --- */
+        .section-title { padding: 0 24px; font-weight: 800; color: var(--text); margin-bottom: 20px; font-size: 1.3rem; }
 
         .mov-item {
             display: flex; align-items: center; justify-content: space-between;
             background: var(--white);
             padding: 28px 24px;
-            margin: 0 15px 15px;
-            border-radius: 30px;
+            margin: 0 15px 12px;
+            border-radius: 32px;
             transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            opacity: 0.4;
-            transform: scale(0.9);
+            opacity: 0.4; transform: scale(0.9);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.02);
         }
 
-        /* Efecto cuando el item entra en el foco central */
         .mov-item.in-view {
-            opacity: 1;
-            transform: scale(1);
-            margin: 0 0 2px; /* Se pegan para ocupar la pantalla */
-            border-radius: 0;
-            background: #fff;
-            border-bottom: 1px solid #f8fafc;
+            opacity: 1; transform: scale(1);
+            margin: 0 0 2px; border-radius: 0;
+            border-bottom: 1px solid #f1f5f9;
         }
 
         /* --- NAV BAR --- */
         .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 95px;
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: 25px; z-index: 50; border-top: 1px solid #f1f5f9;
+            padding-bottom: 20px; z-index: 50; border-top: 1px solid #f1f5f9;
         }
-        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 5px; }
+        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 4px; }
         .nav-item.active { color: var(--primary); }
         .btn-plus {
-            width: 70px; height: 70px; background: var(--text);
-            color: white; border: none; border-radius: 24px;
+            width: 68px; height: 68px; background: var(--text);
+            color: white; border: none; border-radius: 22px;
             display: flex; align-items: center; justify-content: center;
-            transform: translateY(-30px); box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            transform: translateY(-28px); box-shadow: 0 15px 35px rgba(0,0,0,0.3);
         }
 
         /* --- MODAL --- */
@@ -126,14 +125,14 @@
             display: none; flex-direction: column; justify-content: flex-end; z-index: 100;
         }
         .modal-body {
-            background: var(--white); width: 100%; padding: 45px 30px;
-            border-radius: 50px 50px 0 0; animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+            background: var(--white); width: 100%; padding: 45px 25px;
+            border-radius: 45px 45px 0 0; animation: slideUp 0.4s ease-out;
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         input, select { 
-            width: 100%; padding: 22px; border-radius: 20px; border: 2px solid #f1f5f9;
-            background: #f8fafc; margin-bottom: 18px; font-weight: 700; font-size: 1.1rem; outline: none; 
+            width: 100%; padding: 22px; border-radius: 22px; border: 2px solid #f1f5f9;
+            background: #f8fafc; margin-bottom: 15px; font-weight: 700; font-size: 1.1rem; outline: none; 
         }
         .btn-confirm { 
             width: 100%; padding: 22px; background: var(--primary); color: white;
@@ -144,63 +143,59 @@
 <body>
 
     <div class="app-shell">
-        <!-- HEADER DINÁMICO -->
-        <div class="header" id="main-header">
+        <div class="header">
             <p class="balance-label">Balance Disponible</p>
             <h1 class="balance-value" id="dom-balance">$0</h1>
         </div>
 
         <div class="content" id="scroll-area">
+            <!-- TARJETAS CON Z-INDEX CORREGIDO -->
             <div class="summary-grid">
                 <div class="card"><span>INGRESOS</span><p style="color:var(--success)" id="dom-ing">+$0</p></div>
                 <div class="card"><span>GASTOS</span><p style="color:var(--error)" id="dom-egr">-$0</p></div>
             </div>
 
-            <!-- HOME -->
             <div id="v-home" class="view active">
-                <div class="chart-container">
-                    <canvas id="lineChart" height="160"></canvas>
+                <div class="chart-card">
+                    <canvas id="lineChart" height="150"></canvas>
                 </div>
-                <p class="section-title">Movimientos Recientes</p>
+                <p class="section-title">Actividad</p>
                 <div id="dom-list"></div>
             </div>
 
-            <!-- METAS -->
             <div id="v-goals" class="view" style="padding: 0 20px;">
-                <p class="section-title" style="padding-left:0">Tus Objetivos</p>
+                <p class="section-title" style="padding-left:0">Metas de Ahorro</p>
                 <div class="card" style="text-align: left; margin-bottom: 30px; padding: 30px;">
-                    <input type="text" id="g-name" placeholder="Nombre de la meta">
-                    <input type="number" id="g-amount" placeholder="¿Cuánto necesitás?">
-                    <button class="btn-confirm" onclick="saveGoal()">Empezar a ahorrar</button>
+                    <input type="text" id="g-name" placeholder="¿Para qué ahorras?">
+                    <input type="number" id="g-amount" placeholder="Monto objetivo">
+                    <button class="btn-confirm" onclick="saveGoal()">Crear Meta</button>
                 </div>
                 <div id="dom-goals-list"></div>
             </div>
         </div>
 
-        <!-- NAV BAR -->
         <nav class="nav-bar">
             <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="layout-grid"></i>INICIO</div>
-            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="38"></i></button>
+            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="35"></i></button>
             <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
         </nav>
 
-        <!-- MODAL -->
         <div id="modal" onclick="if(event.target==this) closeM()">
             <div class="modal-body">
-                <h2 style="margin-bottom:30px; font-weight: 800; font-size: 1.8rem;">Añadir registro</h2>
-                <input type="text" id="m-desc" placeholder="¿Qué compraste?">
+                <h2 style="margin-bottom:30px; font-weight: 800; font-size: 1.6rem;">Nuevo Registro</h2>
+                <input type="text" id="m-desc" placeholder="Descripción">
                 <input type="number" id="m-amount" placeholder="0.00" inputmode="decimal">
                 <select id="m-type">
                     <option value="out">Gasto (-)</option>
                     <option value="in">Ingreso (+)</option>
                 </select>
-                <button class="btn-confirm" onclick="saveData()">Guardar cambios</button>
+                <button class="btn-confirm" onclick="saveData()">Confirmar</button>
             </div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('fz_v15')) || { m: [], g: [] };
+        let db = JSON.parse(localStorage.getItem('fz_final_v1')) || { m: [], g: [] };
 
         function switchTab(id, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -232,7 +227,7 @@
         }
 
         function saveAndRefresh() {
-            localStorage.setItem('fz_v15', JSON.stringify(db));
+            localStorage.setItem('fz_final_v1', JSON.stringify(db));
             updateUI();
         }
 
@@ -246,9 +241,9 @@
                                 <div style="width:60px; height:60px; border-radius:20px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center;">
                                     <i data-lucide="${isI?'arrow-up-right':'shopping-bag'}" size="28"></i>
                                 </div>
-                                <div><b style="font-size:1.3rem; letter-spacing:-0.5px;">${x.d}</b><br><small style="color:var(--secondary); font-weight:600;">${x.date}</small></div>
+                                <div><b style="font-size:1.2rem;">${x.d}</b><br><small style="color:var(--secondary); font-weight:600;">${x.date}</small></div>
                             </div>
-                            <b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.4rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b>
+                            <b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.3rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b>
                          </div>`;
             });
 
@@ -256,7 +251,7 @@
             document.getElementById('dom-balance').innerText = `$${bal.toLocaleString()}`;
             document.getElementById('dom-ing').innerText = `+$${i.toLocaleString()}`;
             document.getElementById('dom-egr').innerText = `-$${e.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8; font-weight:600;">Sin actividad reciente</p>';
+            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8;">Sin movimientos</p>';
             
             updateGoals(bal);
             renderLine();
@@ -270,12 +265,12 @@
                 let perc = Math.min((balance / x.a) * 100, 100);
                 if(balance <= 0) perc = 0;
                 gHtml += `<div class="card" style="margin-bottom:20px; text-align:left; padding:25px;">
-                            <b style="font-size:1.3rem;">${x.n}</b><br>
-                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:700; color:var(--secondary);">
-                                <span>$${balance.toLocaleString()}</span>
-                                <span>Meta:$${x.a.toLocaleString()}</span>
+                            <b style="font-size:1.2rem;">${x.n}</b>
+                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:700; color:var(--secondary); font-size:0.9rem;">
+                                <span>Ahorrado: $${balance.toLocaleString()}</span>
+                                <span>Objetivo:$${x.a.toLocaleString()}</span>
                             </div>
-                            <div style="width:100%; height:12px; background:#f1f5f9; border-radius:10px; margin-top:10px; overflow:hidden">
+                            <div style="width:100%; height:10px; background:#f1f5f9; border-radius:10px; margin-top:10px; overflow:hidden">
                                 <div style="width:${perc}%; height:100%; background:var(--primary); transition:1.5s cubic-bezier(0.2, 0.8, 0.2, 1)"></div>
                             </div>
                           </div>`;
@@ -291,13 +286,9 @@
                 type: 'line', 
                 data: { 
                     labels: pts.map(()=>''), 
-                    datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 5, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.1)' }] 
+                    datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 4, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.05)' }] 
                 }, 
-                options: { 
-                    maintainAspectRatio: false,
-                    plugins:{legend:{display:false}}, 
-                    scales:{x:{display:false},y:{display:false}} 
-                } 
+                options: { maintainAspectRatio: false, plugins:{legend:{display:false}}, scales:{x:{display:false},y:{display:false}} } 
             });
         }
 
@@ -305,16 +296,10 @@
             const items = document.querySelectorAll('.mov-item');
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
-                    if (entry.isIntersecting) {
-                        entry.target.classList.add('in-view');
-                    } else {
-                        entry.target.classList.remove('in-view');
-                    }
+                    if (entry.isIntersecting) entry.target.classList.add('in-view');
+                    else entry.target.classList.remove('in-view');
                 });
-            }, {
-                threshold: 0.5,
-                rootMargin: "-80px 0px -100px 0px"
-            });
+            }, { threshold: 0.6, rootMargin: "-50px 0px -100px 0px" });
             items.forEach(item => observer.observe(item));
         }
 
