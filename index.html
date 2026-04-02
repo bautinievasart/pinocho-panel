@@ -10,7 +10,6 @@
     <style>
         :root {
             --primario: #6366f1;
-            --primario-fondo: #f5f7ff;
             --fondo: #fcfcfd;
             --texto-oscuro: #0f172a;
             --texto-gris: #64748b;
@@ -18,449 +17,299 @@
             --exito: #10b981;
             --error: #f43f5e;
             --sombra: 0 10px 25px -5px rgba(0, 0, 0, 0.04);
-            --radius-lg: 32px;
-            --radius-md: 18px;
         }
 
+        /* RESET Y CONTENEDOR MAESTRO */
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
-        body { background: var(--fondo); color: var(--texto-oscuro); padding-bottom: 110px; overflow-x: hidden; }
+        body { 
+            background: #e2e8f0; /* Fondo externo para resaltar la app */
+            display: flex;
+            justify-content: center;
+        }
 
-        /* --- UI ESTRUCTURAL --- */
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* EVITA QUE SE ESTIRE EN PC */
+            background: var(--fondo);
+            min-height: 100vh;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.1);
+            padding-bottom: 110px;
+            overflow-x: hidden;
+        }
+
+        /* --- VISTAS --- */
         .vista { display: none; animation: fadeIn 0.3s ease; }
         .vista.activa { display: block; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
 
-        /* --- HEADER ESTILO PREMIUM --- */
+        /* --- HEADER --- */
         .header-app {
             background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
             color: white;
             padding: 40px 25px 80px 25px;
-            border-bottom-left-radius: 45px;
-            border-bottom-right-radius: 45px;
-            position: relative;
+            border-bottom-left-radius: 40px;
+            border-bottom-right-radius: 40px;
         }
 
-        .perfil-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-        .usuario { display: flex; align-items: center; gap: 14px; }
-        
-        /* Avatar dinámico */
+        .perfil-nav { display: flex; justify-content: space-between; align-items: center; margin-bottom: 25px; }
+        .usuario { display: flex; align-items: center; gap: 12px; }
         .avatar-real { 
-            width: 52px; height: 52px; border-radius: 18px; 
-            background: rgba(255,255,255,0.2); border: 2px solid rgba(255,255,255,0.5);
-            display: flex; align-items: center; justify-content: center;
-            font-weight: 800; font-size: 1.3rem; color: white; text-transform: uppercase;
+            width: 45px; height: 45px; border-radius: 14px; 
+            background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4);
+            display: flex; align-items: center; justify-content: center; font-weight: 800;
         }
-        
-        .btn-config-header { background: rgba(255,255,255,0.15); border: none; padding: 10px; border-radius: 12px; color: white; cursor: pointer; }
 
-        .monto-balance { font-size: 3rem; font-weight: 800; margin-top: 4px; letter-spacing: -1.5px; }
+        .monto-balance { font-size: 2.5rem; font-weight: 800; margin-top: 5px; letter-spacing: -1px; }
 
-        /* --- TARJETAS RESUMEN (SCROLL) --- */
-        .contenedor-scroll { display: flex; gap: 16px; padding: 0 25px; margin-top: -50px; overflow-x: auto; scrollbar-width: none; }
-        .contenedor-scroll::-webkit-scrollbar { display: none; }
+        /* --- TARJETAS (Fila con scroll corregida) --- */
+        .contenedor-scroll { 
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            padding: 0 20px;
+            margin-top: -40px;
+        }
 
         .tarjeta-cat {
-            background: var(--blanco); min-width: 140px; padding: 22px; border-radius: 28px;
-            box-shadow: var(--sombra); display: flex; flex-direction: column; gap: 8px; border: 1px solid rgba(0,0,0,0.01);
+            background: var(--blanco);
+            padding: 15px 10px;
+            border-radius: 20px;
+            box-shadow: var(--sombra);
+            text-align: center;
+            border: 1px solid rgba(0,0,0,0.02);
         }
-        .tarjeta-cat span { font-size: 0.75rem; color: var(--texto-gris); font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; }
-        .tarjeta-cat strong { font-size: 1.25rem; font-weight: 800; }
+        .tarjeta-cat span { font-size: 0.65rem; color: var(--texto-gris); font-weight: 700; text-transform: uppercase; display: block; margin-bottom: 4px;}
+        .tarjeta-cat strong { font-size: 0.9rem; font-weight: 800; display: block; word-break: break-all; }
 
-        /* --- CONTENIDO GENERAL --- */
-        .seccion { padding: 30px 25px; }
-        .titulo-seccion { font-size: 1.2rem; font-weight: 800; margin-bottom: 20px; color: var(--texto-oscuro); }
-        .widget { background: var(--blanco); border-radius: var(--radius-lg); padding: 25px; margin-bottom: 25px; box-shadow: var(--sombra); }
+        /* --- SECCIONES --- */
+        .seccion { padding: 25px 20px; }
+        .titulo-seccion { font-size: 1.1rem; font-weight: 800; margin-bottom: 15px; color: var(--texto-oscuro); }
+        .widget { background: var(--blanco); border-radius: 24px; padding: 20px; margin-bottom: 20px; box-shadow: var(--sombra); }
 
         /* --- MOVIMIENTOS --- */
-        .item-movimiento { display: flex; align-items: center; justify-content: space-between; padding: 18px 0; border-bottom: 1px solid #f1f5f9; }
-        .item-movimiento:last-child { border: none; }
-        .icono-mov { width: 52px; height: 52px; border-radius: 18px; display: flex; align-items: center; justify-content: center; }
-        .info-mov p { font-weight: 700; font-size: 1rem; }
-        .info-mov span { font-size: 0.8rem; color: var(--texto-gris); }
+        .item-movimiento { display: flex; align-items: center; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid #f1f5f9; }
+        .icono-mov { width: 45px; height: 45px; border-radius: 14px; display: flex; align-items: center; justify-content: center; }
+        .info-mov p { font-weight: 700; font-size: 0.9rem; }
+        .info-mov span { font-size: 0.75rem; color: var(--texto-gris); }
 
-        /* --- METAS DE AHORRO --- */
-        .tarjeta-meta { background: #f8fafc; border-radius: 20px; padding: 20px; margin-bottom: 15px; border: 1px solid #e2e8f0; }
-        .progreso-fondo { height: 10px; background: #e2e8f0; border-radius: 10px; margin: 12px 0; overflow: hidden; }
-        .progreso-relleno { height: 100%; background: var(--primario); border-radius: 10px; transition: width 0.5s ease; }
-
-        /* --- FORMULARIOS --- */
-        input, select { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #e2e8f0; margin-bottom: 15px; outline: none; font-size: 1rem; background: #f8fafc; font-weight: 500; }
-        input:focus { border-color: var(--primario); background: white; }
-        .btn-principal { width: 100%; padding: 18px; background: var(--primario); color: white; border: none; border-radius: 18px; font-weight: 700; font-size: 1.1rem; cursor: pointer; box-shadow: 0 10px 20px rgba(99, 102, 241, 0.2); }
-        .btn-peligro { width: 100%; padding: 15px; background: #fee2e2; color: var(--error); border: none; border-radius: 15px; font-weight: 700; cursor: pointer; }
-
-        /* --- NAVEGACIÓN INFERIOR (FUNCIONAL) --- */
+        /* --- NAVEGACIÓN (Anclada al contenedor) --- */
         .nav-inferior {
-            position: fixed; bottom: 0; left: 0; right: 0; height: 95px;
-            background: rgba(255, 255, 255, 0.97); backdrop-filter: blur(10px);
-            border-top: 1px solid #f1f5f9; display: flex; justify-content: space-around; align-items: center; padding: 0 25px 25px 25px; z-index: 1000;
+            position: absolute; bottom: 0; left: 0; right: 0; height: 85px;
+            background: rgba(255, 255, 255, 0.98); border-top: 1px solid #f1f5f9;
+            display: flex; justify-content: space-around; align-items: center;
+            padding-bottom: 15px;
         }
-        .nav-link { color: #cbd5e1; display: flex; flex-direction: column; align-items: center; cursor: pointer; transition: 0.2s; position: relative; padding: 10px; }
+        .nav-link { color: #cbd5e1; cursor: pointer; transition: 0.2s; padding: 10px; }
         .nav-link.activo { color: var(--primario); }
-        .nav-link.activo::after { content:''; position: absolute; bottom: 0; width: 6px; height: 6px; background: var(--primario); border-radius: 50%; }
         
-        .btn-mas { width: 64px; height: 64px; background: var(--texto-oscuro); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; transform: translateY(-35px); box-shadow: 0 15px 30px rgba(0,0,0,0.15); border: none; }
+        .btn-mas { 
+            width: 55px; height: 55px; background: var(--texto-oscuro); 
+            border-radius: 50%; display: flex; align-items: center; justify-content: center; 
+            color: white; transform: translateY(-25px); box-shadow: 0 10px 20px rgba(0,0,0,0.1); border: none; 
+        }
 
-        /* --- MODAL --- */
-        #modal-registro { position: fixed; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); display:none; align-items:flex-end; z-index:2000; backdrop-filter: blur(4px); }
-        .modal-contenido { background: var(--blanco); width:100%; padding:40px 25px; border-radius: 45px 45px 0 0; animation: slideUp 0.4s cubic-bezier(0.16, 1, 0.3, 1); }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+        /* MODAL */
+        #modal-registro { position: absolute; top:0; left:0; width:100%; height:100%; background:rgba(15, 23, 42, 0.6); display:none; align-items:flex-end; z-index:2000; }
+        .modal-contenido { background: var(--blanco); width:100%; padding:30px 20px; border-radius: 35px 35px 0 0; }
 
-        /* CLASES UTILES */
-        .exito { color: var(--exito) !important; }
-        .negocio { color: var(--texto-oscuro) !important; }
+        input, select { width: 100%; padding: 15px; border-radius: 14px; border: 1px solid #e2e8f0; margin-bottom: 12px; font-size: 1rem; }
+        .btn-principal { width: 100%; padding: 16px; background: var(--primario); color: white; border: none; border-radius: 14px; font-weight: 700; cursor: pointer; }
     </style>
 </head>
 <body>
 
-    <div id="vista-inicio" class="vista activa">
-        <div class="header-app">
-            <div class="perfil-nav">
-                <div class="usuario">
-                    <div class="avatar-real" id="avatar-iniciales">U</div>
-                    <div>
-                        <p style="font-size: 0.8rem; opacity: 0.8; font-weight: 600;">Mi Panel Real</p>
-                        <p style="font-weight: 800; font-size: 1.2rem;" id="saludo-nombre">Hola, Usuario</p>
+    <div class="app-container">
+        
+        <!-- VISTA INICIO -->
+        <div id="vista-inicio" class="vista activa">
+            <div class="header-app">
+                <div class="perfil-nav">
+                    <div class="usuario">
+                        <div class="avatar-real" id="avatar-iniciales">B</div>
+                        <div>
+                            <p style="font-size: 0.7rem; opacity: 0.8; font-weight: 600;">Mi Panel</p>
+                            <p style="font-weight: 800; font-size: 1rem;" id="saludo-nombre">Hola, Bauti</p>
+                        </div>
                     </div>
+                    <button style="background:none; border:none; color:white;" onclick="navegar('vista-ajustes')">
+                        <i data-lucide="settings" size="20"></i>
+                    </button>
                 </div>
-                <button class="btn-config-header" onclick="navegar('vista-ajustes')">
-                    <i data-lucide="settings" size="20"></i>
-                </button>
-            </div>
-            <p style="font-size: 0.9rem; opacity: 0.9; font-weight: 500;">Balance Neto Actual</p>
-            <h1 class="monto-balance" id="balance-total">$0</h1>
-        </div>
-
-        <div class="contenedor-scroll">
-            <div class="tarjeta-cat">
-                <span>Ingresos</span>
-                <strong id="resumen-ingresos" class="exito">$0</strong>
-            </div>
-            <div class="tarjeta-cat">
-                <span>Gastos</span>
-                <strong id="resumen-gastos" class="negocio">$0</strong>
-            </div>
-            <div class="tarjeta-cat">
-                <span>Ahorro Neto</span>
-                <strong id="resumen-ahorro-neto" style="color: var(--primario);">$0</strong>
-            </div>
-        </div>
-
-        <div class="seccion">
-            <div class="titulo-seccion">Flujo de efectivo (7 días)</div>
-            <div class="widget">
-                <canvas id="graficoFlujo" height="160"></canvas>
+                <p style="font-size: 0.8rem; opacity: 0.9;">Balance Actual</p>
+                <h1 class="monto-balance" id="balance-total">$0,00</h1>
             </div>
 
-            <div class="titulo-seccion">Últimos movimientos</div>
-            <div id="lista-movimientos-inicio">
+            <div class="contenedor-scroll">
+                <div class="tarjeta-cat">
+                    <span>Ingresos</span>
+                    <strong id="resumen-ingresos" style="color:var(--exito)">$0</strong>
                 </div>
-        </div>
-    </div>
-
-    <div id="vista-metas" class="vista">
-        <div class="seccion" style="margin-top: 20px;">
-            <h1>Mis Objetivos</h1>
-            <p style="color: var(--texto-gris); margin-bottom: 25px;">Calcula cuánto tiempo te falta para cumplir tus metas.</p>
-            
-            <div class="widget">
-                <h3 style="margin-bottom: 15px;">Crear nueva meta</h3>
-                <input type="text" id="meta-nombre" placeholder="Ej: Viaje a la playa">
-                <div style="display: flex; gap: 10px;">
-                    <input type="number" id="meta-monto" placeholder="Monto total $">
-                    <input type="number" id="meta-mensual" placeholder="Ahorro al mes $">
+                <div class="tarjeta-cat">
+                    <span>Gastos</span>
+                    <strong id="resumen-gastos" style="color:var(--error)">$0</strong>
                 </div>
-                <button class="btn-principal" onclick="crearMeta()">Crear Meta</button>
-            </div>
-
-            <div class="titulo-seccion">Progreso actual</div>
-            <div id="lista-metas">
+                <div class="tarjeta-cat">
+                    <span>Ahorro</span>
+                    <strong id="resumen-ahorro-neto" style="color:var(--primario)">$0</strong>
                 </div>
-        </div>
-    </div>
-
-    <div id="vista-ajustes" class="vista">
-        <div class="seccion" style="margin-top: 20px;">
-            <h1>Ajustes de Perfil</h1>
-            <p style="color: var(--texto-gris); margin-bottom: 25px;">Personaliza la aplicación con tus datos reales.</p>
-            
-            <div class="widget">
-                <h3 style="margin-bottom: 15px;">Tu Nombre Real</h3>
-                <input type="text" id="config-nombre" placeholder="Escribe tu nombre aquí">
-                <button class="btn-principal" onclick="guardarConfiguracion()">Guardar Cambios</button>
             </div>
 
-            <div class="widget" style="border: 2px solid #fee2e2;">
-                <h3 style="color: var(--error); margin-bottom: 10px;">Zona de Peligro</h3>
-                <p style="font-size: 0.85rem; color: var(--texto-gris); margin-bottom: 15px;">Esta acción borrará todos tus movimientos y metas permanentemente.</p>
-                <button class="btn-peligro" onclick="resetearDatos()">Borrar todos los datos</button>
+            <div class="seccion">
+                <div class="titulo-seccion">Actividad Reciente</div>
+                <div class="widget">
+                    <canvas id="graficoFlujo" height="180"></canvas>
+                </div>
+                <div id="lista-movimientos-inicio">
+                    <!-- Dinámico -->
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="nav-inferior">
-        <div class="nav-link activo" onclick="navegar('vista-inicio', this)"><i data-lucide="home"></i></div>
-        <div class="nav-link" onclick="navegar('vista-metas', this)"><i data-lucide="target"></i></div>
-        
-        <button class="btn-mas" onclick="abrirModal()"><i data-lucide="plus" size="30"></i></button>
-        
-        <div class="nav-link"><i data-lucide="bar-chart-3"></i></div> <div class="nav-link" onclick="navegar('vista-ajustes', this)"><i data-lucide="user"></i></div>
-    </div>
-
-    <div id="modal-registro" onclick="if(event.target == this) cerrarModal()">
-        <div class="modal-contenido">
-            <div style="width: 45px; height: 6px; background: #e2e8f0; border-radius: 10px; margin: -20px auto 30px auto;"></div>
-            <h2 style="margin-bottom:25px; font-weight:800; font-size: 1.6rem; letter-spacing: -1px;">Nuevo Registro</h2>
-            
-            <input type="text" id="reg-desc" placeholder="¿Qué fue? (ej: Cena con amigos)">
-            <input type="number" id="reg-monto" placeholder="Monto $0.00">
-            
-            <select id="reg-tipo">
-                <option value="egreso">Gasto (-) </option>
-                <option value="ingreso">Ingreso (+) </option>
-            </select>
-            
-            <button class="btn-principal" onclick="registrarMovimiento()">Confirmar Registro</button>
+        <!-- VISTA AJUSTES -->
+        <div id="vista-ajustes" class="vista">
+            <div class="seccion">
+                <h2 class="titulo-seccion">Configuración</h2>
+                <div class="widget">
+                    <label style="font-size: 0.8rem; font-weight: 700; color: var(--texto-gris);">NOMBRE DE USUARIO</label>
+                    <input type="text" id="config-nombre" placeholder="Tu nombre">
+                    <button class="btn-principal" onclick="guardarConfiguracion()">Guardar Nombre</button>
+                </div>
+                <button onclick="resetearDatos()" style="color: var(--error); background: none; border: none; font-weight: 700; width: 100%;">Borrar todo y empezar de cero</button>
+            </div>
         </div>
-    </div>
+
+        <!-- NAVEGACIÓN -->
+        <div class="nav-inferior">
+            <div class="nav-link activo" onclick="navegar('vista-inicio', this)"><i data-lucide="home"></i></div>
+            <div class="nav-link"><i data-lucide="target"></i></div>
+            <button class="btn-mas" onclick="abrirModal()"><i data-lucide="plus" size="28"></i></button>
+            <div class="nav-link"><i data-lucide="pie-chart"></i></div>
+            <div class="nav-link" onclick="navegar('vista-ajustes', this)"><i data-lucide="user"></i></div>
+        </div>
+
+        <!-- MODAL REGISTRO -->
+        <div id="modal-registro" onclick="if(event.target == this) cerrarModal()">
+            <div class="modal-contenido">
+                <h3 style="margin-bottom: 20px; font-weight: 800;">Nuevo Movimiento</h3>
+                <input type="text" id="reg-desc" placeholder="¿En qué gastaste?">
+                <input type="number" id="reg-monto" placeholder="Monto $0.00">
+                <select id="reg-tipo">
+                    <option value="egreso">Gasto (-)</option>
+                    <option value="ingreso">Ingreso (+)</option>
+                </select>
+                <button class="btn-principal" onclick="registrarMovimiento()">Confirmar</button>
+            </div>
+        </div>
+
+    </div> <!-- FIN APP CONTAINER -->
 
     <script>
-        // ============================================
-        // MOTOR DE ESTADO (PERSISTENCIA REAL)
-        // ============================================
-        const defecto = {
-            usuario: { nombre: 'Usuario', iniciales: 'U' },
-            movimientos: [],
-            metas: []
-        };
+        const defecto = { usuario: { nombre: 'Bauti', iniciales: 'B' }, movimientos: [] };
+        let db = JSON.parse(localStorage.getItem('finanzly_db_v2')) || defecto;
 
-        let db = JSON.parse(localStorage.getItem('finanzly_core_v1')) || defecto;
-
-        function guardarDB() {
-            localStorage.setItem('finanzly_core_v1', JSON.stringify(db));
-            actualizarUI();
-        }
-
-        // ============================================
-        // SISTEMA DE NAVEGACIÓN (FUNCIONAL)
-        // ============================================
-        function navegar(vistaId, elLink) {
-            // Ocultar todas las vistas
+        function navegar(id, el) {
             document.querySelectorAll('.vista').forEach(v => v.classList.remove('activa'));
-            // Desactivar todos los links de la nav
             document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('activo'));
-
-            // Mostrar la vista seleccionada
-            document.getElementById(vistaId).classList.add('activa');
-            // Activar el link correspondiente (si existe)
-            if(elLink) elLink.classList.add('activo');
+            document.getElementById(id).classList.add('activa');
+            if(el) el.classList.add('activo');
         }
 
         function abrirModal() { document.getElementById('modal-registro').style.display = 'flex'; }
         function cerrarModal() { document.getElementById('modal-registro').style.display = 'none'; }
 
-        // ============================================
-        // GESTIÓN DE MOVIMIENTOS Y INICIO
-        // ============================================
         function registrarMovimiento() {
             const desc = document.getElementById('reg-desc').value;
             const monto = parseFloat(document.getElementById('reg-monto').value);
             const tipo = document.getElementById('reg-tipo').value;
-            
-            if(!desc || !monto || monto <= 0) return alert("Por favor, completa descripción y monto válido.");
+            if(!desc || !monto) return;
 
-            db.movimientos.unshift({
-                id: Date.now(),
-                desc,
-                monto,
-                tipo,
-                fecha: new Date().toLocaleDateString('es-ES', { day: '2-digit', month: 'short' })
-            });
-
-            guardarDB();
+            db.movimientos.unshift({ id: Date.now(), desc, monto, tipo, fecha: 'Hoy' });
+            localStorage.setItem('finanzly_db_v2', JSON.stringify(db));
+            actualizarUI();
             cerrarModal();
-            // Limpiar formulario
-            document.getElementById('reg-desc').value = '';
-            document.getElementById('reg-monto').value = '';
         }
 
-        function eliminarMovimiento(id) {
-            db.movimientos = db.movimientos.filter(m => m.id !== id);
-            guardarDB();
-        }
-
-        // ============================================
-        // GESTIÓN DE METAS (CALCULADOR REAL)
-        // ============================================
-        function crearMeta() {
-            const nombre = document.getElementById('meta-nombre').value;
-            const monto = parseFloat(document.getElementById('meta-monto').value);
-            const mensual = parseFloat(document.getElementById('meta-mensual').value);
-
-            if(!nombre || !monto || !mensual || mensual <= 0) return alert("Completa los datos correctamente.");
-
-            db.metas.push({ id: Date.now(), nombre, monto, mensual });
-            guardarDB();
-            // Limpiar inputs
-            document.getElementById('meta-nombre').value = '';
-            document.getElementById('meta-monto').value = '';
-            document.getElementById('meta-mensual').value = '';
-        }
-
-        function eliminarMeta(id) {
-            db.metas = db.metas.filter(m => m.id !== id);
-            guardarDB();
-        }
-
-        // ============================================
-        // CONFIGURACIÓN (PERSONALIZACIÓN REAL)
-        // ============================================
         function guardarConfiguracion() {
-            const nuevoNombre = document.getElementById('config-nombre').value;
-            if(!nuevoNombre) return alert("Escribe un nombre.");
-
-            db.usuario.nombre = nuevoNombre;
-            db.usuario.iniciales = nuevoNombre.substring(0, 2).toUpperCase();
-            guardarDB();
-            alert("Nombre actualizado.");
-        }
-
-        function resetearDatos() {
-            if(confirm("¿Estás seguro? Se borrará TODO permanentemente.")) {
-                db = defecto;
-                guardarDB();
-                location.reload();
+            const n = document.getElementById('config-nombre').value;
+            if(n) {
+                db.usuario.nombre = n;
+                db.usuario.iniciales = n[0].toUpperCase();
+                localStorage.setItem('finanzly_db_v2', JSON.stringify(db));
+                actualizarUI();
+                alert("Guardado");
             }
         }
 
-        // ============================================
-        // RENDERIZADO DE LA INTERFAZ (UI)
-        // ============================================
-        let graficoFlujo;
+        function resetearDatos() {
+            if(confirm("¿Borrar todo?")) { localStorage.clear(); location.reload(); }
+        }
 
         function actualizarUI() {
-            // 1. Identidad
-            document.getElementById('avatar-iniciales').innerText = db.usuario.iniciales;
             document.getElementById('saludo-nombre').innerText = `Hola, ${db.usuario.nombre}`;
-            document.getElementById('config-nombre').placeholder = db.usuario.nombre;
+            document.getElementById('avatar-iniciales').innerText = db.usuario.iniciales;
 
-            // 2. Cálculos Financieros
-            let totalNeto = 0, ingresos = 0, gastos = 0;
-            const listaInicio = document.getElementById('lista-movimientos-inicio');
-            listaInicio.innerHTML = '';
+            let total = 0, ing = 0, egr = 0;
+            const lista = document.getElementById('lista-movimientos-inicio');
+            lista.innerHTML = '';
 
-            db.movimientos.forEach((m, index) => {
-                const esIngreso = m.tipo === 'ingreso';
-                if(esIngreso) { totalNeto += m.monto; ingresos += m.monto; }
-                else { totalNeto -= m.monto; gastos += m.monto; }
+            db.movimientos.forEach((m, i) => {
+                const esIng = m.tipo === 'ingreso';
+                if(esIng) { total += m.monto; ing += m.monto; }
+                else { total -= m.monto; egr += m.monto; }
 
-                // Mostrar solo los últimos 5 en inicio
-                if(index < 5) {
-                    listaInicio.innerHTML += `
+                if(i < 4) {
+                    lista.innerHTML += `
                         <div class="item-movimiento">
-                            <div style="display:flex; align-items:center; gap:16px;">
-                                <div class="icono-mov" style="background:${esIngreso ? '#dcfce7':'#fee2e2'}; color:${esIngreso ? 'var(--exito)':'var(--error)'}">
-                                    <i data-lucide="${esIngreso ? 'plus' : 'shopping-bag'}" size="22"></i>
+                            <div style="display:flex; align-items:center; gap:12px;">
+                                <div class="icono-mov" style="background:${esIng ? '#dcfce7':'#fee2e2'}; color:${esIng ? 'var(--exito)':'var(--error)'}">
+                                    <i data-lucide="${esIng ? 'plus' : 'shopping-bag'}" size="18"></i>
                                 </div>
                                 <div class="info-mov">
                                     <p>${m.desc}</p>
                                     <span>${m.fecha}</span>
                                 </div>
                             </div>
-                            <div style="text-align:right">
-                                <p class="${esIngreso ? 'exito' : 'negocio'}" style="font-weight:800;">
-                                    ${esIngreso ? '+' : '-'}$${m.monto.toLocaleString('es-ES', {minimumFractionDigits: 2})}
-                                </p>
-                                <span onclick="eliminarMovimiento(${m.id})" style="font-size:0.7rem; color:var(--error); cursor:pointer;">Eliminar</span>
-                            </div>
+                            <strong style="color:${esIng ? 'var(--exito)':'var(--texto-oscuro)'}">${esIng?'+':'-'}$${m.monto}</strong>
                         </div>
                     `;
                 }
             });
 
-            // Actualizar Resumen Inicio
-            document.getElementById('balance-total').innerText = `$${totalNeto.toLocaleString('es-ES', {minimumFractionDigits: 2})}`;
-            document.getElementById('resumen-ingresos').innerText = `+$${ingresos.toLocaleString('es-ES')}`;
-            document.getElementById('resumen-gastos').innerText = `-$${gastos.toLocaleString('es-ES')}`;
-            document.getElementById('resumen-ahorro-neto').innerText = `$${(ingresos - gastos).toLocaleString('es-ES')}`;
-
-            // 3. Render Metas (Calculador Real)
-            const listaMetas = document.getElementById('lista-metas');
-            listaMetas.innerHTML = '';
+            document.getElementById('balance-total').innerText = `$${total.toLocaleString()}`;
+            document.getElementById('resumen-ingresos').innerText = `$${ing}`;
+            document.getElementById('resumen-gastos').innerText = `$${egr}`;
+            document.getElementById('resumen-ahorro-neto').innerText = `$${ing - egr}`;
             
-            db.metas.forEach(meta => {
-                // Cálculo de meses faltantes basado en Balance Neto Real vs Meta
-                const totalParaMeta = Math.max(0, meta.monto - totalNeto);
-                const mesesFaltantes = totalParaMeta > 0 ? Math.ceil(totalParaMeta / meta.mensual) : 0;
-                const porcentaje = Math.min(100, (totalNeto / meta.monto) * 100).toFixed(0);
-
-                listaMetas.innerHTML += `
-                    <div class="tarjeta-meta">
-                        <div style="display:flex; justify-content:space-between;">
-                            <strong>${meta.nombre}</strong>
-                            <span onclick="eliminarMeta(${meta.id})" style="color:var(--error); font-size:1.2rem; font-weight:800;">×</span>
-                        </div>
-                        <p style="font-size:0.8rem; color:var(--texto-gris); margin-top:5px;">
-                            Meta: $${meta.monto.toLocaleString('es-ES')} | Ahorro mensual: $${meta.mensual.toLocaleString('es-ES')}
-                        </p>
-                        <div class="progreso-fondo"><div class="progreso-relleno" style="width: ${porcentaje}%"></div></div>
-                        <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700;">
-                            <span style="color: var(--primario)">${porcentaje}%</span>
-                            <span style="color: var(--texto-gris)">${mesesFaltantes === 0 ? '¡Meta lograda!' : `Faltan ~${mesesFaltantes} meses`}</span>
-                        </div>
-                    </div>
-                `;
-            });
-
-            // Render Gráfico y Iconos
             renderGrafico();
             lucide.createIcons();
         }
 
-        // ============================================
-        // SISTEMA DE GRÁFICOS (VISUALIZACIÓN REAL)
-        // ============================================
         function renderGrafico() {
             const ctx = document.getElementById('graficoFlujo').getContext('2d');
-            if(graficoFlujo) graficoFlujo.destroy();
-            
-            // Simulación de tendencia lineal basada en movimientos reales recientes
-            // (Para un gráfico histórico real se necesita guardar datos por fecha diariamente)
-            let datosSimulados = [200, 300, 250, 400, 380, 500, 480];
-            if(db.movimientos.length > 0) {
-                // Si hay movimientos, ajustamos la tendencia final ligeramente
-                const ultimoMonto = db.movimientos[0].monto * (db.movimientos[0].tipo === 'ingreso' ? 1 : -1);
-                datosSimulados[6] = Math.max(100, datosSimulados[6] + (ultimoMonto * 0.1));
-            }
-
-            graficoFlujo = new Chart(ctx, {
+            if(window.chart) window.chart.destroy();
+            window.chart = new Chart(ctx, {
                 type: 'line',
                 data: {
-                    labels: ['Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sab', 'Dom'],
+                    labels: ['L', 'M', 'M', 'J', 'V', 'S', 'D'],
                     datasets: [{
-                        data: datosSimulados,
+                        data: [20, 50, 30, 70, 40, 90, 60],
                         borderColor: '#6366f1',
-                        borderWidth: 4, pointRadius: 0, tension: 0.45, fill: true,
-                        backgroundColor: (context) => {
-                            const gradiente = ctx.createLinearGradient(0, 0, 0, 300);
-                            gradiente.addColorStop(0, 'rgba(99, 102, 241, 0.15)');
-                            gradiente.addColorStop(1, 'rgba(99, 102, 241, 0)');
-                            return gradiente;
-                        }
+                        borderWidth: 3,
+                        pointRadius: 0,
+                        tension: 0.4,
+                        fill: true,
+                        backgroundColor: 'rgba(99, 102, 241, 0.05)'
                     }]
                 },
-                options: {
+                options: { 
                     plugins: { legend: { display: false } },
-                    scales: { 
-                        x: { grid: { display: false }, border: { display: false } },
-                        y: { display: false }
-                    }
+                    scales: { x: { grid: { display: false } }, y: { display: false } }
                 }
             });
         }
 
-        // INICIALIZACIÓN DE LA APP
         actualizarUI();
     </script>
 </body>
