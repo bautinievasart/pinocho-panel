@@ -3,141 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly Pro | Couple Sync</title>
+    <title>Finanzly | Final Fix</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-database-compat.js"></script>
 
     <style>
-        :root {
-            --bg: #f8fafc; --primary: #4f46e5; --text: #0f172a;
-            --secondary: #64748b; --white: #ffffff; --success: #10b981; --error: #ef4444;
-        }
-
-        /* ANIMACIONES */
-        @keyframes dynamicGlow { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        @keyframes textGlowSuccess { 0% { color: #10b981; } 50% { color: #34d399; } 100% { color: #10b981; } }
-        @keyframes textGlowError { 0% { color: #ef4444; } 50% { color: #f87171; } 100% { color: #ef4444; } }
-        @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-
-        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
+        :root { --bg: #f8fafc; --primary: #4f46e5; --text: #0f172a; --success: #10b981; --error: #ef4444; }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; }
         body { background: var(--bg); color: var(--text); height: 100vh; display: flex; flex-direction: column; overflow: hidden; }
 
-        /* HEADER */
+        /* Header con Gradiente Animado */
         .header {
-            background: linear-gradient(-45deg, #4f46e5, #9333ea, #2563eb, #06b6d4);
-            background-size: 300% 300%;
-            animation: dynamicGlow 6s ease infinite;
-            padding: 60px 24px 50px;
-            border-radius: 0 0 50px 50px;
-            text-align: center; color: white; flex-shrink: 0;
-            box-shadow: 0 15px 30px rgba(79, 70, 229, 0.2);
-            z-index: 10;
+            background: linear-gradient(-45deg, #4f46e5, #9333ea, #2563eb);
+            background-size: 400% 400%;
+            animation: gradient 10s ease infinite;
+            padding: 50px 20px 40px; color: white; text-align: center;
+            border-radius: 0 0 40px 40px; flex-shrink: 0;
         }
-        .balance-value { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-top: 5px; }
+        @keyframes gradient { 0% {background-position: 0% 50%;} 50% {background-position: 100% 50%;} 100% {background-position: 0% 50%;} }
+        .balance-val { font-size: 3.2rem; font-weight: 800; letter-spacing: -2px; }
 
-        /* CONTENIDO */
-        .content { flex: 1; overflow-y: auto; padding: 0 20px 120px; position: relative; }
+        /* Contenedor de Contenido */
+        .content { flex: 1; overflow-y: auto; padding: 0 20px 100px; }
         
-        .summary-grid { 
-            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; 
-            margin-top: -35px; margin-bottom: 25px; position: relative; z-index: 20; 
-        }
-        .card { background: white; padding: 22px; border-radius: 28px; box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center; }
-        .val-ing { font-size: 1.4rem; font-weight: 800; animation: textGlowSuccess 3s infinite ease-in-out; }
-        .val-egr { font-size: 1.4rem; font-weight: 800; animation: textGlowError 3s infinite ease-in-out; }
+        .stats-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: -30px; margin-bottom: 25px; }
+        .card { background: white; padding: 20px; border-radius: 25px; box-shadow: 0 10px 20px rgba(0,0,0,0.05); text-align: center; }
+        .val-in { color: var(--success); font-weight: 800; font-size: 1.2rem; }
+        .val-out { color: var(--error); font-weight: 800; font-size: 1.2rem; }
 
-        /* VISTAS */
-        .view { display: none; animation: fadeIn 0.4s ease; }
-        .view.active { display: block; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        /* Lista de Movimientos */
+        .item { background: white; padding: 15px; border-radius: 20px; margin-bottom: 10px; display: flex; justify-content: space-between; align-items: center; }
+        .btn-del { background: #fee2e2; border: none; padding: 8px; border-radius: 10px; color: var(--error); }
 
-        /* ITEMS */
-        .mov-item {
-            display: flex; align-items: center; justify-content: space-between;
-            background: white; padding: 18px; margin-bottom: 12px;
-            border-radius: 24px; box-shadow: 0 2px 10px rgba(0,0,0,0.02);
-        }
-        .btn-delete { background: #fee2e2; color: var(--error); border: none; width: 32px; height: 32px; border-radius: 10px; display: flex; align-items: center; justify-content: center; }
+        /* Barra de Navegación */
+        nav { position: fixed; bottom: 0; width: 100%; height: 85px; background: white; display: flex; justify-content: space-around; align-items: center; border-top: 1px solid #f1f5f9; padding-bottom: 15px; }
+        .add-btn { width: 60px; height: 60px; background: var(--text); color: white; border: none; border-radius: 20px; margin-top: -40px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); font-size: 24px; }
 
-        /* METAS */
-        .goal-card { background: white; padding: 25px; border-radius: 30px; margin-bottom: 15px; }
-        .progress-bar { width: 100%; height: 10px; background: #f1f5f9; border-radius: 10px; margin-top: 10px; overflow: hidden; }
-        .progress-fill { height: 100%; background: linear-gradient(90deg, #4f46e5, #9333ea); transition: width 1s ease; }
-
-        /* NAV */
-        .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 95px;
-            background: rgba(255,255,255,0.95); backdrop-filter: blur(15px);
-            display: flex; justify-content: space-around; align-items: center;
-            padding-bottom: 25px; border-top: 1px solid #f1f5f9; z-index: 100;
-        }
-        .nav-item { color: #cbd5e1; display: flex; flex-direction: column; align-items: center; font-size: 0.65rem; font-weight: 800; }
-        .nav-item.active { color: var(--primary); }
-        .btn-plus { width: 65px; height: 65px; background: var(--text); color: white; border: none; border-radius: 22px; display: flex; align-items: center; justify-content: center; transform: translateY(-25px); box-shadow: 0 10px 25px rgba(0,0,0,0.2); }
-
-        /* MODAL */
-        #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: flex-end; z-index: 200; backdrop-filter: blur(8px); }
-        .modal-body { background: white; width: 100%; padding: 35px; border-radius: 40px 40px 0 0; animation: slideUp 0.3s ease-out; }
-        input, select { width: 100%; padding: 18px; border-radius: 18px; border: 1px solid #f1f5f9; background: #f8fafc; margin-bottom: 12px; font-weight: 700; font-size: 1rem; outline: none; }
-        .btn-confirm { width: 100%; padding: 20px; background: var(--primary); color: white; border: none; border-radius: 18px; font-weight: 800; font-size: 1.1rem; }
+        /* Modal */
+        #modal { position: fixed; inset: 0; background: rgba(0,0,0,0.5); display: none; align-items: flex-end; z-index: 100; }
+        .modal-body { background: white; width: 100%; padding: 30px; border-radius: 30px 30px 0 0; }
+        input, select { width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #f1f5f9; background: #f8fafc; font-weight: 600; outline: none; }
+        .save-btn { width: 100%; padding: 18px; background: var(--primary); color: white; border: none; border-radius: 12px; font-weight: 800; }
     </style>
 </head>
 <body>
 
-    <div class="app-shell">
-        <div class="header">
-            <p style="font-size:0.75rem; font-weight:800; letter-spacing:2px; opacity:0.8">BALANCE TOTAL</p>
-            <h1 class="balance-value" id="dom-balance">$0</h1>
-        </div>
-
-        <div class="content">
-            <div class="summary-grid">
-                <div class="card"><span>INGRESOS</span><p class="val-ing" id="dom-ing">+$0</p></div>
-                <div class="card"><span>GASTOS</span><p class="val-egr" id="dom-egr">-$0</p></div>
-            </div>
-
-            <div id="v-home" class="view active">
-                <div style="background:white; padding:20px; border-radius:35px; margin-bottom:25px; box-shadow: 0 10px 30px rgba(0,0,0,0.02);"><canvas id="lineChart" height="130"></canvas></div>
-                <p style="font-weight:800; margin-bottom:15px; padding-left:5px;">Movimientos del mes</p>
-                <div id="dom-list"></div>
-            </div>
-
-            <div id="v-goals" class="view">
-                <p style="font-weight:800; margin-bottom:15px">Ahorros y Metas</p>
-                <div class="card" style="text-align:left; padding:25px; margin-bottom:25px;">
-                    <input type="text" id="g-name" placeholder="¿Para qué es la meta?">
-                    <input type="number" id="g-amount" placeholder="Monto objetivo ($)">
-                    <button class="btn-confirm" onclick="saveGoal()">Establecer Meta</button>
-                </div>
-                <div id="dom-goals-list"></div>
-            </div>
-        </div>
-
-        <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="zap"></i>INICIO</div>
-            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="32"></i></button>
-            <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
-        </nav>
+    <div class="header">
+        <p style="font-size: 0.7rem; font-weight: 800; opacity: 0.8; letter-spacing: 2px;">DISPONIBLE</p>
+        <div class="balance-val" id="total-balance">$0</div>
     </div>
 
-    <div id="modal" onclick="if(event.target==this) closeM()">
+    <div class="content">
+        <div class="stats-grid">
+            <div class="card"><span>Ingresos</span><div class="val-in" id="total-in">+$0</div></div>
+            <div class="card"><span>Gastos</span><div class="val-out" id="total-out">-$0</div></div>
+        </div>
+
+        <div id="v-home">
+            <h4 style="margin-bottom: 15px; font-weight: 800;">Actividad</h4>
+            <div id="list-container"></div>
+        </div>
+
+        <div id="v-metas" style="display:none">
+            <h4 style="margin-bottom: 15px; font-weight: 800;">Metas</h4>
+            <div id="goals-container"></div>
+        </div>
+    </div>
+
+    <nav>
+        <div onclick="toggleView('home')"><i data-lucide="home"></i></div>
+        <button class="add-btn" onclick="openModal()">+</button>
+        <div onclick="toggleView('metas')"><i data-lucide="target"></i></div>
+    </nav>
+
+    <div id="modal" onclick="if(event.target==this) closeModal()">
         <div class="modal-body">
-            <h3 style="margin-bottom:20px; font-weight:800">Nuevo Registro</h3>
-            <input type="text" id="m-desc" placeholder="Descripción">
-            <input type="number" id="m-amount" placeholder="Monto" inputmode="decimal">
-            <select id="m-type">
-                <option value="out">Es un Gasto (-)</option>
-                <option value="in">Es un Ingreso (+)</option>
+            <h3 style="margin-bottom: 15px">Nuevo Movimiento</h3>
+            <input type="text" id="in-desc" placeholder="Descripción">
+            <input type="number" id="in-amount" placeholder="Monto ($)">
+            <select id="in-type">
+                <option value="out">Gasto</option>
+                <option value="in">Ingreso</option>
             </select>
-            <button class="btn-confirm" id="btn-save-record">Guardar Registro</button>
+            <button class="save-btn" id="save-trigger">Guardar Registro</button>
         </div>
     </div>
 
     <script>
-        // CONFIGURACIÓN FIREBASE (REEMPLAZAR CON TUS DATOS)
+        // CONFIGURACIÓN (REEMPLAZAR CON TUS DATOS)
         const firebaseConfig = {
             apiKey: "TU_API_KEY",
             authDomain: "TU_PROYECTO.firebaseapp.com",
@@ -146,123 +101,71 @@
             storageBucket: "TU_PROYECTO.appspot.com",
             appId: "TU_APP_ID"
         };
-        
+
         firebase.initializeApp(firebaseConfig);
-        const database = firebase.database();
-        const coupleID = "billetera_duo_principal"; 
+        const db = firebase.database();
+        const coupleID = "billetera_compartida_1";
         const period = new Date().toLocaleString('es-ES', { month: 'long', year: 'numeric' });
 
-        // INICIO Y ESCUCHA DE DATOS
-        function initApp() {
-            database.ref(`couples/${coupleID}`).on('value', (snapshot) => {
-                window.db = snapshot.val() || { data: {}, g: {} };
-                updateUI();
-            });
-        }
+        // FUNCIÓN DE GUARDADO (ATTACHED DIRECTLY TO BUTTON)
+        document.getElementById('save-trigger').onclick = function() {
+            const desc = document.getElementById('in-desc').value;
+            const amount = parseFloat(document.getElementById('in-amount').value);
+            const type = document.getElementById('in-type').value;
 
-        // FUNCIÓN GUARDAR (CORREGIDA Y COMPLETA)
-        document.getElementById('btn-save-record').onclick = function() {
-            const desc = document.getElementById('m-desc').value;
-            const amount = parseFloat(document.getElementById('m-amount').value);
-            const type = document.getElementById('m-type').value;
+            if (!desc || isNaN(amount)) {
+                alert("Completa todos los campos");
+                return;
+            }
 
-            if (!desc || isNaN(amount)) return alert("Completa los campos");
-
-            database.ref(`couples/${coupleID}/data/${period}/m`).push({
+            db.ref(`couples/${coupleID}/data/${period}/m`).push({
                 desc, amount, type,
                 date: new Date().toLocaleDateString(),
                 ts: firebase.database.ServerValue.TIMESTAMP
             }).then(() => {
-                closeM();
-                document.getElementById('m-desc').value = '';
-                document.getElementById('m-amount').value = '';
-            });
+                closeModal();
+                document.getElementById('in-desc').value = "";
+                document.getElementById('in-amount').value = "";
+            }).catch(e => alert("Error al guardar: " + e.message));
         };
 
-        function saveGoal() {
-            const name = document.getElementById('g-name').value;
-            const amount = parseFloat(document.getElementById('g-amount').value);
-            if (!name || isNaN(amount)) return;
+        // ESCUCHA DE DATOS
+        db.ref(`couples/${coupleID}/data/${period}/m`).on('value', (snap) => {
+            let tin = 0, tout = 0, html = "";
+            const data = snap.val();
 
-            database.ref(`couples/${coupleID}/g`).push({ name, amount });
-            document.getElementById('g-name').value = '';
-            document.getElementById('g-amount').value = '';
+            if (data) {
+                const items = Object.entries(data).sort((a,b) => b[1].ts - a[1].ts);
+                items.forEach(([id, x]) => {
+                    const isI = x.type === 'in';
+                    if (isI) tin += x.amount; else tout += x.amount;
+                    html += `
+                        <div class="item">
+                            <div><strong>${x.desc}</strong><br><small style="color:gray">${x.date}</small></div>
+                            <div style="display:flex; align-items:center; gap:10px">
+                                <b style="color:${isI?'var(--success)':'var(--text)'}">${isI?'+':'-'}$${x.amount}</b>
+                                <button class="btn-del" onclick="deleteItem('${id}')">✕</button>
+                            </div>
+                        </div>`;
+                });
+            }
+
+            document.getElementById('total-balance').innerText = `$${(tin - tout).toLocaleString()}`;
+            document.getElementById('total-in').innerText = `+$${tin.toLocaleString()}`;
+            document.getElementById('total-out').innerText = `-$${tout.toLocaleString()}`;
+            document.getElementById('list-container').innerHTML = html || '<p style="text-align:center; padding:20px; color:gray">No hay movimientos</p>';
+        });
+
+        // FUNCIONES DE UI
+        function deleteItem(id) { db.ref(`couples/${coupleID}/data/${period}/m/${id}`).remove(); }
+        function openModal() { document.getElementById('modal').style.display = 'flex'; }
+        function closeModal() { document.getElementById('modal').style.display = 'none'; }
+        function toggleView(v) {
+            document.getElementById('v-home').style.display = v === 'home' ? 'block' : 'none';
+            document.getElementById('v-metas').style.display = v === 'metas' ? 'block' : 'none';
         }
 
-        function deleteItem(id) {
-            database.ref(`couples/${coupleID}/data/${period}/m/${id}`).remove();
-        }
-
-        function deleteGoal(id) {
-            database.ref(`couples/${coupleID}/g/${id}`).remove();
-        }
-
-        function updateUI() {
-            let tin = 0, tout = 0, mHtml = '';
-            const movements = window.db.data?.[period]?.m || {};
-            const movArray = Object.entries(movements).sort((a,b) => b[1].ts - a[1].ts);
-
-            movArray.forEach(([id, x]) => {
-                const isI = x.type === 'in';
-                if(isI) tin += x.amount; else tout += x.amount;
-                mHtml += `<div class="mov-item">
-                    <div style="display:flex; align-items:center;">
-                        <div style="width:45px; height:45px; border-radius:14px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center; margin-right:12px;"><i data-lucide="${isI?'arrow-up':'shopping-bag'}" size="20"></i></div>
-                        <div><b style="font-size:0.95rem">${x.desc}</b><br><small style="color:var(--secondary)">${x.date}</small></div>
-                    </div>
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <b style="font-size:1.1rem; color:${isI?'var(--success)':'var(--text)'}">${isI?'+':'-'}$${x.amount.toLocaleString()}</b>
-                        <button class="btn-delete" onclick="deleteItem('${id}')"><i data-lucide="trash-2" size="14"></i></button>
-                    </div>
-                </div>`;
-            });
-
-            const balance = tin - tout;
-            document.getElementById('dom-balance').innerText = `$${balance.toLocaleString()}`;
-            document.getElementById('dom-ing').innerText = `+$${tin.toLocaleString()}`;
-            document.getElementById('dom-egr').innerText = `-$${tout.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; opacity:0.5; padding:40px;">No hay movimientos</p>';
-
-            // METAS
-            let gHtml = '';
-            const goals = window.db.g || {};
-            Object.entries(goals).forEach(([id, g]) => {
-                let perc = Math.min((balance / g.amount) * 100, 100);
-                gHtml += `<div class="goal-card">
-                    <div style="display:flex; justify-content:space-between; margin-bottom:10px;"><b>${g.name}</b><button onclick="deleteGoal('${id}')" style="border:none; background:none; color:red">✕</button></div>
-                    <div style="display:flex; justify-content:space-between; font-size:0.8rem; color:var(--secondary)"><span>$${balance.toLocaleString()} ahorrados</span><span>Meta: $${g.amount.toLocaleString()}</span></div>
-                    <div class="progress-bar"><div class="progress-fill" style="width:${perc}%"></div></div>
-                </div>`;
-            });
-            document.getElementById('dom-goals-list').innerHTML = gHtml;
-
-            renderChart(Object.values(movements));
-            lucide.createIcons();
-        }
-
-        function renderChart(movs) {
-            const ctx = document.getElementById('lineChart').getContext('2d');
-            let b = 0; const pts = movs.sort((a,b)=>a.ts - b.ts).map(x => { b += (x.type === 'in' ? x.amount : -x.amount); return b; });
-            if(window.lc) window.lc.destroy();
-            window.lc = new Chart(ctx, {
-                type: 'line',
-                data: { labels: pts.map(()=>''), datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 3, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.05)' }] },
-                options: { maintainAspectRatio: false, plugins: { legend: { display: false } }, scales: { x: { display: false }, y: { display: false } } }
-            });
-        }
-
-        function switchTab(tab, el) {
-            document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
-            document.getElementById(tab).classList.add('active');
-            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
-            el.classList.add('active');
-            lucide.createIcons();
-        }
-
-        function openM() { document.getElementById('modal').style.display = 'flex'; }
-        function closeM() { document.getElementById('modal').style.display = 'none'; }
-
-        initApp();
+        lucide.createIcons();
     </script>
 </body>
 </html>
