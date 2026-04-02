@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Dynamic Glow</title>
+    <title>Finanzly | Ultra Dynamic</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -14,77 +14,79 @@
             --error: #ef4444; 
         }
 
+        /* --- ANIMACIÓN DE COLORES VIBRANTE --- */
+        @keyframes dynamicGlow {
+            0% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+            100% { background-position: 0% 50%; }
+        }
+
         * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Plus Jakarta Sans', sans-serif; -webkit-tap-highlight-color: transparent; }
         
         body { background: var(--bg); color: var(--text); overflow: hidden; }
-
-        /* --- ANIMACIÓN GLOBAL DE DEGRADADO --- */
-        @keyframes flowGradient {
-            0% { background-position: 0% 50%; color: #ffffff; }
-            50% { background-position: 100% 50%; color: #f0f9ff; }
-            100% { background-position: 0% 50%; color: #ffffff; }
-        }
 
         .app-shell {
             width: 100vw; height: 100dvh;
             display: flex; flex-direction: column; position: relative;
         }
 
-        /* --- HEADER DINÁMICO --- */
+        /* --- HEADER CON EFECTO DINÁMICO --- */
         .header {
-            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #2563eb, #6366f1);
-            background-size: 400% 400%;
-            animation: flowGradient 10s ease infinite;
-            padding: 80px 24px 70px; /* Más aire arriba */
+            /* Colores más vivos para que se note la transición */
+            background: linear-gradient(-45deg, #4f46e5, #9333ea, #2563eb, #06b6d4);
+            background-size: 300% 300%;
+            animation: dynamicGlow 6s ease infinite; /* Más rápida para que sea visible */
+            padding: 80px 24px 80px;
             border-radius: 0 0 60px 60px;
             flex-shrink: 0;
             text-align: center;
             z-index: 10;
-            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.15);
+            box-shadow: 0 20px 40px rgba(79, 70, 229, 0.2);
         }
 
         .balance-label { 
             font-size: 0.85rem; 
-            opacity: 0.8; 
+            opacity: 0.9; 
             font-weight: 800; 
             text-transform: uppercase; 
             letter-spacing: 3px; 
             color: white;
+            margin-bottom: 10px;
         }
 
-        /* Balance con efecto de brillo dinámico en el texto */
+        /* --- TEXTO DE BALANCE ANIMADO --- */
         .balance-value { 
-            font-size: 4.2rem; 
+            font-size: 4.5rem; 
             font-weight: 800; 
             letter-spacing: -3px; 
-            margin-top: 10px;
             color: white;
-            text-shadow: 0 10px 20px rgba(0,0,0,0.1);
+            /* Efecto de brillo sutil en el texto */
+            text-shadow: 0 10px 30px rgba(255,255,255,0.3);
+            display: inline-block;
         }
 
         /* --- CONTENT AREA --- */
         .content {
             flex-grow: 1;
             overflow-y: scroll;
-            padding: 40px 0 160px; /* Bajamos las tarjetas */
+            padding: 40px 0 160px;
             position: relative;
             z-index: 20;
-            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
-            mask-image: linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%);
+            /* Máscara para que nada choque con el azul arriba */
+            -webkit-mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, black 10%, black 90%, transparent 100%);
         }
 
         .summary-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 18px;
-            padding: 0 24px; 
-            margin-bottom: 40px;
+            padding: 0 24px; margin-bottom: 40px;
         }
 
         .card {
             background: var(--white); padding: 25px 15px; border-radius: 32px;
-            box-shadow: 0 15px 35px rgba(0,0,0,0.05); text-align: center;
-            border: 1px solid rgba(0,0,0,0.01);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.06); text-align: center;
         }
-        .card span { font-size: 0.75rem; font-weight: 800; color: var(--secondary); display: block; margin-bottom: 8px; letter-spacing: 1px; }
+        .card span { font-size: 0.75rem; font-weight: 800; color: var(--secondary); display: block; margin-bottom: 8px; }
         .card p { font-size: 1.5rem; font-weight: 800; }
 
         /* --- CHART --- */
@@ -106,7 +108,6 @@
             padding: 30px 28px;
             margin: 0 24px 15px;
             border-radius: 35px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.02);
             transition: all 0.6s cubic-bezier(0.23, 1, 0.32, 1);
             opacity: 0.2;
             transform: scale(0.8) translateY(40px);
@@ -116,18 +117,24 @@
             opacity: 1; transform: scale(1) translateY(0);
             margin: 0 0 2px; border-radius: 0;
             background: #ffffff; border-bottom: 1px solid #f8fafc;
-            box-shadow: none;
         }
 
         /* --- NAV BAR --- */
         .nav-bar {
             position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
-            background: rgba(255,255,255,0.9); backdrop-filter: blur(25px);
+            background: rgba(255,255,255,0.95); backdrop-filter: blur(25px);
             display: flex; justify-content: space-around; align-items: center;
             padding-bottom: 25px; z-index: 50; border-top: 1px solid #f1f5f9;
         }
         .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.75rem; font-weight: 800; gap: 5px; }
-        .nav-item.active { color: var(--primary); }
+        .nav-item.active { 
+            background: linear-gradient(-45deg, #4f46e5, #9333ea);
+            background-clip: text;
+            -webkit-background-clip: text;
+            color: transparent;
+            animation: dynamicGlow 3s ease infinite;
+            background-size: 200% 200%;
+        }
         
         .btn-plus {
             width: 72px; height: 72px; background: var(--text);
@@ -154,20 +161,19 @@
         .btn-confirm { 
             width: 100%; padding: 24px; background: var(--primary); color: white;
             border: none; border-radius: 24px; font-weight: 800; font-size: 1.2rem;
+            box-shadow: 0 10px 20px rgba(79, 70, 229, 0.2);
         }
     </style>
 </head>
 <body>
 
     <div class="app-shell">
-        <!-- HEADER DINÁMICO (COLOR FLUIDO) -->
-        <div class="header" id="main-header">
-            <p class="balance-label">Tu Capital</p>
+        <div class="header">
+            <p class="balance-label">Balance Actual</p>
             <h1 class="balance-value" id="dom-balance">$0</h1>
         </div>
 
         <div class="content" id="scroll-area">
-            <!-- GRILLA DE RESUMEN -->
             <div class="summary-grid">
                 <div class="card"><span>INGRESOS</span><p style="color:var(--success)" id="dom-ing">+$0</p></div>
                 <div class="card"><span>GASTOS</span><p style="color:var(--error)" id="dom-egr">-$0</p></div>
@@ -177,23 +183,23 @@
                 <div class="chart-card">
                     <canvas id="lineChart" height="150"></canvas>
                 </div>
-                <p class="section-title">Movimientos</p>
+                <p class="section-title">Actividad Reciente</p>
                 <div id="dom-list"></div>
             </div>
 
             <div id="v-goals" class="view" style="padding: 0 24px;">
-                <p class="section-title" style="padding-left:0">Objetivos de Ahorro</p>
+                <p class="section-title" style="padding-left:0">Tus Metas</p>
                 <div class="card" style="text-align: left; margin-bottom: 30px; padding: 35px;">
-                    <input type="text" id="g-name" placeholder="¿Qué quieres lograr?">
-                    <input type="number" id="g-amount" placeholder="Monto necesario ($)">
-                    <button class="btn-confirm" onclick="saveGoal()">Comenzar Plan</button>
+                    <input type="text" id="g-name" placeholder="¿Para qué ahorramos?">
+                    <input type="number" id="g-amount" placeholder="Monto objetivo ($)">
+                    <button class="btn-confirm" onclick="saveGoal()">Crear Meta</button>
                 </div>
                 <div id="dom-goals-list"></div>
             </div>
         </div>
 
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="layout-grid"></i>INICIO</div>
+            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="zap"></i>INICIO</div>
             <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="38"></i></button>
             <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
         </nav>
@@ -207,13 +213,13 @@
                     <option value="out">Gasto (-)</option>
                     <option value="in">Ingreso (+)</option>
                 </select>
-                <button class="btn-confirm" onclick="saveData()">Aceptar</button>
+                <button class="btn-confirm" onclick="saveData()">Confirmar</button>
             </div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('fz_v18')) || { m: [], g: [] };
+        let db = JSON.parse(localStorage.getItem('fz_v19')) || { m: [], g: [] };
 
         function switchTab(id, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -245,7 +251,7 @@
         }
 
         function saveAndRefresh() {
-            localStorage.setItem('fz_v18', JSON.stringify(db));
+            localStorage.setItem('fz_v19', JSON.stringify(db));
             updateUI();
         }
 
@@ -269,7 +275,7 @@
             document.getElementById('dom-balance').innerText = `$${bal.toLocaleString()}`;
             document.getElementById('dom-ing').innerText = `+$${i.toLocaleString()}`;
             document.getElementById('dom-egr').innerText = `-$${e.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8; font-weight:600;">Sin actividad</p>';
+            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8; font-weight:600;">Sin movimientos</p>';
             
             updateGoals(bal);
             renderLine();
@@ -285,11 +291,11 @@
                 gHtml += `<div class="card" style="margin-bottom:20px; text-align:left; padding:30px;">
                             <b style="font-size:1.35rem;">${x.n}</b><br>
                             <div style="display:flex; justify-content:space-between; margin-top:15px; font-weight:700; color:var(--secondary); font-size:0.95rem;">
-                                <span>Ahorro actual: $${balance.toLocaleString()}</span>
+                                <span>Actual: $${balance.toLocaleString()}</span>
                                 <span>Meta:$${x.a.toLocaleString()}</span>
                             </div>
                             <div style="width:100%; height:12px; background:#f1f5f9; border-radius:20px; margin-top:10px; overflow:hidden">
-                                <div style="width:${perc}%; height:100%; background:var(--primary); transition:2s cubic-bezier(0.1, 0.9, 0.2, 1)"></div>
+                                <div style="width:${perc}%; height:100%; background:linear-gradient(90deg, #4f46e5, #9333ea); transition:2s ease-out"></div>
                             </div>
                           </div>`;
             });
@@ -314,7 +320,7 @@
                     if (entry.isIntersecting) entry.target.classList.add('in-view');
                     else entry.target.classList.remove('in-view');
                 });
-            }, { threshold: 0.6, rootMargin: "-5% 0px -15% 0px" });
+            }, { threshold: 0.6 });
             items.forEach(item => observer.observe(item));
         }
 
