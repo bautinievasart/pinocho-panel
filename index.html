@@ -3,13 +3,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Finanzly | Dynamic</title>
+    <title>Finanzly | Ultra Dynamic</title>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;700;800&display=swap" rel="stylesheet">
     <script src="https://unpkg.com/lucide@latest"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style>
         :root {
-            --bg: #fdfeff; --primary: #4f46e5; --text: #0f172a;
+            --bg: #ffffff; --primary: #4f46e5; --text: #0f172a;
             --secondary: #64748b; --white: #ffffff; --success: #10b981;
             --error: #ef4444; 
         }
@@ -23,118 +23,130 @@
             display: flex; flex-direction: column; position: relative;
         }
 
-        /* --- HEADER CON DEGRADADO DINÁMICO --- */
+        /* --- HEADER CON DEGRADADO ANIMADO REAL --- */
         .header {
-            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #2563eb, #4338ca);
-            background-size: 400% 400%;
-            animation: gradientBG 10s ease infinite;
+            background: linear-gradient(135deg, #4f46e5, #9333ea, #3b82f6, #4f46e5);
+            background-size: 300% 300%;
+            animation: moveGradient 8s ease infinite;
             color: white;
-            padding: 60px 24px 80px;
-            border-radius: 0 0 45px 45px;
+            padding: 70px 24px 90px;
+            border-radius: 0 0 50px 50px;
             flex-shrink: 0;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(79, 70, 229, 0.2);
+            position: relative;
+            z-index: 10;
+            box-shadow: 0 15px 40px rgba(79, 70, 229, 0.25);
         }
 
-        @keyframes gradientBG {
+        @keyframes moveGradient {
             0% { background-position: 0% 50%; }
             50% { background-position: 100% 50%; }
             100% { background-position: 0% 50%; }
         }
 
-        .balance-label { font-size: 0.75rem; opacity: 0.8; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
-        .balance-value { font-size: 3.5rem; font-weight: 800; letter-spacing: -2px; margin-top: 5px; }
+        .balance-label { font-size: 0.9rem; opacity: 0.9; font-weight: 700; text-transform: uppercase; letter-spacing: 2px; }
+        .balance-value { font-size: 3.8rem; font-weight: 800; letter-spacing: -2px; margin-top: 10px; }
 
-        /* --- CONTENT AREA --- */
+        /* --- CONTENT AREA CON MÁSCARA DE SCROLL --- */
         .content {
             flex-grow: 1;
-            overflow-y: auto;
-            padding: 0 0 120px; /* Quitamos padding lateral para que los items puedan ocupar todo */
-            margin-top: -45px;
+            overflow-y: scroll;
+            padding: 0 0 140px;
+            margin-top: -50px;
+            -webkit-overflow-scrolling: touch;
             scroll-behavior: smooth;
         }
 
         .summary-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px;
-            padding: 0 20px; margin-bottom: 40px;
+            padding: 0 20px; margin-bottom: 30px;
+            position: relative; z-index: 20;
         }
 
         .card {
-            background: var(--white); padding: 22px 15px; border-radius: 28px;
-            box-shadow: 0 10px 20px rgba(0,0,0,0.04); text-align: center;
+            background: var(--white); padding: 25px 15px; border-radius: 30px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.05); text-align: center;
+        }
+        .card span { font-size: 0.85rem; font-weight: 800; color: var(--secondary); }
+        .card p { font-size: 1.4rem; font-weight: 800; margin-top: 8px; }
+
+        /* --- CHART CARD --- */
+        .chart-container {
+            background: white; margin: 0 20px 30px; padding: 25px;
+            border-radius: 35px; box-shadow: 0 10px 25px rgba(0,0,0,0.03);
         }
 
         /* --- VISTAS --- */
         .view { display: none; }
         .view.active { display: block; }
 
-        /* --- ANIMACIÓN DE MOVIMIENTOS AL SCROLEAR --- */
-        .section-title { padding: 0 24px; font-weight: 800; color: var(--secondary); margin-bottom: 20px; font-size: 0.9rem; }
+        /* --- MOVIMIENTOS DINÁMICOS --- */
+        .section-title { padding: 0 24px; font-weight: 800; color: var(--text); margin-bottom: 20px; font-size: 1.2rem; }
 
         .mov-item {
             display: flex; align-items: center; justify-content: space-between;
             background: var(--white);
-            padding: 24px;
-            margin: 0 10px 15px;
+            padding: 28px 24px;
+            margin: 0 15px 15px;
             border-radius: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.02);
-            transition: all 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            opacity: 0.3;
-            transform: scale(0.85) translateY(30px);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            opacity: 0.4;
+            transform: scale(0.9);
         }
 
-        /* Clase que se activa con el Scroll */
+        /* Efecto cuando el item entra en el foco central */
         .mov-item.in-view {
             opacity: 1;
-            transform: scale(1) translateY(0);
-            margin: 0 0 15px; /* Ocupa más ancho al estar activo */
-            border-radius: 0; /* Efecto de ocupar toda la pantalla */
-            border-bottom: 1px solid #f1f5f9;
-            box-shadow: none;
+            transform: scale(1);
+            margin: 0 0 2px; /* Se pegan para ocupar la pantalla */
+            border-radius: 0;
+            background: #fff;
+            border-bottom: 1px solid #f8fafc;
         }
 
-        /* --- NAV BAR SIMPLIFICADA --- */
+        /* --- NAV BAR --- */
         .nav-bar {
-            position: fixed; bottom: 0; left: 0; width: 100%; height: 85px;
-            background: rgba(255,255,255,0.85); backdrop-filter: blur(20px);
+            position: fixed; bottom: 0; left: 0; width: 100%; height: 100px;
+            background: rgba(255,255,255,0.9); backdrop-filter: blur(20px);
             display: flex; justify-content: space-around; align-items: center;
-            border-top: 1px solid rgba(0,0,0,0.03); padding-bottom: 15px; z-index: 50;
+            padding-bottom: 25px; z-index: 50; border-top: 1px solid #f1f5f9;
         }
-        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.7rem; font-weight: 700; }
+        .nav-item { color: #cbd5e1; cursor: pointer; display: flex; flex-direction: column; align-items: center; font-size: 0.8rem; font-weight: 700; gap: 5px; }
         .nav-item.active { color: var(--primary); }
         .btn-plus {
-            width: 65px; height: 65px; background: var(--text);
-            color: white; border: none; border-radius: 50%;
+            width: 70px; height: 70px; background: var(--text);
+            color: white; border: none; border-radius: 24px;
             display: flex; align-items: center; justify-content: center;
-            transform: translateY(-25px); box-shadow: 0 15px 30px rgba(0,0,0,0.3);
+            transform: translateY(-30px); box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
 
         /* --- MODAL --- */
         #modal {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.5);
+            position: fixed; inset: 0; background: rgba(0,0,0,0.6);
             display: none; flex-direction: column; justify-content: flex-end; z-index: 100;
         }
         .modal-body {
-            background: var(--white); width: 100%; padding: 40px 25px;
-            border-radius: 40px 40px 0 0; animation: slideUp 0.4s ease;
+            background: var(--white); width: 100%; padding: 45px 30px;
+            border-radius: 50px 50px 0 0; animation: slideUp 0.4s cubic-bezier(0.25, 1, 0.5, 1);
         }
         @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
 
         input, select { 
-            width: 100%; padding: 20px; border-radius: 20px; border: 1px solid #f1f5f9;
-            background: #f8fafc; margin-bottom: 15px; font-weight: 700; outline: none; 
+            width: 100%; padding: 22px; border-radius: 20px; border: 2px solid #f1f5f9;
+            background: #f8fafc; margin-bottom: 18px; font-weight: 700; font-size: 1.1rem; outline: none; 
         }
         .btn-confirm { 
-            width: 100%; padding: 20px; background: var(--primary); color: white;
-            border: none; border-radius: 20px; font-weight: 800; font-size: 1.1rem;
+            width: 100%; padding: 22px; background: var(--primary); color: white;
+            border: none; border-radius: 22px; font-weight: 800; font-size: 1.2rem;
         }
     </style>
 </head>
 <body>
 
     <div class="app-shell">
-        <div class="header">
-            <p class="balance-label">Tu Balance Actual</p>
+        <!-- HEADER DINÁMICO -->
+        <div class="header" id="main-header">
+            <p class="balance-label">Balance Disponible</p>
             <h1 class="balance-value" id="dom-balance">$0</h1>
         </div>
 
@@ -146,48 +158,49 @@
 
             <!-- HOME -->
             <div id="v-home" class="view active">
-                <p class="section-title">ACTIVIDAD</p>
-                <div id="dom-list">
-                    <!-- Los items se cargan aquí -->
+                <div class="chart-container">
+                    <canvas id="lineChart" height="160"></canvas>
                 </div>
+                <p class="section-title">Movimientos Recientes</p>
+                <div id="dom-list"></div>
             </div>
 
             <!-- METAS -->
             <div id="v-goals" class="view" style="padding: 0 20px;">
-                <p class="section-title" style="padding:0">METAS DE AHORRO</p>
-                <div class="card" style="text-align: left; margin-bottom: 30px;">
-                    <input type="text" id="g-name" placeholder="¿Qué quieres comprar?">
-                    <input type="number" id="g-amount" placeholder="Monto total ($)">
-                    <button class="btn-confirm" onclick="saveGoal()">Crear Objetivo</button>
+                <p class="section-title" style="padding-left:0">Tus Objetivos</p>
+                <div class="card" style="text-align: left; margin-bottom: 30px; padding: 30px;">
+                    <input type="text" id="g-name" placeholder="Nombre de la meta">
+                    <input type="number" id="g-amount" placeholder="¿Cuánto necesitás?">
+                    <button class="btn-confirm" onclick="saveGoal()">Empezar a ahorrar</button>
                 </div>
                 <div id="dom-goals-list"></div>
             </div>
         </div>
 
-        <!-- NAV BAR SIMPLIFICADA -->
+        <!-- NAV BAR -->
         <nav class="nav-bar">
-            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="zap"></i>INICIO</div>
-            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="35"></i></button>
+            <div class="nav-item active" onclick="switchTab('v-home', this)"><i data-lucide="layout-grid"></i>INICIO</div>
+            <button class="btn-plus" onclick="openM()"><i data-lucide="plus" size="38"></i></button>
             <div class="nav-item" onclick="switchTab('v-goals', this)"><i data-lucide="target"></i>METAS</div>
         </nav>
 
         <!-- MODAL -->
         <div id="modal" onclick="if(event.target==this) closeM()">
             <div class="modal-body">
-                <h3 style="margin-bottom:25px; font-weight: 800;">Nuevo Registro</h3>
-                <input type="text" id="m-desc" placeholder="¿En qué se fue el dinero?">
-                <input type="number" id="m-amount" placeholder="Monto ($)" inputmode="decimal">
+                <h2 style="margin-bottom:30px; font-weight: 800; font-size: 1.8rem;">Añadir registro</h2>
+                <input type="text" id="m-desc" placeholder="¿Qué compraste?">
+                <input type="number" id="m-amount" placeholder="0.00" inputmode="decimal">
                 <select id="m-type">
                     <option value="out">Gasto (-)</option>
                     <option value="in">Ingreso (+)</option>
                 </select>
-                <button class="btn-confirm" onclick="saveData()">Guardar Registro</button>
+                <button class="btn-confirm" onclick="saveData()">Guardar cambios</button>
             </div>
         </div>
     </div>
 
     <script>
-        let db = JSON.parse(localStorage.getItem('fz_v12')) || { m: [], g: [] };
+        let db = JSON.parse(localStorage.getItem('fz_v15')) || { m: [], g: [] };
 
         function switchTab(id, el) {
             document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
@@ -195,7 +208,8 @@
             document.getElementById(id).classList.add('active');
             el.classList.add('active');
             lucide.createIcons();
-            initObserver(); // Re-inicializar el efecto de scroll
+            if(id === 'v-home') renderLine();
+            initObserver();
         }
 
         function openM() { document.getElementById('modal').style.display = 'flex'; }
@@ -218,7 +232,7 @@
         }
 
         function saveAndRefresh() {
-            localStorage.setItem('fz_v12', JSON.stringify(db));
+            localStorage.setItem('fz_v15', JSON.stringify(db));
             updateUI();
         }
 
@@ -228,24 +242,26 @@
                 const isI = x.t === 'in';
                 if(isI) i += x.a; else e += x.a;
                 mHtml += `<div class="mov-item">
-                            <div style="display:flex; align-items:center; gap:15px;">
-                                <div style="width:50px; height:50px; border-radius:15px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center;">
-                                    <i data-lucide="${isI?'arrow-up':'shopping-bag'}"></i>
+                            <div style="display:flex; align-items:center; gap:20px;">
+                                <div style="width:60px; height:60px; border-radius:20px; background:${isI?'#dcfce7':'#fee2e2'}; color:${isI?'#10b981':'#ef4444'}; display:flex; align-items:center; justify-content:center;">
+                                    <i data-lucide="${isI?'arrow-up-right':'shopping-bag'}" size="28"></i>
                                 </div>
-                                <div><b style="font-size:1.1rem;">${x.d}</b><br><small style="color:var(--secondary)">${x.date}</small></div>
+                                <div><b style="font-size:1.3rem; letter-spacing:-0.5px;">${x.d}</b><br><small style="color:var(--secondary); font-weight:600;">${x.date}</small></div>
                             </div>
-                            <b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.2rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b>
+                            <b style="color:${isI?'var(--success)':'var(--text)'}; font-size:1.4rem;">${isI?'+':'-'}$${x.a.toLocaleString()}</b>
                          </div>`;
             });
 
-            document.getElementById('dom-balance').innerText = `$${(i - e).toLocaleString()}`;
+            const bal = i - e;
+            document.getElementById('dom-balance').innerText = `$${bal.toLocaleString()}`;
             document.getElementById('dom-ing').innerText = `+$${i.toLocaleString()}`;
             document.getElementById('dom-egr').innerText = `-$${e.toLocaleString()}`;
-            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8;">No hay actividad</p>';
+            document.getElementById('dom-list').innerHTML = mHtml || '<p style="text-align:center; padding:50px; color:#94a3b8; font-weight:600;">Sin actividad reciente</p>';
             
-            updateGoals(i-e);
+            updateGoals(bal);
+            renderLine();
             lucide.createIcons();
-            initObserver(); // Activar animaciones de scroll
+            initObserver();
         }
 
         function updateGoals(balance) {
@@ -253,17 +269,38 @@
             db.g.forEach(x => {
                 let perc = Math.min((balance / x.a) * 100, 100);
                 if(balance <= 0) perc = 0;
-                gHtml += `<div class="card" style="margin-bottom:15px; text-align:left">
-                            <b>${x.n}</b><br><small>$${balance.toLocaleString()} de$${x.a.toLocaleString()}</small>
-                            <div style="width:100%; height:8px; background:#f1f5f9; border-radius:10px; margin-top:10px; overflow:hidden">
-                                <div style="width:${perc}%; height:100%; background:var(--success); transition:1s"></div>
+                gHtml += `<div class="card" style="margin-bottom:20px; text-align:left; padding:25px;">
+                            <b style="font-size:1.3rem;">${x.n}</b><br>
+                            <div style="display:flex; justify-content:space-between; margin-top:10px; font-weight:700; color:var(--secondary);">
+                                <span>$${balance.toLocaleString()}</span>
+                                <span>Meta:$${x.a.toLocaleString()}</span>
+                            </div>
+                            <div style="width:100%; height:12px; background:#f1f5f9; border-radius:10px; margin-top:10px; overflow:hidden">
+                                <div style="width:${perc}%; height:100%; background:var(--primary); transition:1.5s cubic-bezier(0.2, 0.8, 0.2, 1)"></div>
                             </div>
                           </div>`;
             });
             document.getElementById('dom-goals-list').innerHTML = gHtml;
         }
 
-        // --- LÓGICA DEL EFECTO ANIMADO DE SCROLL ---
+        function renderLine() {
+            const ctx = document.getElementById('lineChart').getContext('2d');
+            let b = 0; const pts = [...db.m].reverse().map(x => { b += (x.t === 'in' ? x.a : -x.a); return b; });
+            if(window.lc) window.lc.destroy();
+            window.lc = new Chart(ctx, { 
+                type: 'line', 
+                data: { 
+                    labels: pts.map(()=>''), 
+                    datasets: [{ data: pts, borderColor: '#4f46e5', borderWidth: 5, tension: 0.4, pointRadius: 0, fill: true, backgroundColor: 'rgba(79, 70, 229, 0.1)' }] 
+                }, 
+                options: { 
+                    maintainAspectRatio: false,
+                    plugins:{legend:{display:false}}, 
+                    scales:{x:{display:false},y:{display:false}} 
+                } 
+            });
+        }
+
         function initObserver() {
             const items = document.querySelectorAll('.mov-item');
             const observer = new IntersectionObserver((entries) => {
@@ -275,10 +312,9 @@
                     }
                 });
             }, {
-                threshold: 0.6, // Se activa cuando el 60% del item está visible
-                rootMargin: "0px 0px -10% 0px"
+                threshold: 0.5,
+                rootMargin: "-80px 0px -100px 0px"
             });
-
             items.forEach(item => observer.observe(item));
         }
 
